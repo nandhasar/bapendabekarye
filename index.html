@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEKARYE Bapenda — Login</title>
+  <style>
+    :root{--bg:#f1f5f9;--bg2:#ffffff;--bg3:#f8fafc;--text:#0f172a;--text2:#334155;--text3:#64748b;--text4:#94a3b8;--border:#e2e8f0;--blue:#2563eb;--blue2:#3b82f6;--blue-bg:#dbeafe;--blue-bg2:#eff6ff;--purple:#7c3aed;--green:#059669;--green-bg:#d1fae5;--red:#dc2626;--red-bg:#fee2e2;--shadow:0 1px 3px rgba(0,0,0,.06);--shadow2:0 8px 30px rgba(0,0,0,.08);--shadow3:0 20px 60px rgba(0,0,0,.12);--radius:20px;--radius2:14px}
+    [data-theme="dark"]{--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#f1f5f9;--text2:#cbd5e1;--text3:#94a3b8;--text4:#64748b;--blue:#3b82f6;--blue2:#60a5fa;--blue-bg:#1e3a5f;--blue-bg2:#172554;--purple:#8b5cf6;--green:#34d399;--green-bg:#064e3b;--red:#f87171;--red-bg:#450a0a;--border:#334155;--shadow:0 1px 3px rgba(0,0,0,.2);--shadow2:0 8px 30px rgba(0,0,0,.3);--shadow3:0 20px 60px rgba(0,0,0,.4)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}button{cursor:pointer;font-family:inherit}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+    /* LOGIN CONTAINER */
+    .login-wrapper{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+    .login-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15}
+    .b1{width:600px;height:600px;background:#3b82f6;top:-100px;right:-100px}
+    .b2{width:500px;height:500px;background:#7c3aed;bottom:-50px;left:-100px}
+    [data-theme="dark"] .blob{opacity:.08}
+    .login-grid{position:absolute;inset:0;background-image:radial-gradient(var(--border) 1px,transparent 1px);background-size:40px 40px;opacity:.4}
+
+    .login-card{width:min(440px,100%);background:var(--bg2);border-radius:var(--radius);padding:40px;box-shadow:var(--shadow3);position:relative;animation:popIn .4s ease}
+    @keyframes popIn{from{transform:scale(.93);opacity:0}to{transform:scale(1);opacity:1}}
+
+    .login-header{text-align:center;margin-bottom:32px}
+    .login-logo{width:80px;height:80px;margin:0 auto 16px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 8px 24px rgba(37,99,235,.3)}
+    .login-title{font-size:24px;font-weight:800;margin-bottom:4px}
+    .login-sub{font-size:14px;color:var(--text3);margin-bottom:8px}
+    .login-unit{font-size:12px;color:var(--text4);font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px}
+    .form-group input{width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius2);font-size:15px;background:var(--bg3);color:var(--text);outline:none;transition:all .2s}
+    .form-group input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+    .form-group input::placeholder{color:var(--text4)}
+
+    .alert{padding:12px 14px;border-radius:12px;font-size:13px;font-weight:600;margin-bottom:16px;display:none;animation:slideDown .3s ease}
+    .alert.show{display:block}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+    .alert-error{background:var(--red-bg);color:var(--red)}
+    .alert-success{background:var(--green-bg);color:var(--green)}
+    .alert-info{background:var(--blue-bg2);color:var(--blue)}
+
+    .btn-login{width:100%;padding:16px;border-radius:var(--radius2);font-size:16px;font-weight:700;border:none;color:#fff;background:linear-gradient(135deg,#2563eb,#7c3aed);box-shadow:0 6px 20px rgba(37,99,235,.3);transition:all .25s;cursor:pointer;margin-top:8px}
+    .btn-login:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.4)}
+    .btn-login:active:not(:disabled){transform:translateY(0)}
+    .btn-login:disabled{opacity:.6;cursor:not-allowed}
+
+    .login-footer{margin-top:20px;text-align:center;font-size:12px;color:var(--text4)}
+    .login-footer a{color:var(--blue);font-weight:600;transition:color .2s}
+    .login-footer a:hover{color:var(--blue2)}
+
+    .theme-toggle{position:absolute;top:20px;right:20px;width:40px;height:40px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .2s}
+    .theme-toggle:hover{background:var(--bg3);transform:scale(1.05)}
+
+    @media(max-width:480px){
+      .login-card{padding:32px 24px}
+      .login-title{font-size:20px}
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeBtn" title="Ganti tema">🌙</button>
+
+  <div class="login-wrapper">
+    <div class="login-bg">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="login-grid"></div>
+    </div>
+
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-logo">📊</div>
+        <div class="login-title">BEKARYE Bapenda</div>
+        <div class="login-sub">Sistem Monitoring Kegiatan</div>
+        <div class="login-unit">Badan Pendapatan Daerah</div>
+      </div>
+
+      <div id="alertErr" class="alert alert-error"></div>
+      <div id="alertInfo" class="alert alert-info"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label>👤 NIP</label>
+          <input type="text" id="inNIP" placeholder="Contoh: 199509222017081002" 
+                 required autocomplete="username" maxlength="18" />
+        </div>
+
+        <div class="form-group">
+          <label>🔑 Password</label>
+          <input type="password" id="inPass" placeholder="Masukkan password"
+                 required autocomplete="current-password" />
+        </div>
+
+        <button type="submit" class="btn-login" id="btnSubmit">
+          🚀 Masuk
+        </button>
+      </form>
+
+      <div class="login-footer">
+        © <span id="yearNow"></span> BEKARYE — Bapenda
+      </div>
+    </div>
+  </div>
+
+  <script>
+// ============================================================
+// CONFIG
+// ============================================================
+var API_URL = 'https://script.google.com/macros/s/AKfycbxPfBmlQtAX7l-ABjenveFEOb0zRdpsfCU0eDaM3RBIt0t1sCASizxErr5BSVJoOFcFjQ/exec';
+var SESSION_KEY = 'bekarye-session';
+var THEME_KEY = 'bekarye-theme';
+
+// ============================================================
+// THEME
+// ============================================================
+function initTheme() {
+  var t = localStorage.getItem(THEME_KEY);
+  if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  updateThemeBtn();
+}
+
+function toggleTheme() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem(THEME_KEY,'light');
+  } else {
+    document.documentElement.setAttribute('data-theme','dark');
+    localStorage.setItem(THEME_KEY,'dark');
+  }
+  updateThemeBtn();
+}
+
+function updateThemeBtn() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+}
+
+// ============================================================
+// ALERT
+// ============================================================
+function showAlert(msg, type) {
+  var elem = type === 'error' ? document.getElementById('alertErr') : 
+             type === 'info' ? document.getElementById('alertInfo') : null;
+  if (!elem) return;
+  elem.textContent = msg;
+  elem.classList.add('show');
+  setTimeout(function(){ elem.classList.remove('show'); }, 5000);
+}
+
+function hideAlerts() {
+  document.getElementById('alertErr').classList.remove('show');
+  document.getElementById('alertInfo').classList.remove('show');
+}
+
+// ============================================================
+// LOGIN SUBMIT
+// ============================================================
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  hideAlerts();
+
+  var nip = document.getElementById('inNIP').value.trim();
+  var pwd = document.getElementById('inPass').value;
+  var btn = document.getElementById('btnSubmit');
+
+  if (!nip || !pwd) {
+    showAlert('❌ NIP dan password wajib diisi', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Memproses...';
+
+  fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'login', username: nip, password: pwd })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(j) {
+    btn.disabled = false;
+    btn.textContent = '🚀 Masuk';
+
+    if (j.ok && j.user) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        nip: j.user.nip,
+        nama: j.user.nama,
+        jabatan: j.user.jabatan,
+        unit: j.user.unit,
+        tier: j.user.tier,
+        target_th: j.user.target_th,
+        target_bln: j.user.target_bln,
+        token: j.user.token,
+        apiKey: j.user.apiKey
+      }));
+
+      showAlert('✅ Login berhasil! Mengalihkan...', 'info');
+      setTimeout(function() {
+        location.href = 'dashboard.html';
+      }, 800);
+
+    } else {
+      showAlert('❌ ' + (j.message || 'Login gagal'), 'error');
+    }
+  })
+  .catch(function(err) {
+    btn.disabled = false;
+    btn.textContent = '🚀 Masuk';
+    showAlert('❌ Koneksi gagal: ' + err.message, 'error');
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+initTheme();
+document.getElementById('themeBtn').onclick = toggleTheme;
+document.getElementById('yearNow').textContent = new Date().getFullYear();
+
+// Auto redirect jika sudah login
+if (localStorage.getItem(SESSION_KEY)) {
+  location.href = 'dashboard.html';
+}
+  </script>
+</body>
+</html>

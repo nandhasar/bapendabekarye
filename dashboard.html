@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEKARYE Bapenda — Dashboard</title>
+  <style>
+    :root{--bg:#f1f5f9;--bg2:#ffffff;--bg3:#f8fafc;--text:#0f172a;--text2:#334155;--text3:#64748b;--text4:#94a3b8;--border:#e2e8f0;--blue:#2563eb;--blue2:#3b82f6;--blue-bg:#dbeafe;--blue-bg2:#eff6ff;--purple:#7c3aed;--green:#059669;--green-bg:#d1fae5;--red:#dc2626;--red-bg:#fee2e2;--shadow:0 1px 3px rgba(0,0,0,.06);--shadow2:0 8px 30px rgba(0,0,0,.08);--shadow3:0 20px 60px rgba(0,0,0,.12);--radius:20px;--radius2:14px}
+    [data-theme="dark"]{--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#f1f5f9;--text2:#cbd5e1;--text3:#94a3b8;--text4:#64748b;--blue:#3b82f6;--blue2:#60a5fa;--blue-bg:#1e3a5f;--blue-bg2:#172554;--purple:#8b5cf6;--green:#34d399;--green-bg:#064e3b;--red:#f87171;--red-bg:#450a0a;--border:#334155;--shadow:0 1px 3px rgba(0,0,0,.2);--shadow2:0 8px 30px rgba(0,0,0,.3);--shadow3:0 20px 60px rgba(0,0,0,.4)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s}
+    a{text-decoration:none;color:inherit}button{cursor:pointer;font-family:inherit}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+    /* NAV */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:12px 20px;background:var(--bg2);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+    .nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px}
+    .nav-links{display:flex;align-items:center;gap:12px}
+    .nav-link{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;font-size:13px;font-weight:600;color:var(--text2);transition:all .2s;border:none;background:transparent;cursor:pointer}
+    .nav-link:hover{background:var(--bg3);transform:translateY(-1px)}
+    .nav-link.icon{width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:10px;background:var(--bg2)}
+    .user-info{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:var(--bg3)}
+    .user-avatar{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+    .user-name{font-size:13px;font-weight:600;color:var(--text2)}
+    .btn-logout{padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg2);color:var(--red);transition:all .2s;cursor:pointer}
+    .btn-logout:hover{background:var(--red-bg)}
+
+    /* MAIN */
+    .main{margin-top:70px;padding:20px;max-width:1400px;margin-left:auto;margin-right:auto}
+
+    /* HEADER */
+    .page-header{margin-bottom:32px}
+    .page-title{font-size:28px;font-weight:800;margin-bottom:4px}
+    .page-sub{font-size:14px;color:var(--text3)}
+
+    /* GRID STATS */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:32px}
+    .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s;overflow:hidden;position:relative}
+    .stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow3);border-color:var(--blue)}
+    .stat-card.high{background:linear-gradient(135deg,rgba(5,150,105,.1),rgba(5,150,105,.05));border-color:var(--green)}
+    .stat-card.medium{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(37,99,235,.05));border-color:var(--blue)}
+    .stat-card.low{background:linear-gradient(135deg,rgba(220,38,38,.1),rgba(220,38,38,.05));border-color:var(--red)}
+
+    .stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:12px}
+    .stat-icon.green{background:var(--green-bg)}
+    .stat-icon.blue{background:var(--blue-bg)}
+    .stat-icon.red{background:var(--red-bg)}
+
+    .stat-label{font-size:13px;color:var(--text3);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+    .stat-value{font-size:32px;font-weight:800;color:var(--text);margin-bottom:8px}
+    .stat-sub{font-size:12px;color:var(--text4)}
+
+    .progress-bar{width:100%;height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:12px}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:4px;transition:width .3s}
+
+    /* TABLE */
+    .table-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:32px}
+    .table-header{padding:20px;border-bottom:1px solid var(--border)}
+    .table-title{font-size:16px;font-weight:700;margin-bottom:4px}
+    .table-sub{font-size:12px;color:var(--text3)}
+
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    th{padding:12px 16px;text-align:left;font-size:12px;font-weight:700;color:var(--text2);background:var(--bg3);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.05em}
+    td{padding:16px;border-bottom:1px solid var(--border);font-size:14px}
+    tr:hover{background:var(--bg3)}
+    tr:last-child td{border-bottom:none}
+
+    .status-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600}
+    .status-selesai{background:var(--green-bg);color:var(--green)}
+    .status-proses{background:var(--blue-bg);color:var(--blue)}
+    .status-pending{background:rgba(234,179,8,.15);color:#ca8a04}
+
+    .btn-action{display:inline-flex;align-items:center;gap:4px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg2);color:var(--text2);transition:all .2s;cursor:pointer}
+    .btn-action:hover{background:var(--bg3);transform:translateY(-1px)}
+    .btn-action-primary{background:var(--blue);color:#fff;border:none}
+    .btn-action-primary:hover{background:var(--blue2)}
+
+    /* POIN CALC DISPLAY */
+    .poin-calc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)}
+    .poin-calc-detail{font-weight:600;color:var(--text2)}
+
+    .empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+    .empty-icon{font-size:48px;margin-bottom:12px}
+    .empty-text{font-size:14px;margin-bottom:4px}
+    .empty-sub{font-size:12px;color:var(--text4)}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:var(--radius2);font-size:14px;font-weight:700;transition:all .25s;border:none;cursor:pointer}
+    .btn-primary{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.35)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.45)}
+    .btn-secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border);box-shadow:var(--shadow)}
+    .btn-secondary:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+
+    .action-bar{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+
+    /* LOADING */
+    .loading{text-align:center;padding:40px 20px;color:var(--text3)}
+    .spinner{display:inline-block;width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* MOBILE */
+    @media(max-width:768px){
+      .navbar{padding:10px 14px}
+      .nav-links .nav-link:not(.icon):not(.user-info):not(.btn-logout){display:none}
+      .main{padding:14px}
+      .stats-grid{grid-template-columns:1fr}
+      .page-title{font-size:20px}
+      table{font-size:12px}
+      td,th{padding:12px 8px}
+      .btn-action{padding:6px 10px;font-size:11px}
+      .poin-calc{flex-direction:column;align-items:flex-start;gap:4px}
+    }
+
+    @media(max-width:480px){
+      .nav-brand{font-size:14px}
+      .user-name{display:none}
+      .stat-value{font-size:24px}
+      .page-title{font-size:18px}
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="nav-brand">📊 BEKARYE Bapenda</div>
+      <div class="nav-links">
+        <a href="entri.html" class="nav-link">➕ Entri Kegiatan</a>
+        <button class="nav-link icon" id="themeBtn" title="Ganti tema">🌙</button>
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <span class="user-name" id="userName">User</span>
+        </div>
+        <button class="btn-logout" id="btnLogout">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-header">
+      <h1 class="page-title">Dashboard Kegiatan</h1>
+      <p class="page-sub">Pantau poin dan aktivitas Anda bulan ini</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card medium">
+        <div class="stat-icon blue">📈</div>
+        <div class="stat-label">Poin Bulan Ini</div>
+        <div class="stat-value" id="poinBulan">-</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressBulan" style="width:0%"></div>
+        </div>
+        <div class="stat-sub" id="statBulanSub">Loading...</div>
+      </div>
+
+      <div class="stat-card high">
+        <div class="stat-icon green">🎯</div>
+        <div class="stat-label">Target Tahunan</div>
+        <div class="stat-value" id="targetTh">-</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressTh" style="width:0%;background:var(--green)"></div>
+        </div>
+        <div class="stat-sub" id="statThSub">Loading...</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(139,92,246,.15)">📝</div>
+        <div class="stat-label">Total Kegiatan</div>
+        <div class="stat-value" id="totalKegiatan">-</div>
+        <div class="stat-sub">Kegiatan selesai bulan ini</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(37,99,235,.15)">👤</div>
+        <div class="stat-label">Tier</div>
+        <div class="stat-value" id="tierUser">-</div>
+        <div class="stat-sub" id="userUnit">Unit: -</div>
+      </div>
+    </div>
+
+    <!-- TABEL DATA KEGIATAN -->
+    <div class="table-section">
+      <div class="table-header">
+        <div class="table-title">📋 Daftar Kegiatan Bulan Ini</div>
+        <div class="table-sub">Semua kegiatan yang telah Anda inputkan dengan perhitungan poin</div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="tableKegiatan">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Kode</th>
+              <th>Nama Kegiatan</th>
+              <th>Perhitungan</th>
+              <th>Total Poin</th>
+              <th>Bukti</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="7" class="loading">
+                <div class="spinner"></div>
+                <div style="margin-top:12px">Loading data...</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="padding:16px;border-top:1px solid var(--border);text-align:center">
+        <a href="entri.html" class="btn btn-primary">➕ Tambah Kegiatan Baru</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+// ============================================================
+// CONFIG
+// ============================================================
+var API_URL = 'https://script.google.com/macros/s/AKfycbxPfBmlQtAX7l-ABjenveFEOb0zRdpsfCU0eDaM3RBIt0t1sCASizxErr5BSVJoOFcFjQ/exec';
+var SESSION_KEY = 'bekarye-session';
+var THEME_KEY = 'bekarye-theme';
+
+// ============================================================
+// THEME
+// ============================================================
+function initTheme() {
+  var t = localStorage.getItem(THEME_KEY);
+  if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  updateThemeBtn();
+}
+
+function toggleTheme() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem(THEME_KEY,'light');
+  } else {
+    document.documentElement.setAttribute('data-theme','dark');
+    localStorage.setItem(THEME_KEY,'dark');
+  }
+  updateThemeBtn();
+}
+
+function updateThemeBtn() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+}
+
+// ============================================================
+// SESSION
+// ============================================================
+function loadSession() {
+  try {
+    var raw = localStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) {
+    return null;
+  }
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+var session = loadSession();
+if (!session || !session.token) {
+  location.href = 'index.html';
+}
+
+// Update user info
+document.getElementById('userAvatar').textContent = (session.nama || '?').charAt(0).toUpperCase();
+document.getElementById('userName').textContent = session.nama || 'User';
+document.getElementById('tierUser').textContent = session.tier || '-';
+document.getElementById('userUnit').textContent = 'Unit: ' + (session.unit || '-');
+
+// ============================================================
+// LOAD DATA KEGIATAN
+// ============================================================
+function loadDataKegiatan() {
+  console.log('🔄 Loading data kegiatan...');
+  
+  fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ 
+      action: 'getDataKegiatan', 
+      nip: session.nip 
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(j) {
+    console.log('✅ Response getDataKegiatan:', j);
+    
+    // Support multiple response formats
+    var kegiatan = null;
+    if (j.data && j.data.kegiatan) {
+      kegiatan = j.data.kegiatan;
+    } else if (j.user && j.user.kegiatan) {
+      kegiatan = j.user.kegiatan;
+    } else if (j.kegiatan) {
+      kegiatan = j.kegiatan;
+    }
+    
+    if (kegiatan) {
+      console.log('📊 Total kegiatan:', kegiatan.length);
+      
+      // Log detail setiap kegiatan
+      kegiatan.forEach(function(k, idx) {
+        console.log('  [' + idx + ']', {
+          tanggal: k.tanggal,
+          nama: k.nama_keg,
+          poin_satuan: k.poin_satuan,
+          jumlah: k.jumlah,
+          total_poin: k.total_poin
+        });
+      });
+      
+      displayKegiatan(kegiatan);
+      calculateStats(kegiatan);
+    } else {
+      console.log('⚠️ Kegiatan kosong atau format tidak dikenali');
+      displayEmptyState();
+      calculateStats([]);
+    }
+  })
+  .catch(function(err) {
+    console.error('❌ Error:', err);
+    displayEmptyState();
+  });
+}
+
+function displayEmptyState() {
+  var tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Belum ada kegiatan</div><div class="empty-sub">Mulai entri kegiatan untuk melihat data di sini</div></td></tr>';
+}
+
+function displayKegiatan(kegiatanList) {
+  var tbody = document.getElementById('tableBody');
+  
+  if (!kegiatanList || kegiatanList.length === 0) {
+    displayEmptyState();
+    return;
+  }
+
+  var html = '';
+  kegiatanList.forEach(function(k) {
+    // Determine status badge class
+    var statusClass = 'status-pending';
+    if (k.status === 'Selesai') {
+      statusClass = 'status-selesai';
+    } else if (k.status === 'Proses') {
+      statusClass = 'status-proses';
+    }
+
+    // Link bukti - safe check
+    var linkBukti = '';
+    var linkStr = k.link_bukti ? String(k.link_bukti).trim() : '';
+    if (linkStr && linkStr.length > 0) {
+      linkBukti = '<a href="' + linkStr + '" target="_blank" class="btn-action">📎 Lihat</a>';
+    } else {
+      linkBukti = '<span style="color:var(--text4)">-</span>';
+    }
+
+    // Hitung/ambil poin
+    var poinSatuan = Number(k.poin_satuan) || 0;
+    var jumlah = Number(k.jumlah) || 1;
+    var totalPoin = Number(k.total_poin) || (poinSatuan * jumlah);
+
+    // Display perhitungan
+    var perhitungan = '';
+    if (jumlah && jumlah > 1) {
+      perhitungan = '<div class="poin-calc">' +
+        '<span class="poin-calc-detail">' + poinSatuan + ' × ' + jumlah + '</span>' +
+        '</div>';
+    } else {
+      perhitungan = '<div class="poin-calc">' +
+        '<span class="poin-calc-detail">' + poinSatuan + '</span>' +
+        '</div>';
+    }
+
+    html += '<tr>';
+    html += '<td>' + (k.tanggal || '-') + '</td>';
+    html += '<td><strong>' + (k.kode_keg || '-') + '</strong></td>';
+    html += '<td>' + (k.nama_keg || '-') + '</td>';
+    html += '<td>' + perhitungan + '</td>';
+    html += '<td><strong style="font-size:16px;color:var(--blue)">' + totalPoin + '</strong></td>';
+    html += '<td>' + linkBukti + '</td>';
+    html += '<td><span class="status-badge ' + statusClass + '">● ' + (k.status || 'Pending') + '</span></td>';
+    html += '</tr>';
+  });
+
+  tbody.innerHTML = html;
+}
+
+function calculateStats(kegiatanList) {
+  console.log('📊 Calculate stats from', kegiatanList.length, 'kegiatan');
+  
+  var today = new Date();
+  var bulanAwal = new Date(today.getFullYear(), today.getMonth(), 1);
+  var bulanAkhir = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+  var poinBulan = 0;
+  var totalKegiatan = 0;
+
+  kegiatanList.forEach(function(k) {
+    try {
+      var tanggal = new Date(k.tanggal);
+      if (tanggal >= bulanAwal && tanggal <= bulanAkhir) {
+        // ✅ PENTING: Gunakan total_poin (bukan poin_satuan)
+        var totalPoin = Number(k.total_poin) || (Number(k.poin_satuan || k.poin || 0) * Number(k.jumlah || 1));
+        poinBulan += totalPoin;
+        totalKegiatan += 1;
+        
+        console.log('  + ' + k.nama_keg + ': ' + totalPoin + ' poin (total: ' + poinBulan + ')');
+      }
+    } catch(e) {
+      console.log('⚠️ Error parse kegiatan:', e);
+    }
+  });
+
+  console.log('💰 Poin bulan ini: ' + poinBulan);
+  console.log('📝 Total kegiatan: ' + totalKegiatan);
+
+  // Update stats
+  var targetBln = Number(session.target_bln) || 0;
+  var targetTh = Number(session.target_th) || 0;
+  var persenBln = targetBln > 0 ? Math.round((poinBulan / targetBln) * 100) : 0;
+  var persenTh = targetTh > 0 ? Math.round((poinBulan / targetTh) * 100) : 0;
+
+  // Clamp percentage to 100%
+  persenBln = Math.min(persenBln, 100);
+  persenTh = Math.min(persenTh, 100);
+
+  document.getElementById('poinBulan').textContent = poinBulan;
+  document.getElementById('targetTh').textContent = targetTh;
+  document.getElementById('totalKegiatan').textContent = totalKegiatan;
+
+  document.getElementById('statBulanSub').textContent = 'Target: ' + targetBln + ' poin (' + persenBln + '%)';
+  document.getElementById('statThSub').textContent = 'Poin: ' + poinBulan + ' / ' + targetTh;
+
+  document.getElementById('progressBulan').style.width = persenBln + '%';
+  document.getElementById('progressTh').style.width = persenTh + '%';
+
+  console.log('✅ Stats updated. Poin:', poinBulan, 'Persen:', persenBln + '%');
+}
+
+// ============================================================
+// LOGOUT
+// ============================================================
+document.getElementById('btnLogout').onclick = function() {
+  clearSession();
+  location.href = 'index.html';
+};
+
+// ============================================================
+// INIT & AUTO-REFRESH
+// ============================================================
+initTheme();
+document.getElementById('themeBtn').onclick = toggleTheme;
+loadDataKegiatan();
+
+// Refresh setiap 30 detik
+setInterval(loadDataKegiatan, 30000);
+  </script>
+</body>
+</html>
