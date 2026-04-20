@@ -1,0 +1,1478 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard BEKARYE Bapenda</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --bg2: #ffffff;
+      --bg3: #f8fafc;
+      --text: #0f172a;
+      --text2: #334155;
+      --text3: #64748b;
+      --text4: #94a3b8;
+      --border: #e2e8f0;
+      --blue: #2563eb;
+      --blue2: #3b82f6;
+      --blue-bg: #dbeafe;
+      --blue-bg2: #eff6ff;
+      --purple: #7c3aed;
+      --green: #059669;
+      --green-bg: #d1fae5;
+      --red: #dc2626;
+      --red-bg: #fee2e2;
+      --yellow: #d97706;
+      --yellow-bg: #fef3c7;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow2: 0 8px 30px rgba(0, 0, 0, 0.08);
+      --shadow3: 0 20px 60px rgba(0, 0, 0, 0.12);
+      --radius: 20px;
+      --radius2: 14px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --bg3: #334155;
+      --text: #f1f5f9;
+      --text2: #cbd5e1;
+      --text3: #94a3b8;
+      --text4: #64748b;
+      --blue: #3b82f6;
+      --blue2: #60a5fa;
+      --blue-bg: #1e3a5f;
+      --blue-bg2: #172554;
+      --purple: #8b5cf6;
+      --green: #34d399;
+      --green-bg: #064e3b;
+      --red: #f87171;
+      --red-bg: #450a0a;
+      --yellow: #fbbf24;
+      --yellow-bg: #78350f;
+      --border: #334155;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      --shadow2: 0 8px 30px rgba(0, 0, 0, 0.3);
+      --shadow3: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      background: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text3);
+    }
+
+    /* ============ NAVBAR ============ */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 70px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow2);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .navbar-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .navbar-brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+    }
+
+    .navbar-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      margin-left: 40px;
+    }
+
+    .navbar-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text2);
+      transition: all 0.2s;
+    }
+
+    .navbar-link:hover {
+      background: var(--bg3);
+      color: var(--blue);
+    }
+
+    .navbar-link.active {
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg3);
+      transform: scale(1.05);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: var(--bg3);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .user-jabatan {
+      font-size: 11px;
+      color: var(--text3);
+    }
+
+    .btn-logout {
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--red);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-logout:hover {
+      background: var(--red-bg);
+    }
+
+    /* ============ MAIN ============ */
+    .main {
+      margin-top: 70px;
+      padding: 30px 20px;
+      min-height: calc(100vh - 70px);
+      background: var(--bg);
+    }
+
+    .main-container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* ============ PAGE HEADER ============ */
+    .page-header {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .page-title-section h1 {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .page-title-section p {
+      font-size: 14px;
+      color: var(--text3);
+    }
+
+    /* ============ STATS GRID ============ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow3);
+      border-color: var(--blue);
+    }
+
+    .stat-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stat-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .stat-icon.blue {
+      background: var(--blue-bg);
+    }
+
+    .stat-icon.green {
+      background: var(--green-bg);
+    }
+
+    .stat-icon.purple {
+      background: rgba(124, 58, 237, 0.15);
+    }
+
+    .stat-icon.yellow {
+      background: var(--yellow-bg);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text3);
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .stat-value-small {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text3);
+    }
+
+    .stat-sub {
+      font-size: 13px;
+      color: var(--text3);
+      margin-bottom: 12px;
+    }
+
+    .stat-progress {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .stat-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    /* ============ FILTER BAR ============ */
+    .filter-bar {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text2);
+      white-space: nowrap;
+    }
+
+    .filter-select {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg2);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .filter-select:hover {
+      border-color: var(--blue);
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .filter-info {
+      background: var(--blue-bg);
+      color: var(--blue);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .btn-export {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-pdf {
+      background: var(--red);
+      color: white;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    }
+
+    .btn-pdf:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+    }
+
+    .btn-excel {
+      background: var(--green);
+      color: white;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+
+    .btn-excel:hover {
+      background: #047857;
+      transform: translateY(-2px);
+    }
+
+    /* ============ TABLE SECTION ============ */
+    .table-section {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .table-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg3);
+    }
+
+    .table-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .table-subtitle {
+      font-size: 13px;
+      color: var(--text3);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      padding: 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text2);
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    tbody tr {
+      transition: all 0.2s;
+    }
+
+    tbody tr:hover {
+      background: var(--bg3);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-approved {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .status-pending {
+      background: var(--yellow-bg);
+      color: var(--yellow);
+    }
+
+    .status-rejected {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .status-processing {
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .poin-calculation {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .poin-value {
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--blue);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-action:hover {
+      background: var(--blue-bg);
+      border-color: var(--blue);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text3);
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-text {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text2);
+    }
+
+    .empty-sub {
+      font-size: 13px;
+      color: var(--text4);
+      margin-bottom: 20px;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius2);
+      font-size: 13px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: white;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35);
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 40px;
+      color: var(--text3);
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ============ FOOTER ============ */
+    .table-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 10px 16px;
+        height: 60px;
+      }
+
+      .navbar-center {
+        display: none;
+      }
+
+      .navbar-brand {
+        font-size: 16px;
+      }
+
+      .user-details {
+        display: none;
+      }
+
+      .filter-bar {
+        padding: 16px;
+        gap: 12px;
+      }
+
+      .filter-info {
+        display: none;
+      }
+
+      .filter-actions {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .btn-export {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .main {
+        padding: 20px 12px;
+        margin-top: 60px;
+      }
+
+      .page-header {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th, td {
+        padding: 12px;
+      }
+
+      .btn-action {
+        padding: 6px 10px;
+        font-size: 10px;
+      }
+
+      .poin-calculation {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar-brand {
+        font-size: 14px;
+      }
+
+      .navbar-brand-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+
+      .page-title-section h1 {
+        font-size: 24px;
+      }
+
+      .stat-value {
+        font-size: 28px;
+      }
+
+      .theme-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <div class="navbar-brand-icon">📊</div>
+        <span>BEKARYE Bapenda</span>
+      </div>
+
+      <div class="navbar-center">
+        <a href="dashboard.html" class="navbar-link active">📊 Dashboard</a>
+        <a href="entri.html" class="navbar-link">➕ Entri Kegiatan</a>
+        <a href="verifikasi.html" class="navbar-link" id="linkVerifikasi" style="display: none;">
+          ✅ Verifikasi
+        </a>
+      </div>
+
+      <div class="navbar-right">
+        <button class="theme-toggle" id="themeBtn" title="Ganti tema">🌙</button>
+
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <div class="user-details">
+            <div class="user-name" id="userName">User</div>
+            <div class="user-jabatan" id="userJabatan">-</div>
+          </div>
+        </div>
+
+        <button class="btn-logout" id="btnLogout">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="main-container">
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div class="page-title-section">
+          <h1>📊 Dashboard Kegiatan</h1>
+          <p id="pageSub">Pantau poin dan aktivitas Anda bulan ini</p>
+        </div>
+      </div>
+
+      <!-- STATS GRID -->
+      <div class="stats-grid">
+        <!-- Poin Bulan Ini -->
+        <div class="stat-card">
+          <div class="stat-icon blue">📈</div>
+          <div class="stat-label">Poin Bulan Ini</div>
+          <div class="stat-value">
+            <span id="poinBulan">0</span>
+            <span class="stat-value-small">poin</span>
+          </div>
+          <div class="stat-sub">Target: <strong id="targetBulan">0</strong> poin</div>
+          <div class="stat-progress">
+            <div class="stat-progress-fill" id="progressBulan" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Target Tahunan -->
+        <div class="stat-card">
+          <div class="stat-icon green">🎯</div>
+          <div class="stat-label">Target Tahunan</div>
+          <div class="stat-value">
+            <span id="poinTahun">0</span>
+            <span class="stat-value-small">poin</span>
+          </div>
+          <div class="stat-sub">Target: <strong id="targetTahun">0</strong> poin</div>
+          <div class="stat-progress">
+            <div class="stat-progress-fill" id="progressTahun" style="width: 0%; background: var(--green)"></div>
+          </div>
+        </div>
+
+        <!-- Total Kegiatan -->
+        <div class="stat-card">
+          <div class="stat-icon purple">📝</div>
+          <div class="stat-label">Total Kegiatan</div>
+          <div class="stat-value">
+            <span id="totalKegiatan">0</span>
+          </div>
+          <div class="stat-sub">Kegiatan bulan ini</div>
+        </div>
+
+        <!-- Status Verifikasi -->
+        <div class="stat-card">
+          <div class="stat-icon yellow">⏳</div>
+          <div class="stat-label">Menunggu Verifikasi</div>
+          <div class="stat-value">
+            <span id="verifPending">0</span>
+          </div>
+          <div class="stat-sub">Kegiatan dalam proses</div>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <span class="filter-label">📅 Filter Periode:</span>
+        <select class="filter-select" id="filterBulan">
+          <option value="all">Semua Bulan</option>
+          <option value="0">Januari</option>
+          <option value="1">Februari</option>
+          <option value="2">Maret</option>
+          <option value="3">April</option>
+          <option value="4">Mei</option>
+          <option value="5">Juni</option>
+          <option value="6">Juli</option>
+          <option value="7">Agustus</option>
+          <option value="8">September</option>
+          <option value="9">Oktober</option>
+          <option value="10">November</option>
+          <option value="11">Desember</option>
+        </select>
+
+        <select class="filter-select" id="filterTahun"></select>
+
+        <span class="filter-info" id="filterInfo">Menampilkan: -</span>
+
+        <div class="filter-actions">
+          <button class="btn-export btn-pdf" onclick="exportPDF()">📄 Export PDF</button>
+          <button class="btn-export btn-excel" onclick="exportExcel()">📊 Export Excel</button>
+        </div>
+      </div>
+
+      <!-- TABLE SECTION -->
+      <div class="table-section">
+        <div class="table-header">
+          <div class="table-title">📋 Daftar Kegiatan</div>
+          <div class="table-subtitle" id="tableSubtitle">Semua kegiatan yang telah Anda inputkan</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="tableKegiatan">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Kode</th>
+                <th>Nama Kegiatan</th>
+                <th>Perhitungan</th>
+                <th>Total Poin</th>
+                <th>Bukti</th>
+                <th>Status Verifikasi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td colspan="7">
+                  <div class="loading">
+                    <div class="spinner"></div>
+                    <span>Memuat data...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <a href="entri.html" class="btn-cta">➕ Tambah Kegiatan Baru</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    // ============================================================
+    // CONFIG
+    // ============================================================
+    var API_URL = 'https://script.google.com/macros/s/AKfycbwExhaqgJiK9gK58gVZ5b-qbPEFWAPfHX_JuWV4DeHMZczBu59nm2E0__MSeTv6cJNquQ/exec';
+    var SESSION_KEY = 'bekarye-session';
+    var THEME_KEY = 'bekarye-theme';
+    var BULAN_NAMA = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    var allKegiatan = [];
+    var filteredKegiatan = [];
+    var session = null;
+
+    // ============================================================
+    // THEME
+    // ============================================================
+    function initTheme() {
+      var t = localStorage.getItem(THEME_KEY);
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      updateThemeBtn();
+    }
+
+    function toggleTheme() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem(THEME_KEY, 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem(THEME_KEY, 'dark');
+      }
+      updateThemeBtn();
+    }
+
+    function updateThemeBtn() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    // ============================================================
+    // SESSION
+    // ============================================================
+    function initApp() {
+      try {
+        console.log('🚀 initApp() started');
+
+        session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+
+        console.log('📋 Session loaded:', session);
+
+        if (!session || !session.token || !session.nip) {
+          console.log('❌ Session tidak valid');
+          alert('⚠️ Sesi tidak valid. Silakan login kembali.');
+          location.href = 'index.html';
+          return;
+        }
+
+        console.log('✅ Session valid:', session.nama);
+
+        // Setup UI
+        setupUI();
+
+        // Load data
+        setupFilters();
+        loadDataKegiatan();
+      } catch (err) {
+        console.error('❌ Init error:', err);
+        location.href = 'index.html';
+      }
+    }
+
+    function setupUI() {
+      try {
+        document.getElementById('userAvatar').textContent = (session.nama || '?').charAt(0).toUpperCase();
+        document.getElementById('userName').textContent = session.nama || 'User';
+        document.getElementById('userJabatan').textContent = session.jabatan || '-';
+
+        if (session && session.is_verifikator) {
+          document.getElementById('linkVerifikasi').style.display = 'inline-flex';
+          console.log('✅ Verifikasi link ditampilkan (Eselon: ' + session.eselon + ')');
+        }
+      } catch (err) {
+        console.error('❌ setupUI error:', err);
+      }
+    }
+
+    // ============================================================
+    // SETUP FILTERS
+    // ============================================================
+    function setupFilters() {
+      var today = new Date();
+      var currentYear = today.getFullYear();
+      var currentMonth = today.getMonth();
+
+      var selectTahun = document.getElementById('filterTahun');
+      for (var y = currentYear; y >= currentYear - 4; y--) {
+        var opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        selectTahun.appendChild(opt);
+      }
+
+      document.getElementById('filterBulan').value = currentMonth;
+      document.getElementById('filterTahun').value = currentYear;
+    }
+
+    // ============================================================
+    // LOAD DATA
+    // ============================================================
+    function loadDataKegiatan() {
+      console.log('🔄 Loading kegiatan for:', session.nip);
+
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'getDataKegiatan',
+          nip: session.nip
+        })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          console.log('📊 Response:', j);
+
+          if (j.ok && j.data && j.data.kegiatan) {
+            allKegiatan = j.data.kegiatan;
+            console.log('✅ Total kegiatan:', allKegiatan.length);
+            applyFilter();
+          } else {
+            console.error('❌ Error:', j.message);
+            allKegiatan = [];
+            applyFilter();
+          }
+        })
+        .catch(function (err) {
+          console.error('❌ Fetch error:', err);
+          displayEmpty();
+        });
+    }
+
+    // ============================================================
+    // APPLY FILTER
+    // ============================================================
+    function applyFilter() {
+      var bulanFilter = document.getElementById('filterBulan').value;
+      var tahunFilter = parseInt(document.getElementById('filterTahun').value);
+
+      filteredKegiatan = allKegiatan.filter(function (k) {
+        try {
+          var tgl = new Date(k.tanggal);
+          if (isNaN(tgl.getTime())) return false;
+
+          if (tgl.getFullYear() !== tahunFilter) return false;
+
+          if (bulanFilter === 'all') return true;
+          return tgl.getMonth() === parseInt(bulanFilter);
+        } catch (e) {
+          return false;
+        }
+      });
+
+      updateFilterInfo(bulanFilter, tahunFilter);
+      displayKegiatan(filteredKegiatan);
+      calculateStats(filteredKegiatan);
+    }
+
+    function updateFilterInfo(bulanFilter, tahunFilter) {
+      var infoText = '';
+      var subText = '';
+
+      if (bulanFilter === 'all') {
+        infoText = 'Tahun ' + tahunFilter + ' (' + filteredKegiatan.length + ' kegiatan)';
+        subText = 'Menampilkan semua kegiatan tahun ' + tahunFilter;
+        document.getElementById('pageSub').textContent = 'Pantau poin dan aktivitas Anda tahun ' + tahunFilter;
+      } else {
+        infoText = BULAN_NAMA[bulanFilter] + ' ' + tahunFilter + ' (' + filteredKegiatan.length + ' kegiatan)';
+        subText = 'Kegiatan bulan ' + BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
+        document.getElementById('pageSub').textContent = 'Pantau poin dan aktivitas Anda bulan ' + BULAN_NAMA[bulanFilter];
+      }
+
+      document.getElementById('filterInfo').textContent = infoText;
+      document.getElementById('tableSubtitle').textContent = subText;
+    }
+
+    // ============================================================
+    // DISPLAY
+    // ============================================================
+    function displayEmpty() {
+      var tbody = document.getElementById('tableBody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7">
+            <div class="empty-state">
+              <div class="empty-icon">📭</div>
+              <div class="empty-text">Belum ada kegiatan</div>
+              <div class="empty-sub">Tidak ada data pada periode terpilih</div>
+              <a href="entri.html" class="btn-cta">➕ Tambah Kegiatan</a>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    function displayKegiatan(kegiatanList) {
+      var tbody = document.getElementById('tableBody');
+
+      if (!kegiatanList || kegiatanList.length === 0) {
+        displayEmpty();
+        return;
+      }
+
+      kegiatanList.sort(function (a, b) {
+        return new Date(b.tanggal) - new Date(a.tanggal);
+      });
+
+      var html = '';
+      kegiatanList.forEach(function (k) {
+        var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        }) : '-';
+
+        // Status badge
+        var statusClass = 'status-pending';
+        var statusText = '⏳ Pending';
+
+        if (k.status_verif) {
+          if (k.status_verif === 'Final Disetujui') {
+            statusClass = 'status-approved';
+            statusText = '✅ Disetujui';
+          } else if (k.status_verif === 'Ditolak') {
+            statusClass = 'status-rejected';
+            statusText = '❌ Ditolak';
+          } else {
+            statusClass = 'status-processing';
+            statusText = '⏳ ' + k.status_verif;
+          }
+        }
+
+        // Bukti link
+        var buktiLink = '';
+        if (k.link_bukti && String(k.link_bukti).trim()) {
+          buktiLink = `<a href="${k.link_bukti}" target="_blank" class="btn-action">📎 Lihat</a>`;
+        } else {
+          buktiLink = '<span style="color: var(--text4)">-</span>';
+        }
+
+        // Perhitungan poin
+        var poinSatuan = Number(k.poin_satuan) || 0;
+        var jumlah = Number(k.jumlah) || 1;
+        var totalPoin = Number(k.total_poin) || (poinSatuan * jumlah);
+        var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
+
+        html += `
+          <tr>
+            <td>${tglDisplay}</td>
+            <td><strong>${k.kode_keg || '-'}</strong></td>
+            <td>${k.nama_keg || '-'}</td>
+            <td><span class="poin-calculation">${perhitungan}</span></td>
+            <td><strong class="poin-value">${totalPoin}</strong></td>
+            <td>${buktiLink}</td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    // ============================================================
+    // CALCULATE STATS
+    // ============================================================
+    function calculateStats(kegiatanList) {
+      var totalPoin = 0;
+      var totalKegiatan = kegiatanList.length;
+      var verifPending = 0;
+
+      kegiatanList.forEach(function (k) {
+        var poin = Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+        totalPoin += poin;
+
+        if (!k.status_verif || k.status_verif.includes('Pending') || k.status_verif.includes('Eselon')) {
+          verifPending++;
+        }
+      });
+
+      var targetBln = Number(session.target_bln) || 0;
+      var targetTh = Number(session.target_th) || 0;
+      var bulanFilter = document.getElementById('filterBulan').value;
+
+      var targetCompare = bulanFilter === 'all' ? targetTh : targetBln;
+      var persenBln = targetCompare > 0 ? Math.min(Math.round((totalPoin / targetCompare) * 100), 100) : 0;
+      var persenTh = targetTh > 0 ? Math.min(Math.round((totalPoin / targetTh) * 100), 100) : 0;
+
+      document.getElementById('poinBulan').textContent = totalPoin;
+      document.getElementById('targetBulan').textContent = targetCompare;
+      document.getElementById('poinTahun').textContent = totalPoin;
+      document.getElementById('targetTahun').textContent = targetTh;
+      document.getElementById('totalKegiatan').textContent = totalKegiatan;
+      document.getElementById('verifPending').textContent = verifPending;
+
+      document.getElementById('progressBulan').style.width = persenBln + '%';
+      document.getElementById('progressTahun').style.width = persenTh + '%';
+    }
+
+    // ============================================================
+    // EXPORT PDF
+    // ============================================================
+    function exportPDF() {
+      if (filteredKegiatan.length === 0) {
+        alert('❌ Tidak ada data untuk diexport!');
+        return;
+      }
+
+      var bulanFilter = document.getElementById('filterBulan').value;
+      var tahunFilter = document.getElementById('filterTahun').value;
+      var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
+
+      var totalPoin = 0;
+      filteredKegiatan.forEach(function (k) {
+        totalPoin += Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+      });
+
+      var { jsPDF } = window.jspdf;
+      var doc = new jsPDF('landscape', 'mm', 'a4');
+
+      // Header
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('LAPORAN KEGIATAN BEKARYE BAPENDA', 148, 15, { align: 'center' });
+
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Badan Pendapatan Daerah', 148, 22, { align: 'center' });
+
+      doc.setLineWidth(0.5);
+      doc.line(15, 27, 282, 27);
+
+      // Info
+      var infoY = 35;
+      doc.setFontSize(10);
+
+      doc.text('Nama', 15, infoY);
+      doc.text(': ' + (session.nama || '-'), 40, infoY);
+
+      doc.text('NIP', 15, infoY + 6);
+      doc.text(': ' + (session.nip || '-'), 40, infoY + 6);
+
+      doc.text('Unit', 15, infoY + 12);
+      doc.text(': ' + (session.unit || '-'), 40, infoY + 12);
+
+      doc.text('Periode', 150, infoY);
+      doc.text(': ' + periode, 175, infoY);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Total Poin', 150, infoY + 6);
+      doc.text(': ' + totalPoin + ' poin', 175, infoY + 6);
+
+      doc.line(15, 55, 282, 55);
+
+      // Table
+      var tableData = filteredKegiatan.map(function (k, idx) {
+        var poinSatuan = Number(k.poin_satuan) || 0;
+        var jumlah = Number(k.jumlah) || 1;
+        var tp = Number(k.total_poin) || (poinSatuan * jumlah);
+        var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
+        var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
+
+        return [idx + 1, tglDisplay, k.kode_keg || '-', k.nama_keg || '-', perhitungan, tp, k.status || 'Pending'];
+      });
+
+      doc.autoTable({
+        head: [['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Perhitungan', 'Poin', 'Status']],
+        body: tableData,
+        startY: 60,
+        theme: 'grid',
+        headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 9 },
+        bodyStyles: { fontSize: 8 },
+        columnStyles: {
+          0: { cellWidth: 10, halign: 'center' },
+          1: { cellWidth: 22 },
+          2: { cellWidth: 22 },
+          3: { cellWidth: 100 },
+          4: { cellWidth: 25, halign: 'center' },
+          5: { cellWidth: 18, halign: 'center', fontStyle: 'bold' },
+          6: { cellWidth: 22, halign: 'center' }
+        },
+        foot: [['', '', '', '', 'TOTAL', totalPoin, '']],
+        footStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }
+      });
+
+      var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.pdf';
+      doc.save(fileName);
+
+      console.log('✅ PDF exported:', fileName);
+    }
+
+    // ============================================================
+    // EXPORT EXCEL
+    // ============================================================
+    function exportExcel() {
+      if (filteredKegiatan.length === 0) {
+        alert('❌ Tidak ada data untuk diexport!');
+        return;
+      }
+
+      var bulanFilter = document.getElementById('filterBulan').value;
+      var tahunFilter = document.getElementById('filterTahun').value;
+      var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
+
+      var totalPoin = 0;
+      filteredKegiatan.forEach(function (k) {
+        totalPoin += Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+      });
+
+      var wsData = [];
+      wsData.push(['LAPORAN KEGIATAN BEKARYE BAPENDA']);
+      wsData.push(['Badan Pendapatan Daerah']);
+      wsData.push([]);
+      wsData.push(['Nama', ':', session.nama || '-', '', 'Periode', ':', periode]);
+      wsData.push(['NIP', ':', session.nip || '-', '', 'Total Poin', ':', totalPoin + ' poin']);
+      wsData.push(['Unit', ':', session.unit || '-']);
+      wsData.push([]);
+      wsData.push(['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Poin Satuan', 'Jumlah', 'Total Poin', 'Status']);
+
+      filteredKegiatan.forEach(function (k, idx) {
+        var poinSatuan = Number(k.poin_satuan) || 0;
+        var jumlah = Number(k.jumlah) || 1;
+        var tp = Number(k.total_poin) || (poinSatuan * jumlah);
+        var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
+
+        wsData.push([idx + 1, tglDisplay, k.kode_keg || '-', k.nama_keg || '-', poinSatuan, jumlah, tp, k.status || 'Pending']);
+      });
+
+      wsData.push([]);
+      wsData.push(['', '', '', '', '', 'TOTAL', totalPoin, '']);
+
+      var ws = XLSX.utils.aoa_to_sheet(wsData);
+      ws['!cols'] = [
+        { wch: 5 }, { wch: 12 }, { wch: 12 }, { wch: 40 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 12 }
+      ];
+
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Laporan Kegiatan');
+
+      var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.xlsx';
+      XLSX.writeFile(wb, fileName);
+
+      console.log('✅ Excel exported:', fileName);
+    }
+
+    // ============================================================
+    // LOGOUT
+    // ============================================================
+    document.getElementById('btnLogout').addEventListener('click', function () {
+      if (confirm('⚠️ Anda yakin ingin logout?')) {
+        localStorage.removeItem(SESSION_KEY);
+        location.href = 'index.html';
+      }
+    });
+
+    // ============================================================
+    // EVENT LISTENERS
+    // ============================================================
+    document.getElementById('filterBulan').addEventListener('change', applyFilter);
+    document.getElementById('filterTahun').addEventListener('change', applyFilter);
+
+    document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    console.log('📄 Dashboard loading...');
+    initTheme();
+    initApp();
+
+    // Auto refresh every 60 seconds
+    setInterval(loadDataKegiatan, 60000);
+  </script>
+</body>
+</html>

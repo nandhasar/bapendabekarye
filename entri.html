@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEKARYE Bapenda — Entri Kegiatan</title>
+  <style>
+    :root{--bg:#f1f5f9;--bg2:#ffffff;--bg3:#f8fafc;--text:#0f172a;--text2:#334155;--text3:#64748b;--text4:#94a3b8;--border:#e2e8f0;--blue:#2563eb;--blue2:#3b82f6;--blue-bg:#dbeafe;--blue-bg2:#eff6ff;--purple:#7c3aed;--green:#059669;--green-bg:#d1fae5;--red:#dc2626;--red-bg:#fee2e2;--shadow:0 1px 3px rgba(0,0,0,.06);--shadow2:0 8px 30px rgba(0,0,0,.08);--shadow3:0 20px 60px rgba(0,0,0,.12);--radius:20px;--radius2:14px}
+    [data-theme="dark"]{--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#f1f5f9;--text2:#cbd5e1;--text3:#94a3b8;--text4:#64748b;--blue:#3b82f6;--blue2:#60a5fa;--blue-bg:#1e3a5f;--blue-bg2:#172554;--purple:#8b5cf6;--green:#34d399;--green-bg:#064e3b;--red:#f87171;--red-bg:#450a0a;--border:#334155;--shadow:0 1px 3px rgba(0,0,0,.2);--shadow2:0 8px 30px rgba(0,0,0,.3);--shadow3:0 20px 60px rgba(0,0,0,.4)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s}
+    a{text-decoration:none;color:inherit}button{cursor:pointer;font-family:inherit}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+    /* NAV */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:12px 20px;background:var(--bg2);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+    .nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px}
+    .nav-links{display:flex;align-items:center;gap:12px}
+    .nav-link{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;font-size:13px;font-weight:600;color:var(--text2);transition:all .2s;border:none;background:transparent;cursor:pointer}
+    .nav-link:hover{background:var(--bg3);transform:translateY(-1px)}
+    .nav-link.icon{width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:10px}
+    .btn-logout{padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg2);color:var(--red);transition:all .2s;cursor:pointer}
+    .btn-logout:hover{background:var(--red-bg)}
+
+    /* MAIN */
+    .main{margin-top:70px;padding:20px;max-width:900px;margin-left:auto;margin-right:auto}
+
+    /* HEADER */
+    .page-header{margin-bottom:32px}
+    .page-title{font-size:28px;font-weight:800;margin-bottom:4px}
+    .page-sub{font-size:14px;color:var(--text3)}
+
+    /* FORM SECTION */
+    .form-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow2)}
+
+    .form-group{margin-bottom:20px}
+    .form-group label{display:block;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+    .form-group input,
+    .form-group select,
+    .form-group textarea{width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius2);font-size:15px;background:var(--bg3);color:var(--text);font-family:inherit;outline:none;transition:all .2s}
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+    .form-group input::placeholder,
+    .form-group textarea::placeholder{color:var(--text4)}
+    .form-group textarea{min-height:100px;resize:vertical}
+
+    .input-hint{font-size:12px;color:var(--text4);margin-top:4px}
+
+    /* AUTOCOMPLETE */
+    .autocomplete-wrapper{position:relative}
+    .autocomplete-input{width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius2);font-size:15px;background:var(--bg3);color:var(--text);font-family:inherit;outline:none;transition:all .2s}
+    .autocomplete-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+    .autocomplete-input::placeholder{color:var(--text4)}
+
+    .autocomplete-list{position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius2) var(--radius2);max-height:300px;overflow-y:auto;display:none;z-index:100;box-shadow:var(--shadow2)}
+    .autocomplete-list.show{display:block}
+    .autocomplete-item{padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:4px}
+    .autocomplete-item:last-child{border-bottom:none}
+    .autocomplete-item:hover{background:var(--bg3)}
+    .autocomplete-item.selected{background:var(--blue-bg);border-left:4px solid var(--blue)}
+    .autocomplete-item-code{font-size:12px;font-weight:700;color:var(--blue)}
+    .autocomplete-item-name{font-size:14px;font-weight:600;color:var(--text2)}
+    .autocomplete-item-poin{font-size:11px;color:var(--text4)}
+    .autocomplete-empty{padding:16px;text-align:center;color:var(--text4);font-size:13px}
+
+    /* FILE UPLOAD */
+    .upload-zone{border:2px dashed var(--border);border-radius:var(--radius2);padding:24px;text-align:center;transition:all .2s;cursor:pointer;background:var(--bg3)}
+    .upload-zone:hover{border-color:var(--blue);background:rgba(37,99,235,.05)}
+    .upload-zone.drag{border-color:var(--blue);background:rgba(37,99,235,.1)}
+    .upload-icon{font-size:32px;margin-bottom:8px}
+    .upload-text{font-size:14px;font-weight:600;color:var(--text2);margin-bottom:4px}
+    .upload-sub{font-size:12px;color:var(--text4)}
+    .upload-input{display:none}
+
+    .file-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+    .file-info{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+    .file-icon{font-size:18px}
+    .file-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .file-size{font-size:11px;color:var(--text4)}
+    .btn-remove{padding:6px 10px;border-radius:8px;font-size:11px;border:1px solid var(--red-bg);background:var(--red-bg);color:var(--red);cursor:pointer;transition:all .2s}
+    .btn-remove:hover{background:var(--red);color:#fff}
+
+    /* ALERT */
+    .alert{padding:14px 16px;border-radius:12px;font-size:13px;font-weight:600;margin-bottom:20px;display:none;animation:slideDown .3s ease}
+    .alert.show{display:block}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+    .alert-error{background:var(--red-bg);color:var(--red)}
+    .alert-success{background:var(--green-bg);color:var(--green)}
+    .alert-info{background:var(--blue-bg2);color:var(--blue)}
+
+    /* POIN PREVIEW */
+    .poin-preview{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(124,58,237,.1));border:2px solid var(--blue);border-radius:12px;padding:20px;margin:20px 0;text-align:center}
+    .poin-preview-label{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+    .poin-preview-calc{font-size:16px;font-weight:600;color:var(--text2);margin-bottom:8px}
+    .poin-preview-total{font-size:32px;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+    /* FORM BUTTONS */
+    .form-actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:var(--radius2);font-size:14px;font-weight:700;transition:all .25s;border:none;cursor:pointer}
+    .btn-primary{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.35)}
+    .btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.45)}
+    .btn-primary:disabled{opacity:.6;cursor:not-allowed}
+    .btn-secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border);box-shadow:var(--shadow)}
+    .btn-secondary:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+
+    .loader{display:none;width:20px;height:20px;border:3px solid rgba(255,255,255,.3);border-top:3px solid #fff;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* INPUT ROW (untuk tanggal + jumlah) */
+    .input-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+    /* SATUAN BADGE */
+    .satuan-badge{display:inline-block;background:var(--blue-bg);color:var(--blue);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;margin-left:4px}
+
+    /* MOBILE */
+    @media(max-width:768px){
+      .main{padding:14px}
+      .form-card{padding:24px}
+      .page-title{font-size:20px}
+      .form-actions{flex-direction:column}
+      .btn{width:100%;justify-content:center}
+      .autocomplete-list{max-height:200px}
+      .input-row{grid-template-columns:1fr}
+    }
+
+    @media(max-width:480px){
+      .nav-brand{font-size:14px}
+      .page-title{font-size:18px}
+      .poin-preview-total{font-size:24px}
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="nav-brand">📝 BEKARYE Bapenda</div>
+      <div class="nav-links">
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <button class="nav-link icon" id="themeBtn" title="Ganti tema">🌙</button>
+        <button class="btn-logout" id="btnLogout">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-header">
+      <h1 class="page-title">➕ Entri Kegiatan Baru</h1>
+      <p class="page-sub">Catat semua kegiatan yang telah Anda laksanakan</p>
+    </div>
+
+    <!-- ALERT -->
+    <div id="alertErr" class="alert alert-error"></div>
+    <div id="alertSuccess" class="alert alert-success"></div>
+    <div id="alertInfo" class="alert alert-info"></div>
+
+    <!-- FORM -->
+    <div class="form-card">
+      <form id="kegiatanForm">
+        
+        <!-- TANGGAL + JUMLAH (ROW) -->
+        <div class="input-row">
+          <div class="form-group">
+            <label>📅 Tanggal Kegiatan</label>
+            <input type="date" id="inTanggal" required />
+            <div class="input-hint">Kapan kegiatan ini dilaksanakan?</div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              🔢 Jumlah / Pengali
+              <span class="satuan-badge" id="satuanLabel">unit</span>
+            </label>
+            <input 
+              type="number" 
+              id="inJumlah" 
+              min="1" 
+              value="1" 
+              required 
+              oninput="hitungTotalPoin()"
+            />
+            <div class="input-hint">Misal: jumlah orang dilayani, dokumen diproses, dll</div>
+          </div>
+        </div>
+
+        <!-- KODE KEGIATAN (AUTOCOMPLETE) -->
+        <div class="form-group">
+          <label>🔢 Kode / Nama Kegiatan</label>
+          <div class="autocomplete-wrapper">
+            <input type="text" id="inKodeKeg" class="autocomplete-input" 
+                   placeholder="Ketik kode atau nama kegiatan..." required autocomplete="off" />
+            <div class="autocomplete-list" id="autocompleteList"></div>
+          </div>
+          <div class="input-hint" id="hintKeg">⏳ Memuat data kegiatan...</div>
+        </div>
+
+        <!-- NAMA KEGIATAN (Auto) -->
+        <div class="form-group">
+          <label>📋 Nama Kegiatan Lengkap</label>
+          <input type="text" id="inNamaKeg" readonly style="background:var(--bg3);cursor:not-allowed" />
+          <div class="input-hint">Terisi otomatis berdasarkan pilihan</div>
+        </div>
+
+        <!-- POIN PREVIEW -->
+        <div class="poin-preview">
+          <div class="poin-preview-label">💎 Total Poin</div>
+          <div class="poin-preview-calc">
+            <span id="previewPoinSatuan">0</span> × 
+            <span id="previewJumlah">1</span> = 
+          </div>
+          <div class="poin-preview-total" id="previewTotalPoin">0</div>
+        </div>
+
+        <!-- POIN (Hidden) -->
+        <input type="hidden" id="inPoin" />
+
+        <!-- CATATAN -->
+        <div class="form-group">
+          <label>📝 Catatan/Deskripsi</label>
+          <textarea id="inCatatan" placeholder="Jelaskan detail kegiatan (opsional)"></textarea>
+        </div>
+
+        <!-- UPLOAD BUKTI -->
+        <div class="form-group">
+          <label>📎 Upload Bukti (PDF/JPG/PNG)</label>
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">☁️</div>
+            <div class="upload-text">Klik atau drag file di sini</div>
+            <div class="upload-sub">Format: PDF, JPG, PNG (Max 25MB)</div>
+            <input type="file" id="fileInput" class="upload-input" accept=".pdf,.jpg,.jpeg,.png" />
+          </div>
+          <div id="fileList"></div>
+          <input type="hidden" id="inLinkBukti" />
+          <div class="input-hint">File akan diupload ke Google Drive otomatis</div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btnSubmit">
+            <span class="loader" id="loader"></span>
+            ✅ Simpan Kegiatan
+          </button>
+          <a href="dashboard.html" class="btn btn-secondary">⬅️ Kembali</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+// ============================================================
+// CONFIG
+// ============================================================
+var API_URL = 'https://script.google.com/macros/s/AKfycbwExhaqgJiK9gK58gVZ5b-qbPEFWAPfHX_JuWV4DeHMZczBu59nm2E0__MSeTv6cJNquQ/exec';
+var SESSION_KEY = 'bekarye-session';
+var THEME_KEY = 'bekarye-theme';
+
+var MASTER_KEGIATAN = [];
+var selectedFile = null;
+var selectedKegiatan = null;
+
+// ============================================================
+// THEME
+// ============================================================
+function initTheme() {
+  var t = localStorage.getItem(THEME_KEY);
+  if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  updateThemeBtn();
+}
+
+function toggleTheme() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem(THEME_KEY,'light');
+  } else {
+    document.documentElement.setAttribute('data-theme','dark');
+    localStorage.setItem(THEME_KEY,'dark');
+  }
+  updateThemeBtn();
+}
+
+function updateThemeBtn() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+}
+
+// ============================================================
+// SESSION
+// ============================================================
+function loadSession() {
+  try {
+    var raw = localStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) {
+    return null;
+  }
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
+// ============================================================
+// ALERT
+// ============================================================
+function showAlert(msg, type) {
+  var elem = type === 'error' ? document.getElementById('alertErr') : 
+             type === 'success' ? document.getElementById('alertSuccess') : 
+             type === 'info' ? document.getElementById('alertInfo') : null;
+  if (!elem) return;
+  elem.textContent = msg;
+  elem.classList.add('show');
+  setTimeout(function(){ elem.classList.remove('show'); }, 4000);
+}
+
+function hideAlerts() {
+  document.getElementById('alertErr').classList.remove('show');
+  document.getElementById('alertSuccess').classList.remove('show');
+  document.getElementById('alertInfo').classList.remove('show');
+}
+
+// ============================================================
+// HITUNG TOTAL POIN
+// ============================================================
+function hitungTotalPoin() {
+  if (!selectedKegiatan) return;
+
+  var poinSatuan = parseFloat(selectedKegiatan.poin) || 0;
+  var jumlahInput = document.getElementById('inJumlah');
+  var jumlah = parseInt(jumlahInput.value) || 1;
+
+  if (jumlah < 1) {
+    jumlah = 1;
+    jumlahInput.value = 1;
+  }
+
+  var totalPoin = poinSatuan * jumlah;
+  var satuan = selectedKegiatan.satuan || 'unit';
+
+  document.getElementById('previewPoinSatuan').textContent = poinSatuan;
+  document.getElementById('previewJumlah').textContent = jumlah;
+  document.getElementById('previewTotalPoin').textContent = totalPoin;
+  document.getElementById('inPoin').value = totalPoin;
+  document.getElementById('satuanLabel').textContent = satuan;
+}
+
+// ============================================================
+// LOAD MASTER KEGIATAN
+// ============================================================
+function loadMasterKegiatan() {
+  var hint = document.getElementById('hintKeg');
+  hint.textContent = '⏳ Memuat data kegiatan...';
+  
+  fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'getMasterKegiatan' })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(j) {
+    console.log('Response getMasterKegiatan:', j);
+    
+    // Support multiple response formats
+    var kegiatan = null;
+    if (j.data && j.data.kegiatan) {
+      kegiatan = j.data.kegiatan;
+    } else if (j.user && j.user.kegiatan) {
+      kegiatan = j.user.kegiatan;
+    } else if (j.kegiatan) {
+      kegiatan = j.kegiatan;
+    }
+    
+    if (kegiatan && kegiatan.length > 0) {
+      MASTER_KEGIATAN = kegiatan;
+      console.log('✅ Master kegiatan loaded:', kegiatan.length);
+      hint.textContent = '✅ ' + kegiatan.length + ' kegiatan siap dipilih. Mulai ketik untuk mencari...';
+    } else {
+      console.error('❌ Data kegiatan kosong:', j);
+      hint.textContent = '⚠️ Data kegiatan tidak ditemukan';
+      showAlert('⚠️ Data kegiatan tidak ditemukan', 'info');
+    }
+  })
+  .catch(function(err) {
+    console.error('Error loading master:', err);
+    hint.textContent = '❌ Gagal memuat data kegiatan';
+    showAlert('⚠️ Gagal memuat data kegiatan: ' + err.message, 'error');
+  });
+}
+
+// ============================================================
+// AUTOCOMPLETE LOGIC
+// ============================================================
+var inputKeg = document.getElementById('inKodeKeg');
+var listKeg = document.getElementById('autocompleteList');
+
+inputKeg.addEventListener('input', function() {
+  if (MASTER_KEGIATAN.length === 0) {
+    listKeg.innerHTML = '<div class="autocomplete-empty">⏳ Data kegiatan belum siap, mohon tunggu...</div>';
+    listKeg.classList.add('show');
+    return;
+  }
+  
+  var keyword = this.value.toLowerCase().trim();
+  
+  if (keyword.length === 0) {
+    listKeg.classList.remove('show');
+    selectedKegiatan = null;
+    document.getElementById('inNamaKeg').value = '';
+    document.getElementById('inPoin').value = '';
+    document.getElementById('previewTotalPoin').textContent = '0';
+    return;
+  }
+
+  var filtered = MASTER_KEGIATAN.filter(function(k) {
+    var kode = String(k.kode || '').toLowerCase();
+    var nama = String(k.nama || '').toLowerCase();
+    return kode.includes(keyword) || nama.includes(keyword);
+  });
+
+  // Limit hasil ke 50 item
+  if (filtered.length > 50) {
+    filtered = filtered.slice(0, 50);
+  }
+
+  if (filtered.length === 0) {
+    listKeg.innerHTML = '<div class="autocomplete-empty">Tidak ada kegiatan yang cocok</div>';
+    listKeg.classList.add('show');
+    selectedKegiatan = null;
+    return;
+  }
+
+  var html = '';
+  filtered.forEach(function(k, idx) {
+    var kodeEsc = String(k.kode).replace(/"/g, '&quot;');
+    var namaEsc = String(k.nama).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    var satuan = k.satuan || 'unit';
+    html += '<div class="autocomplete-item" data-idx="' + idx + '" data-kode="' + kodeEsc + '">' +
+      '<span class="autocomplete-item-code">' + kodeEsc + '</span>' +
+      '<span class="autocomplete-item-name">' + namaEsc + '</span>' +
+      '<span class="autocomplete-item-poin">Poin: ' + k.poin + ' / ' + satuan + '</span>' +
+      '</div>';
+  });
+
+  listKeg.innerHTML = html;
+  listKeg.classList.add('show');
+
+  // Add click listeners
+  document.querySelectorAll('.autocomplete-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var kode = this.getAttribute('data-kode');
+      selectedKegiatan = MASTER_KEGIATAN.find(function(k) { return k.kode === kode; });
+      
+      if (selectedKegiatan) {
+        inputKeg.value = selectedKegiatan.kode + ' - ' + selectedKegiatan.nama;
+        document.getElementById('inNamaKeg').value = selectedKegiatan.nama;
+        hitungTotalPoin();
+        listKeg.classList.remove('show');
+      }
+    });
+  });
+});
+
+// Tampilkan dropdown saat focus
+inputKeg.addEventListener('focus', function() {
+  if (this.value.trim().length > 0 && MASTER_KEGIATAN.length > 0) {
+    this.dispatchEvent(new Event('input'));
+  }
+});
+
+// Close autocomplete when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.autocomplete-wrapper')) {
+    listKeg.classList.remove('show');
+  }
+});
+
+// ============================================================
+// SET TANGGAL DEFAULT
+// ============================================================
+var today = new Date().toISOString().split('T')[0];
+document.getElementById('inTanggal').value = today;
+
+// ============================================================
+// FILE UPLOAD HANDLING
+// ============================================================
+var uploadZone = document.getElementById('uploadZone');
+uploadZone.addEventListener('click', function(){ 
+  document.getElementById('fileInput').click(); 
+});
+
+uploadZone.addEventListener('dragover', function(e){
+  e.preventDefault();
+  uploadZone.classList.add('drag');
+});
+
+uploadZone.addEventListener('dragleave', function(){
+  uploadZone.classList.remove('drag');
+});
+
+uploadZone.addEventListener('drop', function(e){
+  e.preventDefault();
+  uploadZone.classList.remove('drag');
+  var files = e.dataTransfer.files;
+  if (files.length) handleFileSelect(files[0]);
+});
+
+document.getElementById('fileInput').addEventListener('change', function(){
+  if (this.files.length) handleFileSelect(this.files[0]);
+});
+
+function handleFileSelect(file) {
+  if (!file) return;
+
+  if (file.size > 25 * 1024 * 1024) {
+    showAlert('❌ File terlalu besar (max 25MB)', 'error');
+    return;
+  }
+
+  var validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+  if (!validTypes.includes(file.type)) {
+    showAlert('❌ Tipe file tidak didukung. Gunakan PDF, JPG, atau PNG', 'error');
+    return;
+  }
+
+  selectedFile = file;
+  displayFileInfo(file);
+  showAlert('✅ File dipilih: ' + file.name, 'success');
+}
+
+function displayFileInfo(file) {
+  var html = '<div class="file-item" id="fileItem">' +
+    '<div class="file-info">' +
+    '<span class="file-icon">📄</span>' +
+    '<div>' +
+    '<div class="file-name">' + file.name + '</div>' +
+    '<div class="file-size">' + formatFileSize(file.size) + '</div>' +
+    '</div>' +
+    '</div>' +
+    '<button type="button" class="btn-remove" onclick="removeFile()">✕ Hapus</button>' +
+    '</div>';
+
+  document.getElementById('fileList').innerHTML = html;
+}
+
+function removeFile() {
+  selectedFile = null;
+  document.getElementById('fileList').innerHTML = '';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('inLinkBukti').value = '';
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+// ============================================================
+// FILE TO BASE64
+// ============================================================
+function fileToBase64(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var base64 = reader.result.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ============================================================
+// UPLOAD FILE
+// ============================================================
+async function uploadFile(session, file) {
+  try {
+    var base64Data = await fileToBase64(file);
+    
+    showAlert('⏳ Mengupload file...', 'info');
+    
+    var result = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'uploadFile',
+        nip: session.nip,
+        fileName: file.name,
+        mimeType: file.type,
+        fileData: base64Data
+      })
+    }).then(function(r) { return r.json(); });
+
+    var link = null;
+    if (result.data && result.data.link) link = result.data.link;
+    else if (result.user && result.user.link) link = result.user.link;
+
+    if (result.ok && link) {
+      showAlert('✅ File berhasil diupload ke Google Drive!', 'success');
+      document.getElementById('inLinkBukti').value = link;
+      return link;
+    } else {
+      showAlert('❌ Gagal upload file: ' + (result.message || 'Error'), 'error');
+      return null;
+    }
+  } catch (err) {
+    showAlert('❌ Error: ' + err.message, 'error');
+    return null;
+  }
+}
+
+// ============================================================
+// FORM SUBMIT
+// ============================================================
+document.getElementById('kegiatanForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  hideAlerts();
+
+  var session = loadSession();
+  if (!session) {
+    showAlert('❌ Session tidak valid', 'error');
+    return;
+  }
+
+  var tanggal = document.getElementById('inTanggal').value;
+  var namaKeg = document.getElementById('inNamaKeg').value;
+  var totalPoin = document.getElementById('inPoin').value;
+  var jumlah = parseInt(document.getElementById('inJumlah').value) || 1;
+  var catatan = document.getElementById('inCatatan').value;
+  var linkBukti = '';
+
+  if (!tanggal || !selectedKegiatan || !namaKeg || !totalPoin) {
+    showAlert('❌ Silakan pilih kegiatan dan isi semua field yang wajib', 'error');
+    return;
+  }
+
+  var btn = document.getElementById('btnSubmit');
+  if (!btn) {
+    console.error('❌ Button submit tidak ditemukan!');
+    showAlert('❌ Error: Button tidak ditemukan', 'error');
+    return;
+  }
+
+  var loader = document.getElementById('loader');
+  btn.disabled = true;
+  if (loader) loader.style.display = 'inline-block';
+  btn.textContent = ' Memproses...';
+
+  // Upload file jika ada
+  if (selectedFile) {
+    linkBukti = await uploadFile(session, selectedFile);
+    if (!linkBukti) {
+      btn.disabled = false;
+      if (loader) loader.style.display = 'none';
+      btn.textContent = '✅ Simpan Kegiatan';
+      return;
+    }
+  }
+
+  // Save kegiatan dengan JUMLAH
+  var poinSatuan = parseFloat(selectedKegiatan.poin) || 0;
+  var totalCalc = poinSatuan * jumlah;
+  
+  var payload = {
+    action: 'saveKegiatan',
+    nip: session.nip,
+    kegiatan: {
+      tanggal: tanggal,
+      kode_keg: selectedKegiatan.kode,
+      nama_keg: namaKeg,
+      poin: poinSatuan,
+      jumlah: jumlah,
+      link_bukti: linkBukti || '',
+      status: 'Selesai',
+      catatan: catatan
+    }
+  };
+
+  console.log('📤 Payload yang dikirim:', payload);
+
+  fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  })
+  .then(function(r) { 
+    console.log('Response status:', r.status);
+    return r.json(); 
+  })
+  .then(function(j) {
+    console.log('✅ Response dari server:', j);
+    
+    btn.disabled = false;
+    if (loader) loader.style.display = 'none';
+    btn.textContent = '✅ Simpan Kegiatan';
+
+    if (j.ok) {
+      showAlert('✅ Kegiatan berhasil disimpan! (' + poinSatuan + ' × ' + jumlah + ' = ' + totalCalc + ' poin)', 'success');
+      setTimeout(function() {
+        document.getElementById('kegiatanForm').reset();
+        document.getElementById('inTanggal').value = today;
+        document.getElementById('inKodeKeg').value = '';
+        document.getElementById('inNamaKeg').value = '';
+        document.getElementById('inPoin').value = '';
+        document.getElementById('inJumlah').value = 1;
+        var previewTotal = document.getElementById('previewTotalPoin');
+        if (previewTotal) previewTotal.textContent = '0';
+        removeFile();
+        selectedKegiatan = null;
+      }, 1200);
+    } else {
+      showAlert('❌ ' + (j.message || 'Gagal menyimpan kegiatan'), 'error');
+    }
+  })
+  .catch(function(err) {
+    console.error('❌ ERROR FETCH:', err);
+    btn.disabled = false;
+    if (loader) loader.style.display = 'none';
+    btn.textContent = '✅ Simpan Kegiatan';
+    showAlert('❌ Koneksi gagal: ' + err.message, 'error');
+  });
+});
+
+// ============================================================
+// LOGOUT
+// ============================================================
+document.getElementById('btnLogout').onclick = function() {
+  clearSession();
+  location.href = 'index.html';
+};
+
+// ============================================================
+// INIT
+// ============================================================
+var session = loadSession();
+if (!session || !session.token) {
+  location.href = 'index.html';
+}
+
+initTheme();
+document.getElementById('themeBtn').onclick = toggleTheme;
+loadMasterKegiatan();
+  </script>
+</body>
+</html>
