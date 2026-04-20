@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BEKARYE Bapenda — Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     :root{--bg:#f1f5f9;--bg2:#ffffff;--bg3:#f8fafc;--text:#0f172a;--text2:#334155;--text3:#64748b;--text4:#94a3b8;--border:#e2e8f0;--blue:#2563eb;--blue2:#3b82f6;--blue-bg:#dbeafe;--blue-bg2:#eff6ff;--purple:#7c3aed;--green:#059669;--green-bg:#d1fae5;--red:#dc2626;--red-bg:#fee2e2;--shadow:0 1px 3px rgba(0,0,0,.06);--shadow2:0 8px 30px rgba(0,0,0,.08);--shadow3:0 20px 60px rgba(0,0,0,.12);--radius:20px;--radius2:14px}
     [data-theme="dark"]{--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#f1f5f9;--text2:#cbd5e1;--text3:#94a3b8;--text4:#64748b;--blue:#3b82f6;--blue2:#60a5fa;--blue-bg:#1e3a5f;--blue-bg2:#172554;--purple:#8b5cf6;--green:#34d399;--green-bg:#064e3b;--red:#f87171;--red-bg:#450a0a;--border:#334155;--shadow:0 1px 3px rgba(0,0,0,.2);--shadow2:0 8px 30px rgba(0,0,0,.3);--shadow3:0 20px 60px rgba(0,0,0,.4)}
@@ -54,6 +57,19 @@
     .progress-bar{width:100%;height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:12px}
     .progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:4px;transition:width .3s}
 
+    /* EXPORT BAR */
+    .export-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .export-bar-label{font-size:14px;font-weight:700;color:var(--text2)}
+    .export-bar select{padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-size:14px;font-family:inherit;cursor:pointer;font-weight:500}
+    .export-bar select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+    .export-buttons{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+    .btn-export{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .2s}
+    .btn-pdf{background:#dc2626;color:#fff;box-shadow:0 4px 12px rgba(220,38,38,.3)}
+    .btn-pdf:hover{background:#b91c1c;transform:translateY(-2px)}
+    .btn-excel{background:#059669;color:#fff;box-shadow:0 4px 12px rgba(5,150,105,.3)}
+    .btn-excel:hover{background:#047857;transform:translateY(-2px)}
+    .filter-info{background:var(--blue-bg);color:var(--blue);padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600}
+
     /* TABLE */
     .table-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:32px}
     .table-header{padding:20px;border-bottom:1px solid var(--border)}
@@ -74,10 +90,7 @@
 
     .btn-action{display:inline-flex;align-items:center;gap:4px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg2);color:var(--text2);transition:all .2s;cursor:pointer}
     .btn-action:hover{background:var(--bg3);transform:translateY(-1px)}
-    .btn-action-primary{background:var(--blue);color:#fff;border:none}
-    .btn-action-primary:hover{background:var(--blue2)}
 
-    /* POIN CALC DISPLAY */
     .poin-calc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)}
     .poin-calc-detail{font-weight:600;color:var(--text2)}
 
@@ -86,21 +99,14 @@
     .empty-text{font-size:14px;margin-bottom:4px}
     .empty-sub{font-size:12px;color:var(--text4)}
 
-    /* BUTTONS */
     .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:var(--radius2);font-size:14px;font-weight:700;transition:all .25s;border:none;cursor:pointer}
     .btn-primary{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.35)}
     .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.45)}
-    .btn-secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border);box-shadow:var(--shadow)}
-    .btn-secondary:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
 
-    .action-bar{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
-
-    /* LOADING */
     .loading{text-align:center;padding:40px 20px;color:var(--text3)}
     .spinner{display:inline-block;width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* MOBILE */
     @media(max-width:768px){
       .navbar{padding:10px 14px}
       .nav-links .nav-link:not(.icon):not(.user-info):not(.btn-logout){display:none}
@@ -111,6 +117,8 @@
       td,th{padding:12px 8px}
       .btn-action{padding:6px 10px;font-size:11px}
       .poin-calc{flex-direction:column;align-items:flex-start;gap:4px}
+      .export-buttons{margin-left:0;width:100%}
+      .btn-export{flex:1;justify-content:center}
     }
 
     @media(max-width:480px){
@@ -149,7 +157,7 @@
     <div class="stats-grid">
       <div class="stat-card medium">
         <div class="stat-icon blue">📈</div>
-        <div class="stat-label">Poin Bulan Ini</div>
+        <div class="stat-label" id="labelPoinPeriode">Poin Bulan Ini</div>
         <div class="stat-value" id="poinBulan">-</div>
         <div class="progress-bar">
           <div class="progress-fill" id="progressBulan" style="width:0%"></div>
@@ -171,7 +179,7 @@
         <div class="stat-icon" style="background:rgba(139,92,246,.15)">📝</div>
         <div class="stat-label">Total Kegiatan</div>
         <div class="stat-value" id="totalKegiatan">-</div>
-        <div class="stat-sub">Kegiatan selesai bulan ini</div>
+        <div class="stat-sub">Kegiatan periode terpilih</div>
       </div>
 
       <div class="stat-card">
@@ -182,11 +190,37 @@
       </div>
     </div>
 
+    <!-- EXPORT BAR -->
+    <div class="export-bar">
+      <span class="export-bar-label">📅 Filter Periode:</span>
+      <select id="filterBulan">
+        <option value="all">Semua Bulan</option>
+        <option value="0">Januari</option>
+        <option value="1">Februari</option>
+        <option value="2">Maret</option>
+        <option value="3">April</option>
+        <option value="4">Mei</option>
+        <option value="5">Juni</option>
+        <option value="6">Juli</option>
+        <option value="7">Agustus</option>
+        <option value="8">September</option>
+        <option value="9">Oktober</option>
+        <option value="10">November</option>
+        <option value="11">Desember</option>
+      </select>
+      <select id="filterTahun"></select>
+      <span class="filter-info" id="filterInfo">Menampilkan: -</span>
+      <div class="export-buttons">
+        <button class="btn-export btn-pdf" onclick="exportPDF()">📄 Export PDF</button>
+        <button class="btn-export btn-excel" onclick="exportExcel()">📊 Export Excel</button>
+      </div>
+    </div>
+
     <!-- TABEL DATA KEGIATAN -->
     <div class="table-section">
       <div class="table-header">
-        <div class="table-title">📋 Daftar Kegiatan Bulan Ini</div>
-        <div class="table-sub">Semua kegiatan yang telah Anda inputkan dengan perhitungan poin</div>
+        <div class="table-title">📋 Daftar Kegiatan</div>
+        <div class="table-sub" id="tableSubtitle">Semua kegiatan yang telah Anda inputkan</div>
       </div>
 
       <div class="table-wrap">
@@ -226,6 +260,11 @@
 var API_URL = 'https://script.google.com/macros/s/AKfycbw_L-odpnrDQukHr0f-6gOdUODKUimMaE4ypd8nt_jcjVmmIumF34XgrZOdQpYDTla7IQ/exec';
 var SESSION_KEY = 'bekarye-session';
 var THEME_KEY = 'bekarye-theme';
+var BULAN_NAMA = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+// Storage data
+var allKegiatan = [];
+var filteredKegiatan = [];
 
 // ============================================================
 // THEME
@@ -270,18 +309,39 @@ function clearSession() {
 }
 
 // ============================================================
-// INIT
+// INIT SESSION
 // ============================================================
 var session = loadSession();
 if (!session || !session.token) {
   location.href = 'index.html';
 }
 
-// Update user info
 document.getElementById('userAvatar').textContent = (session.nama || '?').charAt(0).toUpperCase();
 document.getElementById('userName').textContent = session.nama || 'User';
 document.getElementById('tierUser').textContent = session.tier || '-';
 document.getElementById('userUnit').textContent = 'Unit: ' + (session.unit || '-');
+
+// ============================================================
+// SETUP FILTER TAHUN & DEFAULT BULAN
+// ============================================================
+function setupFilters() {
+  var today = new Date();
+  var currentYear = today.getFullYear();
+  var currentMonth = today.getMonth();
+  
+  // Setup tahun (5 tahun ke belakang)
+  var selectTahun = document.getElementById('filterTahun');
+  for (var y = currentYear; y >= currentYear - 4; y--) {
+    var opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    selectTahun.appendChild(opt);
+  }
+  
+  // Default ke bulan & tahun ini
+  document.getElementById('filterBulan').value = currentMonth;
+  document.getElementById('filterTahun').value = currentYear;
+}
 
 // ============================================================
 // LOAD DATA KEGIATAN
@@ -299,38 +359,20 @@ function loadDataKegiatan() {
   })
   .then(function(r) { return r.json(); })
   .then(function(j) {
-    console.log('✅ Response getDataKegiatan:', j);
+    console.log('✅ Response:', j);
     
-    // Support multiple response formats
     var kegiatan = null;
-    if (j.data && j.data.kegiatan) {
-      kegiatan = j.data.kegiatan;
-    } else if (j.user && j.user.kegiatan) {
-      kegiatan = j.user.kegiatan;
-    } else if (j.kegiatan) {
-      kegiatan = j.kegiatan;
-    }
+    if (j.data && j.data.kegiatan) kegiatan = j.data.kegiatan;
+    else if (j.user && j.user.kegiatan) kegiatan = j.user.kegiatan;
+    else if (j.kegiatan) kegiatan = j.kegiatan;
     
     if (kegiatan) {
-      console.log('📊 Total kegiatan:', kegiatan.length);
-      
-      // Log detail setiap kegiatan
-      kegiatan.forEach(function(k, idx) {
-        console.log('  [' + idx + ']', {
-          tanggal: k.tanggal,
-          nama: k.nama_keg,
-          poin_satuan: k.poin_satuan,
-          jumlah: k.jumlah,
-          total_poin: k.total_poin
-        });
-      });
-      
-      displayKegiatan(kegiatan);
-      calculateStats(kegiatan);
+      allKegiatan = kegiatan;
+      console.log('📊 Total kegiatan:', allKegiatan.length);
+      applyFilter();
     } else {
-      console.log('⚠️ Kegiatan kosong atau format tidak dikenali');
-      displayEmptyState();
-      calculateStats([]);
+      allKegiatan = [];
+      applyFilter();
     }
   })
   .catch(function(err) {
@@ -339,9 +381,54 @@ function loadDataKegiatan() {
   });
 }
 
+// ============================================================
+// APPLY FILTER
+// ============================================================
+function applyFilter() {
+  var bulanFilter = document.getElementById('filterBulan').value;
+  var tahunFilter = parseInt(document.getElementById('filterTahun').value);
+  
+  // Filter data
+  filteredKegiatan = allKegiatan.filter(function(k) {
+    try {
+      var tgl = new Date(k.tanggal);
+      if (isNaN(tgl.getTime())) return false;
+      
+      if (tgl.getFullYear() !== tahunFilter) return false;
+      
+      if (bulanFilter === 'all') return true;
+      return tgl.getMonth() === parseInt(bulanFilter);
+    } catch(e) {
+      return false;
+    }
+  });
+  
+  // Update info
+  var infoText = '';
+  var subText = '';
+  if (bulanFilter === 'all') {
+    infoText = 'Tahun ' + tahunFilter + ' (' + filteredKegiatan.length + ' kegiatan)';
+    subText = 'Menampilkan semua kegiatan tahun ' + tahunFilter;
+    document.getElementById('labelPoinPeriode').textContent = 'Poin Tahun ' + tahunFilter;
+  } else {
+    infoText = BULAN_NAMA[bulanFilter] + ' ' + tahunFilter + ' (' + filteredKegiatan.length + ' kegiatan)';
+    subText = 'Kegiatan bulan ' + BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
+    document.getElementById('labelPoinPeriode').textContent = 'Poin ' + BULAN_NAMA[bulanFilter];
+  }
+  
+  document.getElementById('filterInfo').textContent = infoText;
+  document.getElementById('tableSubtitle').textContent = subText;
+  
+  displayKegiatan(filteredKegiatan);
+  calculateStats(filteredKegiatan);
+}
+
+// ============================================================
+// DISPLAY
+// ============================================================
 function displayEmptyState() {
   var tbody = document.getElementById('tableBody');
-  tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Belum ada kegiatan</div><div class="empty-sub">Mulai entri kegiatan untuk melihat data di sini</div></td></tr>';
+  tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Belum ada kegiatan</div><div class="empty-sub">Tidak ada data pada periode terpilih</div></td></tr>';
 }
 
 function displayKegiatan(kegiatanList) {
@@ -352,17 +439,17 @@ function displayKegiatan(kegiatanList) {
     return;
   }
 
+  // Sort by tanggal descending
+  kegiatanList.sort(function(a, b) {
+    return new Date(b.tanggal) - new Date(a.tanggal);
+  });
+
   var html = '';
   kegiatanList.forEach(function(k) {
-    // Determine status badge class
     var statusClass = 'status-pending';
-    if (k.status === 'Selesai') {
-      statusClass = 'status-selesai';
-    } else if (k.status === 'Proses') {
-      statusClass = 'status-proses';
-    }
+    if (k.status === 'Selesai') statusClass = 'status-selesai';
+    else if (k.status === 'Proses') statusClass = 'status-proses';
 
-    // Link bukti - safe check
     var linkBukti = '';
     var linkStr = k.link_bukti ? String(k.link_bukti).trim() : '';
     if (linkStr && linkStr.length > 0) {
@@ -371,25 +458,21 @@ function displayKegiatan(kegiatanList) {
       linkBukti = '<span style="color:var(--text4)">-</span>';
     }
 
-    // Hitung/ambil poin
     var poinSatuan = Number(k.poin_satuan) || 0;
     var jumlah = Number(k.jumlah) || 1;
     var totalPoin = Number(k.total_poin) || (poinSatuan * jumlah);
 
-    // Display perhitungan
     var perhitungan = '';
     if (jumlah && jumlah > 1) {
-      perhitungan = '<div class="poin-calc">' +
-        '<span class="poin-calc-detail">' + poinSatuan + ' × ' + jumlah + '</span>' +
-        '</div>';
+      perhitungan = '<div class="poin-calc"><span class="poin-calc-detail">' + poinSatuan + ' × ' + jumlah + '</span></div>';
     } else {
-      perhitungan = '<div class="poin-calc">' +
-        '<span class="poin-calc-detail">' + poinSatuan + '</span>' +
-        '</div>';
+      perhitungan = '<div class="poin-calc"><span class="poin-calc-detail">' + poinSatuan + '</span></div>';
     }
 
+    var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
+
     html += '<tr>';
-    html += '<td>' + (k.tanggal || '-') + '</td>';
+    html += '<td>' + tglDisplay + '</td>';
     html += '<td><strong>' + (k.kode_keg || '-') + '</strong></td>';
     html += '<td>' + (k.nama_keg || '-') + '</td>';
     html += '<td>' + perhitungan + '</td>';
@@ -403,55 +486,272 @@ function displayKegiatan(kegiatanList) {
 }
 
 function calculateStats(kegiatanList) {
-  console.log('📊 Calculate stats from', kegiatanList.length, 'kegiatan');
-  
-  var today = new Date();
-  var bulanAwal = new Date(today.getFullYear(), today.getMonth(), 1);
-  var bulanAkhir = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-  var poinBulan = 0;
-  var totalKegiatan = 0;
+  var totalPoin = 0;
+  var totalKegiatan = kegiatanList.length;
 
   kegiatanList.forEach(function(k) {
-    try {
-      var tanggal = new Date(k.tanggal);
-      if (tanggal >= bulanAwal && tanggal <= bulanAkhir) {
-        // ✅ PENTING: Gunakan total_poin (bukan poin_satuan)
-        var totalPoin = Number(k.total_poin) || (Number(k.poin_satuan || k.poin || 0) * Number(k.jumlah || 1));
-        poinBulan += totalPoin;
-        totalKegiatan += 1;
-        
-        console.log('  + ' + k.nama_keg + ': ' + totalPoin + ' poin (total: ' + poinBulan + ')');
-      }
-    } catch(e) {
-      console.log('⚠️ Error parse kegiatan:', e);
-    }
+    var poin = Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+    totalPoin += poin;
   });
 
-  console.log('💰 Poin bulan ini: ' + poinBulan);
-  console.log('📝 Total kegiatan: ' + totalKegiatan);
-
-  // Update stats
   var targetBln = Number(session.target_bln) || 0;
   var targetTh = Number(session.target_th) || 0;
-  var persenBln = targetBln > 0 ? Math.round((poinBulan / targetBln) * 100) : 0;
-  var persenTh = targetTh > 0 ? Math.round((poinBulan / targetTh) * 100) : 0;
+  var bulanFilter = document.getElementById('filterBulan').value;
+  
+  // Kalau filter "all" pakai target tahunan, kalau filter bulan pakai target bulan
+  var targetCompare = bulanFilter === 'all' ? targetTh : targetBln;
+  var persenBln = targetCompare > 0 ? Math.round((totalPoin / targetCompare) * 100) : 0;
+  var persenTh = targetTh > 0 ? Math.round((totalPoin / targetTh) * 100) : 0;
 
-  // Clamp percentage to 100%
   persenBln = Math.min(persenBln, 100);
   persenTh = Math.min(persenTh, 100);
 
-  document.getElementById('poinBulan').textContent = poinBulan;
+  document.getElementById('poinBulan').textContent = totalPoin;
   document.getElementById('targetTh').textContent = targetTh;
   document.getElementById('totalKegiatan').textContent = totalKegiatan;
 
-  document.getElementById('statBulanSub').textContent = 'Target: ' + targetBln + ' poin (' + persenBln + '%)';
-  document.getElementById('statThSub').textContent = 'Poin: ' + poinBulan + ' / ' + targetTh;
+  document.getElementById('statBulanSub').textContent = 'Target: ' + targetCompare + ' poin (' + persenBln + '%)';
+  document.getElementById('statThSub').textContent = 'Poin: ' + totalPoin + ' / ' + targetTh;
 
   document.getElementById('progressBulan').style.width = persenBln + '%';
   document.getElementById('progressTh').style.width = persenTh + '%';
+}
 
-  console.log('✅ Stats updated. Poin:', poinBulan, 'Persen:', persenBln + '%');
+// ============================================================
+// EXPORT PDF
+// ============================================================
+function exportPDF() {
+  if (filteredKegiatan.length === 0) {
+    alert('Tidak ada data untuk diexport!');
+    return;
+  }
+
+  var bulanFilter = document.getElementById('filterBulan').value;
+  var tahunFilter = document.getElementById('filterTahun').value;
+  var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
+  
+  var totalPoin = 0;
+  filteredKegiatan.forEach(function(k) {
+    totalPoin += Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+  });
+
+  var { jsPDF } = window.jspdf;
+  var doc = new jsPDF('landscape', 'mm', 'a4');
+  
+  // ============ KOP SURAT ============
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('LAPORAN KEGIATAN BEKARYE BAPENDA', 148, 15, { align: 'center' });
+  
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Badan Pendapatan Daerah', 148, 22, { align: 'center' });
+  
+  // Garis pembatas
+  doc.setLineWidth(0.5);
+  doc.line(15, 27, 282, 27);
+  
+  // Info pegawai
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  
+  var infoY = 35;
+  doc.text('Nama', 15, infoY);
+  doc.text(': ' + (session.nama || '-'), 40, infoY);
+  
+  doc.text('NIP', 15, infoY + 6);
+  doc.text(': ' + (session.nip || '-'), 40, infoY + 6);
+  
+  doc.text('Jabatan', 15, infoY + 12);
+  doc.text(': ' + (session.jabatan || '-'), 40, infoY + 12);
+  
+  doc.text('Unit', 150, infoY);
+  doc.text(': ' + (session.unit || '-'), 175, infoY);
+  
+  doc.text('Periode', 150, infoY + 6);
+  doc.text(': ' + periode, 175, infoY + 6);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('Total Poin', 150, infoY + 12);
+  doc.text(': ' + totalPoin + ' poin', 175, infoY + 12);
+  
+  // Garis pembatas
+  doc.line(15, 55, 282, 55);
+  
+  // ============ TABLE ============
+  var tableData = filteredKegiatan.map(function(k, idx) {
+    var poinSatuan = Number(k.poin_satuan) || 0;
+    var jumlah = Number(k.jumlah) || 1;
+    var totalPoin = Number(k.total_poin) || (poinSatuan * jumlah);
+    var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
+    var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
+    
+    return [
+      idx + 1,
+      tglDisplay,
+      k.kode_keg || '-',
+      k.nama_keg || '-',
+      perhitungan,
+      totalPoin,
+      k.status || 'Pending'
+    ];
+  });
+  
+  doc.autoTable({
+    head: [['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Perhitungan', 'Total Poin', 'Status']],
+    body: tableData,
+    startY: 60,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [37, 99, 235],
+      textColor: [255, 255, 255],
+      fontStyle: 'bold',
+      fontSize: 9
+    },
+    bodyStyles: {
+      fontSize: 8
+    },
+    columnStyles: {
+      0: { cellWidth: 10, halign: 'center' },
+      1: { cellWidth: 25 },
+      2: { cellWidth: 25 },
+      3: { cellWidth: 100 },
+      4: { cellWidth: 30, halign: 'center' },
+      5: { cellWidth: 25, halign: 'center', fontStyle: 'bold' },
+      6: { cellWidth: 25, halign: 'center' }
+    },
+    foot: [['', '', '', '', 'TOTAL', totalPoin, '']],
+    footStyles: {
+      fillColor: [37, 99, 235],
+      textColor: [255, 255, 255],
+      fontStyle: 'bold',
+      fontSize: 10
+    }
+  });
+  
+  // Footer signature
+  var finalY = doc.lastAutoTable.finalY + 15;
+  if (finalY > 180) {
+    doc.addPage();
+    finalY = 20;
+  }
+  
+  var today = new Date();
+  var ttdY = finalY + 5;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }), 220, ttdY);
+  doc.text('Hormat saya,', 220, ttdY + 6);
+  doc.setFont('helvetica', 'bold');
+  doc.text(session.nama || '-', 220, ttdY + 30);
+  doc.setFont('helvetica', 'normal');
+  doc.text('NIP. ' + (session.nip || '-'), 220, ttdY + 35);
+  
+  // Save
+  var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.pdf';
+  doc.save(fileName);
+  
+  console.log('✅ PDF exported:', fileName);
+}
+
+// ============================================================
+// EXPORT EXCEL
+// ============================================================
+function exportExcel() {
+  if (filteredKegiatan.length === 0) {
+    alert('Tidak ada data untuk diexport!');
+    return;
+  }
+
+  var bulanFilter = document.getElementById('filterBulan').value;
+  var tahunFilter = document.getElementById('filterTahun').value;
+  var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
+  
+  var totalPoin = 0;
+  filteredKegiatan.forEach(function(k) {
+    totalPoin += Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+  });
+
+  // Build data array
+  var wsData = [];
+  
+  // KOP
+  wsData.push(['LAPORAN KEGIATAN BEKARYE BAPENDA']);
+  wsData.push(['Badan Pendapatan Daerah']);
+  wsData.push([]);
+  wsData.push(['Nama', ':', session.nama || '-', '', 'Unit', ':', session.unit || '-']);
+  wsData.push(['NIP', ':', session.nip || '-', '', 'Periode', ':', periode]);
+  wsData.push(['Jabatan', ':', session.jabatan || '-', '', 'Total Poin', ':', totalPoin + ' poin']);
+  wsData.push([]);
+  
+  // Header tabel
+  wsData.push(['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Poin Satuan', 'Jumlah', 'Total Poin', 'Status', 'Link Bukti', 'Catatan']);
+  
+  // Data
+  filteredKegiatan.forEach(function(k, idx) {
+    var poinSatuan = Number(k.poin_satuan) || 0;
+    var jumlah = Number(k.jumlah) || 1;
+    var tp = Number(k.total_poin) || (poinSatuan * jumlah);
+    var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
+    
+    wsData.push([
+      idx + 1,
+      tglDisplay,
+      k.kode_keg || '-',
+      k.nama_keg || '-',
+      poinSatuan,
+      jumlah,
+      tp,
+      k.status || 'Pending',
+      k.link_bukti || '-',
+      k.catatan || '-'
+    ]);
+  });
+  
+  // Total row
+  wsData.push([]);
+  wsData.push(['', '', '', '', '', 'TOTAL', totalPoin, '', '', '']);
+  
+  // Create worksheet
+  var ws = XLSX.utils.aoa_to_sheet(wsData);
+  
+  // Set column widths
+  ws['!cols'] = [
+    { wch: 5 },   // No
+    { wch: 12 },  // Tanggal
+    { wch: 12 },  // Kode
+    { wch: 40 },  // Nama
+    { wch: 12 },  // Poin Satuan
+    { wch: 10 },  // Jumlah
+    { wch: 12 },  // Total
+    { wch: 12 },  // Status
+    { wch: 30 },  // Link
+    { wch: 30 }   // Catatan
+  ];
+  
+  // Merge cells untuk title
+  ws['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 9 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 9 } }
+  ];
+  
+  // Style title (basic)
+  if (ws['A1']) {
+    ws['A1'].s = { font: { bold: true, sz: 14 }, alignment: { horizontal: 'center' } };
+  }
+  if (ws['A2']) {
+    ws['A2'].s = { font: { sz: 11 }, alignment: { horizontal: 'center' } };
+  }
+  
+  // Create workbook
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Laporan Kegiatan');
+  
+  // Save
+  var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.xlsx';
+  XLSX.writeFile(wb, fileName);
+  
+  console.log('✅ Excel exported:', fileName);
 }
 
 // ============================================================
@@ -463,14 +763,21 @@ document.getElementById('btnLogout').onclick = function() {
 };
 
 // ============================================================
-// INIT & AUTO-REFRESH
+// EVENT LISTENERS
+// ============================================================
+document.getElementById('filterBulan').addEventListener('change', applyFilter);
+document.getElementById('filterTahun').addEventListener('change', applyFilter);
+
+// ============================================================
+// INIT
 // ============================================================
 initTheme();
 document.getElementById('themeBtn').onclick = toggleTheme;
+setupFilters();
 loadDataKegiatan();
 
-// Refresh setiap 30 detik
-setInterval(loadDataKegiatan, 30000);
+// Refresh setiap 60 detik
+setInterval(loadDataKegiatan, 60000);
   </script>
 </body>
 </html>
