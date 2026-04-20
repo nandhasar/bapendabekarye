@@ -186,18 +186,35 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     btn.disabled = false;
     btn.textContent = '🚀 Masuk';
 
-    if (j.ok && j.user) {
-      localStorage.setItem(SESSION_KEY, JSON.stringify({
-        nip: j.user.nip,
-        nama: j.user.nama,
-        jabatan: j.user.jabatan,
-        unit: j.user.unit,
-        tier: j.user.tier,
-        target_th: j.user.target_th,
-        target_bln: j.user.target_bln,
-        token: j.user.token,
-        apiKey: j.user.apiKey
-      }));
+    console.log('🔍 Login response:', j);
+
+    // ✅ Check response structure
+    if (j.ok) {
+      var userData = j.user || j.data || {};
+      
+      console.log('📝 User data:', userData);
+
+      // ⭐ PENTING: Simpan semua field termasuk eselon & is_verifikator
+      var sessionData = {
+        nip: userData.nip || '',
+        nama: userData.nama || '',
+        jabatan: userData.jabatan || '',
+        unit: userData.unit || '',
+        tier: userData.tier || '',
+        target_th: userData.target_th || 0,
+        target_bln: userData.target_bln || 0,
+        eselon: userData.eselon || 'Staff',
+        is_verifikator: userData.is_verifikator || false,
+        nip_atasan_iv: userData.nip_atasan_iv || '',
+        nip_atasan_iii: userData.nip_atasan_iii || '',
+        nip_atasan_ii: userData.nip_atasan_ii || '',
+        token: userData.token || '',
+        apiKey: userData.apiKey || ''
+      };
+
+      console.log('✅ Session data to save:', sessionData);
+
+      localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
 
       showAlert('✅ Login berhasil! Mengalihkan...', 'info');
       setTimeout(function() {
@@ -205,10 +222,12 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
       }, 800);
 
     } else {
+      console.error('❌ Login failed:', j.message);
       showAlert('❌ ' + (j.message || 'Login gagal'), 'error');
     }
   })
   .catch(function(err) {
+    console.error('❌ Fetch error:', err);
     btn.disabled = false;
     btn.textContent = '🚀 Masuk';
     showAlert('❌ Koneksi gagal: ' + err.message, 'error');
@@ -224,6 +243,7 @@ document.getElementById('yearNow').textContent = new Date().getFullYear();
 
 // Auto redirect jika sudah login
 if (localStorage.getItem(SESSION_KEY)) {
+  console.log('✅ Session found, redirecting to dashboard');
   location.href = 'dashboard.html';
 }
   </script>
