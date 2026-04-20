@@ -1300,98 +1300,189 @@
       document.getElementById('progressTahun').style.width = persenTh + '%';
     }
 
+
     // ============================================================
-    // EXPORT PDF
-    // ============================================================
-    function exportPDF() {
-      if (filteredKegiatan.length === 0) {
-        alert('❌ Tidak ada data untuk diexport!');
-        return;
+// EXPORT PDF - DENGAN LINK CLICKABLE
+// ============================================================
+function exportPDF() {
+  if (filteredKegiatan.length === 0) {
+    alert('❌ Tidak ada data untuk diexport!');
+    return;
+  }
+
+  var bulanFilter = document.getElementById('filterBulan').value;
+  var tahunFilter = document.getElementById('filterTahun').value;
+  var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
+
+  var totalPoin = 0;
+  filteredKegiatan.forEach(function (k) {
+    totalPoin += Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+  });
+
+  var { jsPDF } = window.jspdf;
+  var doc = new jsPDF('landscape', 'mm', 'a4');
+
+  // ============ KOP SURAT ============
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('LAPORAN KEGIATAN BEKARYE BAPENDA', 148, 15, { align: 'center' });
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Badan Pendapatan Daerah', 148, 22, { align: 'center' });
+
+  doc.setLineWidth(0.5);
+  doc.line(15, 27, 282, 27);
+
+  // ============ INFO ============
+  var infoY = 35;
+  doc.setFontSize(10);
+
+  doc.text('Nama', 15, infoY);
+  doc.text(': ' + (session.nama || '-'), 40, infoY);
+
+  doc.text('NIP', 15, infoY + 6);
+  doc.text(': ' + (session.nip || '-'), 40, infoY + 6);
+
+  doc.text('Unit', 15, infoY + 12);
+  doc.text(': ' + (session.unit || '-'), 40, infoY + 12);
+
+  doc.text('Periode', 150, infoY);
+  doc.text(': ' + periode, 175, infoY);
+
+  doc.setFont('helvetica', 'bold');
+  doc.text('Total Poin', 150, infoY + 6);
+  doc.text(': ' + totalPoin + ' poin', 175, infoY + 6);
+
+  doc.line(15, 55, 282, 55);
+
+  // ============ TABLE DATA ============
+  var tableData = filteredKegiatan.map(function (k, idx) {
+    var poinSatuan = Number(k.poin_satuan) || 0;
+    var jumlah = Number(k.jumlah) || 1;
+    var tp = Number(k.total_poin) || (poinSatuan * jumlah);
+    var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
+    var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
+    
+    // ⭐ Gunakan "Klik di sini" sebagai text, bukan link
+    var buktiText = k.link_bukti ? String(k.link_bukti).trim() : '-';
+    var buktiDisplay = buktiText && buktiText !== '-' ? 'Klik di sini' : '-';
+
+    return [
+      idx + 1,
+      tglDisplay,
+      k.kode_keg || '-',
+      k.nama_keg || '-',
+      perhitungan,
+      tp,
+      k.status || 'Pending',
+      buktiDisplay  // ⭐ Text placeholder
+    ];
+  });
+
+  doc.autoTable({
+    head: [['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Perhitungan', 'Poin', 'Status', 'Bukti']],
+    body: tableData,
+    startY: 60,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [37, 99, 235],
+      textColor: [255, 255, 255],
+      fontStyle: 'bold',
+      fontSize: 9
+    },
+    bodyStyles: {
+      fontSize: 8
+    },
+    columnStyles: {
+      0: { cellWidth: 10, halign: 'center' },
+      1: { cellWidth: 22 },
+      2: { cellWidth: 22 },
+      3: { cellWidth: 85 },
+      4: { cellWidth: 25, halign: 'center' },
+      5: { cellWidth: 18, halign: 'center', fontStyle: 'bold' },
+      6: { cellWidth: 22, halign: 'center' },
+      7: { cellWidth: 30, halign: 'center', textColor: [37, 99, 235], fontStyle: 'bold' }
+    },
+    foot: [['', '', '', '', 'TOTAL', totalPoin, '', '']],
+    footStyles: {
+      fillColor: [37, 99, 235],
+      textColor: [255, 255, 255],
+      fontStyle: 'bold',
+      fontSize: 10
+    },
+    // ⭐ PENTING: Tambah link dengan didDrawCell hook
+    didDrawCell: function (data) {
+      // Kolom ke-7 (index 7) = kolom Bukti
+      if (data.section === 'body' && data.column.index === 7) {
+        var rowIdx = data.row.index;
+        var kegiatan = filteredKegiatan[rowIdx];
+        
+        if (kegiatan && kegiatan.link_bukti) {
+          var link = String(kegiatan.link_bukti).trim();
+          
+          if (link && link !== '-' && link.length > 0) {
+            // ⭐ Add hyperlink ke text "Klik di sini"
+            var cellX = data.cell.x;
+            var cellY = data.cell.y;
+            var cellWidth = data.cell.width;
+            var cellHeight = data.cell.height;
+            
+            // Tambah rectangle sebagai clickable area
+            doc.setDrawColor(37, 99, 235);
+            doc.setLineWidth(0.1);
+            
+            // Buat link area
+            doc.textWithLink(
+              'Klik di sini',
+              cellX + cellWidth / 2,
+              cellY + cellHeight / 2 + 1,
+              { pageNumber: doc.internal.getNumberOfPages(), name: 'link_' + rowIdx },
+              'U'
+            );
+            
+            // Atau gunakan addLink dengan exact positioning
+            var linkId = doc.addLink(link);
+            doc.addLinkAnnotation({
+              x: cellX + 1,
+              y: cellY + 1,
+              w: cellWidth - 2,
+              h: cellHeight - 2,
+              URI: link
+            });
+          }
+        }
       }
-
-      var bulanFilter = document.getElementById('filterBulan').value;
-      var tahunFilter = document.getElementById('filterTahun').value;
-      var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
-
-      var totalPoin = 0;
-      filteredKegiatan.forEach(function (k) {
-        totalPoin += Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
-      });
-
-      var { jsPDF } = window.jspdf;
-      var doc = new jsPDF('landscape', 'mm', 'a4');
-
-      // Header
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      doc.text('LAPORAN KEGIATAN BEKARYE BAPENDA', 148, 15, { align: 'center' });
-
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Badan Pendapatan Daerah', 148, 22, { align: 'center' });
-
-      doc.setLineWidth(0.5);
-      doc.line(15, 27, 282, 27);
-
-      // Info
-      var infoY = 35;
-      doc.setFontSize(10);
-
-      doc.text('Nama', 15, infoY);
-      doc.text(': ' + (session.nama || '-'), 40, infoY);
-
-      doc.text('NIP', 15, infoY + 6);
-      doc.text(': ' + (session.nip || '-'), 40, infoY + 6);
-
-      doc.text('Unit', 15, infoY + 12);
-      doc.text(': ' + (session.unit || '-'), 40, infoY + 12);
-
-      doc.text('Periode', 150, infoY);
-      doc.text(': ' + periode, 175, infoY);
-
-      doc.setFont('helvetica', 'bold');
-      doc.text('Total Poin', 150, infoY + 6);
-      doc.text(': ' + totalPoin + ' poin', 175, infoY + 6);
-
-      doc.line(15, 55, 282, 55);
-
-      // Table
-      var tableData = filteredKegiatan.map(function (k, idx) {
-        var poinSatuan = Number(k.poin_satuan) || 0;
-        var jumlah = Number(k.jumlah) || 1;
-        var tp = Number(k.total_poin) || (poinSatuan * jumlah);
-        var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
-        var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
-
-        return [idx + 1, tglDisplay, k.kode_keg || '-', k.nama_keg || '-', perhitungan, tp, k.status || 'Pending'];
-      });
-
-      doc.autoTable({
-        head: [['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Perhitungan', 'Poin', 'Status']],
-        body: tableData,
-        startY: 60,
-        theme: 'grid',
-        headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 9 },
-        bodyStyles: { fontSize: 8 },
-        columnStyles: {
-          0: { cellWidth: 10, halign: 'center' },
-          1: { cellWidth: 22 },
-          2: { cellWidth: 22 },
-          3: { cellWidth: 100 },
-          4: { cellWidth: 25, halign: 'center' },
-          5: { cellWidth: 18, halign: 'center', fontStyle: 'bold' },
-          6: { cellWidth: 22, halign: 'center' }
-        },
-        foot: [['', '', '', '', 'TOTAL', totalPoin, '']],
-        footStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }
-      });
-
-      var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.pdf';
-      doc.save(fileName);
-
-      console.log('✅ PDF exported:', fileName);
     }
+  });
 
+  // ============ FOOTER ============
+  var finalY = doc.lastAutoTable.finalY + 15;
+  if (finalY > 250) {
+    doc.addPage();
+    finalY = 20;
+  }
+
+  var today = new Date();
+  var ttdY = finalY + 5;
+  
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }), 220, ttdY);
+  doc.text('Hormat saya,', 220, ttdY + 6);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text(session.nama || '-', 220, ttdY + 30);
+  
+  doc.setFont('helvetica', 'normal');
+  doc.text('NIP. ' + (session.nip || '-'), 220, ttdY + 35);
+
+  // ============ SAVE ============
+  var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.pdf';
+  doc.save(fileName);
+
+  console.log('✅ PDF exported dengan link:', fileName);
+}
     // ============================================================
     // EXPORT EXCEL
     // ============================================================
