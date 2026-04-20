@@ -24,7 +24,7 @@
     .btn-logout:hover{background:var(--red-bg)}
 
     /* MAIN */
-    .main{margin-top:70px;padding:20px;max-width:900px;margin-left:auto;margin-right:auto}
+    .main{margin-top:70px;padding:20px;max-width:1000px;margin-left:auto;margin-right:auto}
 
     /* HEADER */
     .page-header{margin-bottom:32px}
@@ -32,7 +32,7 @@
     .page-sub{font-size:14px;color:var(--text3)}
 
     /* FORM SECTION */
-    .form-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow2)}
+    .form-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow2);margin-bottom:30px}
 
     .form-group{margin-bottom:20px}
     .form-group label{display:block;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
@@ -65,6 +65,21 @@
     .autocomplete-item-poin{font-size:11px;color:var(--text4)}
     .autocomplete-empty{padding:16px;text-align:center;color:var(--text4);font-size:13px}
 
+    /* ⭐ BUKTI SECTION */
+    .bukti-section{background:var(--bg3);border:2px dashed var(--border);border-radius:var(--radius2);padding:24px;margin:20px 0}
+
+    .bukti-tabs{display:flex;gap:12px;margin-bottom:20px}
+
+    .bukti-tab{padding:12px 20px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text2);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s}
+
+    .bukti-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+    .bukti-tab:hover{transform:translateY(-2px)}
+
+    .bukti-content{display:none}
+
+    .bukti-content.active{display:block}
+
     /* FILE UPLOAD */
     .upload-zone{border:2px dashed var(--border);border-radius:var(--radius2);padding:24px;text-align:center;transition:all .2s;cursor:pointer;background:var(--bg3)}
     .upload-zone:hover{border-color:var(--blue);background:rgba(37,99,235,.05)}
@@ -81,6 +96,67 @@
     .file-size{font-size:11px;color:var(--text4)}
     .btn-remove{padding:6px 10px;border-radius:8px;font-size:11px;border:1px solid var(--red-bg);background:var(--red-bg);color:var(--red);cursor:pointer;transition:all .2s}
     .btn-remove:hover{background:var(--red);color:#fff}
+
+    /* ⭐ CAMERA */
+    .camera-container{border:2px solid var(--border);border-radius:var(--radius2);overflow:hidden;background:#000}
+
+    video{width:100%;height:auto;display:block;background:#000}
+
+    #cameraCanvas{display:none}
+
+    .camera-controls{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+
+    .btn-camera{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:var(--radius2);font-size:14px;font-weight:700;transition:all .25s;border:none;cursor:pointer}
+
+    .btn-start-camera{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.35)}
+
+    .btn-start-camera:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.45)}
+
+    .btn-capture{background:var(--green);color:#fff;box-shadow:0 6px 20px rgba(5,150,105,.35)}
+
+    .btn-capture:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 28px rgba(5,150,105,.45)}
+
+    .btn-stop-camera{background:var(--red);color:#fff;box-shadow:0 6px 20px rgba(220,38,38,.35)}
+
+    .btn-stop-camera:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 28px rgba(220,38,38,.45)}
+
+    .btn-retake{background:var(--text3);color:#fff}
+
+    .btn-retake:hover{background:var(--text2)}
+
+    /* GPS INFO */
+    .gps-info{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-top:12px;font-size:12px}
+
+    .gps-status{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+
+    .gps-indicator{width:12px;height:12px;border-radius:50%;background:#ccc;animation:pulse 2s infinite}
+
+    .gps-indicator.active{background:var(--green);animation:pulse-active 2s infinite}
+
+    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+    @keyframes pulse-active{0%,100%{opacity:1}50%{opacity:.6}}
+
+    .gps-coords{font-family:monospace;color:var(--blue);font-weight:600}
+
+    .gps-error{color:var(--red)}
+
+    .gps-loading{color:var(--text3)}
+
+    /* PREVIEW */
+    .preview-container{margin-top:16px;position:relative}
+
+    .preview-img{width:100%;max-width:400px;border-radius:10px;border:1px solid var(--border);display:block}
+
+    .photo-metadata{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-top:12px;font-size:12px}
+
+    .metadata-item{display:flex;justify-content:space-between;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+
+    .metadata-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+
+    .metadata-label{font-weight:600;color:var(--text2)}
+
+    .metadata-value{color:var(--text3);font-family:monospace;word-break:break-all}
 
     /* ALERT */
     .alert{padding:14px 16px;border-radius:12px;font-size:13px;font-weight:600;margin-bottom:20px;display:none;animation:slideDown .3s ease}
@@ -108,11 +184,58 @@
     .loader{display:none;width:20px;height:20px;border:3px solid rgba(255,255,255,.3);border-top:3px solid #fff;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* INPUT ROW (untuk tanggal + jumlah) */
+    /* INPUT ROW */
     .input-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
     /* SATUAN BADGE */
     .satuan-badge{display:inline-block;background:var(--blue-bg);color:var(--blue);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;margin-left:4px}
+
+    /* TABLE SECTION */
+    .table-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:30px;box-shadow:var(--shadow)}
+
+    .table-header{padding:24px;border-bottom:1px solid var(--border);background:var(--bg3)}
+
+    .table-title{font-size:18px;font-weight:800;margin-bottom:4px;color:var(--text)}
+
+    .table-subtitle{font-size:13px;color:var(--text3)}
+
+    .table-wrapper{overflow-x:auto}
+
+    table{width:100%;border-collapse:collapse;min-width:600px}
+
+    th{padding:14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text2);background:var(--bg3);border-bottom:2px solid var(--border)}
+
+    td{padding:14px;border-bottom:1px solid var(--border);font-size:13px}
+
+    tr:hover{background:var(--bg3)}
+
+    .status-badge{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;text-align:center}
+
+    .status-pending{background:rgba(217,119,6,.15);color:#b45309}
+
+    .status-approved{background:rgba(5,150,105,.15);color:var(--green)}
+
+    .status-rejected{background:rgba(220,38,38,.15);color:var(--red)}
+
+    .status-processing{background:rgba(59,130,246,.15);color:var(--blue)}
+
+    .btn-action{display:inline-flex;align-items:center;gap:4px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:all .2s}
+
+    .btn-view{background:var(--blue-bg);color:var(--blue)}
+
+    .btn-view:hover{background:var(--blue);color:#fff}
+
+    .btn-delete{background:var(--red-bg);color:var(--red)}
+
+    .btn-delete:hover{background:var(--red);color:#fff;transform:translateY(-1px)}
+
+    .empty-state{padding:40px 20px;text-align:center;color:var(--text4)}
+
+    .empty-icon{font-size:48px;margin-bottom:8px}
+
+    .empty-text{font-size:16px;font-weight:600;color:var(--text2);margin-bottom:4px}
+
+    .empty-sub{font-size:13px;color:var(--text4)}
 
     /* MOBILE */
     @media(max-width:768px){
@@ -123,12 +246,17 @@
       .btn{width:100%;justify-content:center}
       .autocomplete-list{max-height:200px}
       .input-row{grid-template-columns:1fr}
+      th,td{padding:10px 6px;font-size:11px}
+      .btn-action{padding:6px 10px;font-size:10px}
+      .bukti-tabs{flex-wrap:wrap}
+      .bukti-tab{flex:1;min-width:100px}
     }
 
     @media(max-width:480px){
       .nav-brand{font-size:14px}
       .page-title{font-size:18px}
       .poin-preview-total{font-size:24px}
+      .table-header{padding:16px}
     }
   </style>
 </head>
@@ -157,7 +285,7 @@
     <div id="alertSuccess" class="alert alert-success"></div>
     <div id="alertInfo" class="alert alert-info"></div>
 
-    <!-- FORM -->
+    <!-- FORM ENTRI -->
     <div class="form-card">
       <form id="kegiatanForm">
         
@@ -223,19 +351,86 @@
           <textarea id="inCatatan" placeholder="Jelaskan detail kegiatan (opsional)"></textarea>
         </div>
 
-        <!-- UPLOAD BUKTI -->
-        <div class="form-group">
-          <label>📎 Upload Bukti (PDF/JPG/PNG)</label>
-          <div class="upload-zone" id="uploadZone">
-            <div class="upload-icon">☁️</div>
-            <div class="upload-text">Klik atau drag file di sini</div>
-            <div class="upload-sub">Format: PDF, JPG, PNG (Max 25MB)</div>
-            <input type="file" id="fileInput" class="upload-input" accept=".pdf,.jpg,.jpeg,.png" />
+        <!-- ⭐ BUKTI SECTION (TABS) -->
+        <div class="bukti-section">
+          <label style="display:block;font-size:14px;font-weight:700;margin-bottom:16px;color:var(--text)">📸 Bukti Kegiatan</label>
+
+          <!-- TABS -->
+          <div class="bukti-tabs">
+            <button type="button" class="bukti-tab active" data-tab="upload" onclick="switchBuktiTab(event, 'upload')">
+              📤 Upload File
+            </button>
+            <button type="button" class="bukti-tab" data-tab="camera" onclick="switchBuktiTab(event, 'camera')">
+              📷 Ambil Foto + GPS
+            </button>
           </div>
-          <div id="fileList"></div>
-          <input type="hidden" id="inLinkBukti" />
-          <div class="input-hint">File akan diupload ke Google Drive otomatis</div>
+
+          <!-- TAB: UPLOAD FILE -->
+          <div id="upload" class="bukti-content active">
+            <div class="upload-zone" id="uploadZone">
+              <div class="upload-icon">☁️</div>
+              <div class="upload-text">Klik atau drag file di sini</div>
+              <div class="upload-sub">Format: PDF, JPG, PNG (Max 25MB)</div>
+              <input type="file" id="fileInput" class="upload-input" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <div id="fileList"></div>
+            <div class="input-hint" style="margin-top:12px;">✅ File akan diupload ke Google Drive otomatis</div>
+          </div>
+
+          <!-- TAB: CAMERA + GPS -->
+          <div id="camera" class="bukti-content">
+            <!-- GPS STATUS -->
+            <div class="gps-info">
+              <div class="gps-status">
+                <div class="gps-indicator" id="gpsIndicator"></div>
+                <span id="gpsStatusText">🔍 Mencari GPS...</span>
+              </div>
+              <div id="gpsCoords" class="gps-loading">Menunggu GPS aktif...</div>
+            </div>
+
+            <!-- CAMERA PREVIEW -->
+            <div class="camera-container" id="cameraContainer" style="display:none;margin-top:16px;">
+              <video id="cameraVideo" playsinline autoplay></video>
+            </div>
+
+            <!-- CAPTURED PHOTO -->
+            <div class="preview-container" id="photoPreview" style="display:none;">
+              <canvas id="cameraCanvas"></canvas>
+              <img id="capturedImg" class="preview-img" />
+              <div class="photo-metadata">
+                <div class="metadata-item">
+                  <span class="metadata-label">⏱️ Timestamp:</span>
+                  <span class="metadata-value" id="photoTime">-</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">📍 Koordinat GPS:</span>
+                  <span class="metadata-value" id="photoGPS">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CAMERA CONTROLS -->
+            <div class="camera-controls">
+              <button type="button" class="btn-camera btn-start-camera" id="btnStartCamera" onclick="startCamera()">
+                ▶️ Buka Kamera
+              </button>
+              <button type="button" class="btn-camera btn-capture" id="btnCapture" onclick="capturePhoto()" style="display:none;">
+                📸 Ambil Foto
+              </button>
+              <button type="button" class="btn-camera btn-stop-camera" id="btnStopCamera" onclick="stopCamera()" style="display:none;">
+                ⏹️ Tutup Kamera
+              </button>
+              <button type="button" class="btn-camera btn-retake" id="btnRetake" onclick="retakePhoto()" style="display:none;">
+                🔄 Ambil Ulang
+              </button>
+            </div>
+          </div>
         </div>
+
+        <!-- HIDDEN INPUT -->
+        <input type="hidden" id="inLinkBukti" />
+        <input type="hidden" id="inPhotoBase64" />
+        <input type="hidden" id="inPhotoMetadata" />
 
         <!-- BUTTONS -->
         <div class="form-actions">
@@ -246,6 +441,38 @@
           <a href="dashboard.html" class="btn btn-secondary">⬅️ Kembali</a>
         </div>
       </form>
+    </div>
+
+    <!-- ⭐ TABEL KEGIATAN -->
+    <div class="table-section">
+      <div class="table-header">
+        <div class="table-title">📋 Daftar Kegiatan Anda</div>
+        <div class="table-subtitle">Kelola kegiatan yang telah diinput</div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Kode</th>
+              <th>Nama Kegiatan</th>
+              <th>Perhitungan</th>
+              <th>Poin</th>
+              <th>Bukti</th>
+              <th>Status Verifikasi</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="8" class="empty-state">
+                <div class="empty-icon">⏳</div>
+                <div class="empty-text">Memuat data...</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -260,6 +487,13 @@ var THEME_KEY = 'bekarye-theme';
 var MASTER_KEGIATAN = [];
 var selectedFile = null;
 var selectedKegiatan = null;
+var allKegiatanList = [];
+
+// ⭐ CAMERA & GPS VARIABLES
+var stream = null;
+var gpsData = null;
+var photoData = null;
+var gpsWatchId = null;
 
 // ============================================================
 // THEME
@@ -348,6 +582,246 @@ function hitungTotalPoin() {
 }
 
 // ============================================================
+// BUKTI TABS
+// ============================================================
+function switchBuktiTab(e, tabName) {
+  e.preventDefault();
+  
+  // Hide all content
+  document.querySelectorAll('.bukti-content').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  
+  // Deactivate all tabs
+  document.querySelectorAll('.bukti-tab').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  
+  // Show selected content
+  document.getElementById(tabName).classList.add('active');
+  
+  // Activate selected tab
+  event.target.classList.add('active');
+}
+
+// ============================================================
+// ⭐ GPS TRACKING
+// ============================================================
+function initGPS() {
+  if (!navigator.geolocation) {
+    document.getElementById('gpsStatusText').textContent = '❌ GPS tidak didukung';
+    document.getElementById('gpsCoords').innerHTML = '<span class="gps-error">GPS tidak tersedia di device ini</span>';
+    return;
+  }
+
+  document.getElementById('gpsStatusText').textContent = '🔍 Mencari GPS...';
+  document.getElementById('gpsIndicator').classList.remove('active');
+
+  gpsWatchId = navigator.geolocation.watchPosition(
+    function(pos) {
+      gpsData = {
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+        accuracy: pos.coords.accuracy,
+        altitude: pos.coords.altitude,
+        timestamp: new Date().toLocaleString('id-ID')
+      };
+
+      document.getElementById('gpsStatusText').textContent = '✅ GPS Aktif';
+      document.getElementById('gpsIndicator').classList.add('active');
+      document.getElementById('gpsCoords').innerHTML = 
+        '<span class="gps-coords">' +
+        '📍 ' + gpsData.latitude.toFixed(6) + ', ' + gpsData.longitude.toFixed(6) +
+        '</span><br><small style="color:var(--text4);">Akurasi: ±' + Math.round(gpsData.accuracy) + 'm</small>';
+    },
+    function(err) {
+      console.warn('GPS Error:', err);
+      document.getElementById('gpsStatusText').textContent = '⚠️ GPS Error';
+      document.getElementById('gpsCoords').innerHTML = '<span class="gps-error">⚠️ ' + err.message + '</span>';
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000
+    }
+  );
+}
+
+function stopGPS() {
+  if (gpsWatchId !== null) {
+    navigator.geolocation.clearWatch(gpsWatchId);
+    gpsWatchId = null;
+  }
+}
+
+// ============================================================
+// ⭐ CAMERA FUNCTIONS
+// ============================================================
+function startCamera() {
+  console.log('📷 Starting camera...');
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showAlert('❌ Kamera tidak didukung di browser ini', 'error');
+    return;
+  }
+
+  initGPS(); // Start GPS when camera starts
+
+  navigator.mediaDevices.getUserMedia({
+    video: { facingMode: 'environment' },
+    audio: false
+  })
+  .then(function(mediaStream) {
+    stream = mediaStream;
+    var video = document.getElementById('cameraVideo');
+    video.srcObject = stream;
+
+    document.getElementById('cameraContainer').style.display = 'block';
+    document.getElementById('btnStartCamera').style.display = 'none';
+    document.getElementById('btnCapture').style.display = 'inline-flex';
+    document.getElementById('btnStopCamera').style.display = 'inline-flex';
+
+    showAlert('✅ Kamera siap. Tekan Ambil Foto ketika siap.', 'success');
+  })
+  .catch(function(err) {
+    console.error('Camera Error:', err);
+    showAlert('❌ Gagal akses kamera: ' + err.message, 'error');
+  });
+}
+
+function capturePhoto() {
+  console.log('📸 Capturing photo...');
+
+  if (!stream) {
+    showAlert('❌ Kamera tidak aktif', 'error');
+    return;
+  }
+
+  var video = document.getElementById('cameraVideo');
+  var canvas = document.getElementById('cameraCanvas');
+  var ctx = canvas.getContext('2d');
+
+  // Set canvas size to video size
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  // Draw video frame
+  ctx.drawImage(video, 0, 0);
+
+  // ⭐ DRAW METADATA (Timestamp + GPS)
+  drawMetadata(ctx, canvas);
+
+  // Convert to data URL
+  var imageData = canvas.toDataURL('image/jpeg', 0.9);
+
+  // Display photo
+  var img = document.getElementById('capturedImg');
+  img.src = imageData;
+
+  // Store photo data
+  photoData = {
+    base64: imageData.split(',')[1],
+    timestamp: new Date().toLocaleString('id-ID', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }),
+    gps: gpsData || null
+  };
+
+  // Display metadata
+  document.getElementById('photoTime').textContent = photoData.timestamp;
+  document.getElementById('photoGPS').textContent = gpsData ? 
+    gpsData.latitude.toFixed(6) + ', ' + gpsData.longitude.toFixed(6) :
+    '🔍 Sedang mencari GPS...';
+
+  // Update UI
+  document.getElementById('photoPreview').style.display = 'block';
+  document.getElementById('cameraContainer').style.display = 'none';
+  document.getElementById('btnCapture').style.display = 'none';
+  document.getElementById('btnStopCamera').style.display = 'none';
+  document.getElementById('btnRetake').style.display = 'inline-flex';
+
+  // Store to hidden inputs
+  document.getElementById('inPhotoBase64').value = photoData.base64;
+  document.getElementById('inPhotoMetadata').value = JSON.stringify({
+    timestamp: photoData.timestamp,
+    gps: photoData.gps
+  });
+
+  showAlert('✅ Foto berhasil diambil dengan metadata', 'success');
+}
+
+function drawMetadata(ctx, canvas) {
+  var fontSize = Math.floor(canvas.height / 20);
+  ctx.font = 'bold ' + fontSize + 'px Arial';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+  ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+  ctx.lineWidth = 2;
+
+  // Timestamp
+  var timestamp = new Date().toLocaleString('id-ID', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+
+  var yPos = canvas.height - fontSize * 2.5;
+  ctx.strokeText('⏱️ ' + timestamp, 20, yPos);
+  ctx.fillText('⏱️ ' + timestamp, 20, yPos);
+
+  // GPS Coordinates
+  if (gpsData) {
+    var gpsText = '📍 ' + gpsData.latitude.toFixed(6) + ', ' + gpsData.longitude.toFixed(6);
+    yPos = canvas.height - fontSize - 10;
+    ctx.strokeText(gpsText, 20, yPos);
+    ctx.fillText(gpsText, 20, yPos);
+  }
+}
+
+function stopCamera() {
+  console.log('⏹️ Stopping camera...');
+
+  if (stream) {
+    stream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    stream = null;
+  }
+
+  stopGPS();
+
+  document.getElementById('cameraContainer').style.display = 'none';
+  document.getElementById('btnStartCamera').style.display = 'inline-flex';
+  document.getElementById('btnCapture').style.display = 'none';
+  document.getElementById('btnStopCamera').style.display = 'none';
+  document.getElementById('btnRetake').style.display = 'none';
+  document.getElementById('photoPreview').style.display = 'none';
+
+  showAlert('✅ Kamera ditutup', 'info');
+}
+
+function retakePhoto() {
+  console.log('🔄 Retaking photo...');
+
+  photoData = null;
+  document.getElementById('inPhotoBase64').value = '';
+  document.getElementById('inPhotoMetadata').value = '';
+  document.getElementById('photoPreview').style.display = 'none';
+  document.getElementById('cameraContainer').style.display = 'block';
+  document.getElementById('btnCapture').style.display = 'inline-flex';
+  document.getElementById('btnRetake').style.display = 'none';
+
+  showAlert('✅ Siap ambil foto lagi', 'success');
+}
+
+// ============================================================
 // LOAD MASTER KEGIATAN
 // ============================================================
 function loadMasterKegiatan() {
@@ -363,7 +837,6 @@ function loadMasterKegiatan() {
   .then(function(j) {
     console.log('Response getMasterKegiatan:', j);
     
-    // Support multiple response formats
     var kegiatan = null;
     if (j.data && j.data.kegiatan) {
       kegiatan = j.data.kegiatan;
@@ -387,6 +860,185 @@ function loadMasterKegiatan() {
     console.error('Error loading master:', err);
     hint.textContent = '❌ Gagal memuat data kegiatan';
     showAlert('⚠️ Gagal memuat data kegiatan: ' + err.message, 'error');
+  });
+}
+
+// ============================================================
+// LOAD DATA KEGIATAN USER
+// ============================================================
+function loadDataKegiatan() {
+  var session = loadSession();
+  if (!session) return;
+
+  fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      action: 'getDataKegiatan',
+      nip: session.nip
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(j) {
+    console.log('Response getDataKegiatan:', j);
+    
+    var kegiatan = null;
+    if (j.data && j.data.kegiatan) {
+      kegiatan = j.data.kegiatan;
+    } else if (j.user && j.user.kegiatan) {
+      kegiatan = j.user.kegiatan;
+    } else if (j.kegiatan) {
+      kegiatan = j.kegiatan;
+    }
+
+    if (kegiatan && kegiatan.length > 0) {
+      allKegiatanList = kegiatan;
+      displayKegiatanTable(kegiatan);
+    } else {
+      displayKegiatanTable([]);
+    }
+  })
+  .catch(function(err) {
+    console.error('Error load data:', err);
+    var tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><div class="empty-icon">❌</div><div class="empty-text">Gagal memuat data</div></td></tr>';
+  });
+}
+
+// ============================================================
+// DISPLAY KEGIATAN TABLE
+// ============================================================
+function displayKegiatanTable(kegiatan) {
+  var tbody = document.getElementById('tableBody');
+
+  if (!kegiatan || kegiatan.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Belum ada kegiatan</div><div class="empty-sub">Mulai inputkan kegiatan di atas</div></td></tr>';
+    return;
+  }
+
+  kegiatan.sort(function(a, b) {
+    return new Date(b.tanggal) - new Date(a.tanggal);
+  });
+
+  var html = '';
+  kegiatan.forEach(function(k, idx) {
+    var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    }) : '-';
+
+    var statusClass = 'status-pending';
+    var statusText = '⏳ Pending';
+    var canDelete = true;
+
+    if (k.status_verif) {
+      if (k.status_verif === 'Final Disetujui') {
+        statusClass = 'status-approved';
+        statusText = '✅ Disetujui';
+        canDelete = false;
+      } else if (k.status_verif === 'Ditolak') {
+        statusClass = 'status-rejected';
+        statusText = '❌ Ditolak';
+        canDelete = false;
+      } else {
+        statusClass = 'status-processing';
+        statusText = '⏳ ' + k.status_verif;
+        canDelete = true;
+      }
+    }
+
+    var buktiLink = '';
+    if (k.link_bukti && String(k.link_bukti).trim()) {
+      buktiLink = '<a href="' + k.link_bukti + '" target="_blank" class="btn-action btn-view">📎 Lihat</a>';
+    } else {
+      buktiLink = '<span style="color: var(--text4)">-</span>';
+    }
+
+    var poinSatuan = Number(k.poin_satuan) || 0;
+    var jumlah = Number(k.jumlah) || 1;
+    var totalPoin = Number(k.total_poin) || (poinSatuan * jumlah);
+    var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
+
+    var aksiButton = '';
+    if (canDelete) {
+      aksiButton = '<button type="button" class="btn-action btn-delete" onclick="deleteKegiatan(' + idx + ')" title="Hapus kegiatan">🗑️ Hapus</button>';
+    } else {
+      aksiButton = '<span style="color: var(--text3); font-size: 12px; font-weight: 600; display: inline-block; padding: 6px 10px; background: var(--bg3); border-radius: 6px;">' + (k.status_verif === 'Ditolak' ? '❌ Ditolak' : '⏳ Terkunci') + '</span>';
+    }
+
+    html += '<tr>';
+    html += '<td>' + tglDisplay + '</td>';
+    html += '<td><strong>' + (k.kode_keg || '-') + '</strong></td>';
+    html += '<td>' + (k.nama_keg || '-') + '</td>';
+    html += '<td><span style="background: var(--blue-bg); color: var(--blue); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;">' + perhitungan + '</span></td>';
+    html += '<td><strong style="color: var(--blue); font-size: 14px;">' + totalPoin + '</strong></td>';
+    html += '<td>' + buktiLink + '</td>';
+    html += '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>';
+    html += '<td>' + aksiButton + '</td>';
+    html += '</tr>';
+  });
+
+  tbody.innerHTML = html;
+}
+
+// ============================================================
+// DELETE KEGIATAN
+// ============================================================
+function deleteKegiatan(idx) {
+  var kegiatan = allKegiatanList[idx];
+  
+  if (!kegiatan) {
+    showAlert('❌ Data kegiatan tidak ditemukan!', 'error');
+    return;
+  }
+
+  var msg = '⚠️ PERHATIAN!\n\n' +
+            'Yakin hapus kegiatan ini?\n\n' +
+            '📌 ' + (kegiatan.nama_keg || 'Kegiatan') + '\n' +
+            '📅 ' + (kegiatan.tanggal ? new Date(kegiatan.tanggal).toLocaleDateString('id-ID') : '-') + '\n' +
+            '📊 Poin: ' + (kegiatan.total_poin || 0) + '\n\n' +
+            '🔴 Aksi ini TIDAK BISA dibatalkan!';
+  
+  if (!confirm(msg)) {
+    return;
+  }
+
+  var session = loadSession();
+  if (!session) {
+    showAlert('❌ Session tidak valid', 'error');
+    return;
+  }
+
+  var rowIndex = idx + 2;
+
+  console.log('🗑️ Deleting kegiatan at index:', idx, 'row:', rowIndex);
+
+  fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      action: 'deleteKegiatan',
+      nip: session.nip,
+      rowIndex: rowIndex
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(j) {
+    console.log('📊 Delete response:', j);
+
+    if (j.ok) {
+      showAlert('✅ Kegiatan berhasil dihapus!', 'success');
+      setTimeout(function() {
+        loadDataKegiatan();
+      }, 500);
+    } else {
+      showAlert('❌ Error: ' + (j.message || 'Gagal menghapus kegiatan'), 'error');
+    }
+  })
+  .catch(function(err) {
+    console.error('❌ Delete error:', err);
+    showAlert('❌ Error: ' + err.message, 'error');
   });
 }
 
@@ -420,7 +1072,6 @@ inputKeg.addEventListener('input', function() {
     return kode.includes(keyword) || nama.includes(keyword);
   });
 
-  // Limit hasil ke 50 item
   if (filtered.length > 50) {
     filtered = filtered.slice(0, 50);
   }
@@ -447,7 +1098,6 @@ inputKeg.addEventListener('input', function() {
   listKeg.innerHTML = html;
   listKeg.classList.add('show');
 
-  // Add click listeners
   document.querySelectorAll('.autocomplete-item').forEach(function(item) {
     item.addEventListener('click', function() {
       var kode = this.getAttribute('data-kode');
@@ -463,14 +1113,12 @@ inputKeg.addEventListener('input', function() {
   });
 });
 
-// Tampilkan dropdown saat focus
 inputKeg.addEventListener('focus', function() {
   if (this.value.trim().length > 0 && MASTER_KEGIATAN.length > 0) {
     this.dispatchEvent(new Event('input'));
   }
 });
 
-// Close autocomplete when clicking outside
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.autocomplete-wrapper')) {
     listKeg.classList.remove('show');
@@ -613,6 +1261,44 @@ async function uploadFile(session, file) {
 }
 
 // ============================================================
+// UPLOAD PHOTO
+// ============================================================
+async function uploadPhoto(session, photoBase64, metadata) {
+  try {
+    var fileName = 'BEKARYE_' + new Date().toISOString().replace(/\D/g, '').substring(0, 14) + '.jpg';
+    
+    showAlert('⏳ Mengupload foto dengan metadata...', 'info');
+    
+    var result = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'uploadFile',
+        nip: session.nip,
+        fileName: fileName,
+        mimeType: 'image/jpeg',
+        fileData: photoBase64
+      })
+    }).then(function(r) { return r.json(); });
+
+    var link = null;
+    if (result.data && result.data.link) link = result.data.link;
+    else if (result.user && result.user.link) link = result.user.link;
+
+    if (result.ok && link) {
+      showAlert('✅ Foto dengan GPS & timestamp berhasil diupload!', 'success');
+      return link;
+    } else {
+      showAlert('❌ Gagal upload foto: ' + (result.message || 'Error'), 'error');
+      return null;
+    }
+  } catch (err) {
+    showAlert('❌ Error: ' + err.message, 'error');
+    return null;
+  }
+}
+
+// ============================================================
 // FORM SUBMIT
 // ============================================================
 document.getElementById('kegiatanForm').addEventListener('submit', async function(e) {
@@ -638,18 +1324,12 @@ document.getElementById('kegiatanForm').addEventListener('submit', async functio
   }
 
   var btn = document.getElementById('btnSubmit');
-  if (!btn) {
-    console.error('❌ Button submit tidak ditemukan!');
-    showAlert('❌ Error: Button tidak ditemukan', 'error');
-    return;
-  }
-
   var loader = document.getElementById('loader');
   btn.disabled = true;
   if (loader) loader.style.display = 'inline-block';
   btn.textContent = ' Memproses...';
 
-  // Upload file jika ada
+  // Upload file atau photo
   if (selectedFile) {
     linkBukti = await uploadFile(session, selectedFile);
     if (!linkBukti) {
@@ -658,9 +1338,17 @@ document.getElementById('kegiatanForm').addEventListener('submit', async functio
       btn.textContent = '✅ Simpan Kegiatan';
       return;
     }
+  } else if (photoData) {
+    linkBukti = await uploadPhoto(session, photoData.base64, photoData);
+    if (!linkBukti) {
+      btn.disabled = false;
+      if (loader) loader.style.display = 'none';
+      btn.textContent = '✅ Simpan Kegiatan';
+      return;
+    }
   }
 
-  // Save kegiatan dengan JUMLAH
+  // Save kegiatan
   var poinSatuan = parseFloat(selectedKegiatan.poin) || 0;
   var totalCalc = poinSatuan * jumlah;
   
@@ -679,19 +1367,16 @@ document.getElementById('kegiatanForm').addEventListener('submit', async functio
     }
   };
 
-  console.log('📤 Payload yang dikirim:', payload);
+  console.log('📤 Payload:', payload);
 
   fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(payload)
   })
-  .then(function(r) { 
-    console.log('Response status:', r.status);
-    return r.json(); 
-  })
+  .then(function(r) { return r.json(); })
   .then(function(j) {
-    console.log('✅ Response dari server:', j);
+    console.log('✅ Response:', j);
     
     btn.disabled = false;
     if (loader) loader.style.display = 'none';
@@ -706,17 +1391,19 @@ document.getElementById('kegiatanForm').addEventListener('submit', async functio
         document.getElementById('inNamaKeg').value = '';
         document.getElementById('inPoin').value = '';
         document.getElementById('inJumlah').value = 1;
-        var previewTotal = document.getElementById('previewTotalPoin');
-        if (previewTotal) previewTotal.textContent = '0';
+        document.getElementById('previewTotalPoin').textContent = '0';
         removeFile();
+        stopCamera();
         selectedKegiatan = null;
+        photoData = null;
+        loadDataKegiatan();
       }, 1200);
     } else {
       showAlert('❌ ' + (j.message || 'Gagal menyimpan kegiatan'), 'error');
     }
   })
   .catch(function(err) {
-    console.error('❌ ERROR FETCH:', err);
+    console.error('❌ ERROR:', err);
     btn.disabled = false;
     if (loader) loader.style.display = 'none';
     btn.textContent = '✅ Simpan Kegiatan';
@@ -743,6 +1430,7 @@ if (!session || !session.token) {
 initTheme();
 document.getElementById('themeBtn').onclick = toggleTheme;
 loadMasterKegiatan();
+loadDataKegiatan();
   </script>
 </body>
 </html>
