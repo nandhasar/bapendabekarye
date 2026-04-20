@@ -1301,10 +1301,10 @@
     }
 
 
-    // ============================================================
-// EXPORT PDF - DENGAN LINK CLICKABLE
 // ============================================================
-function exportPDF() {
+// EXPORT PDF DENGAN QR CODE (Alternatif)
+// ============================================================
+function exportPDFWithQRCode() {
   if (filteredKegiatan.length === 0) {
     alert('❌ Tidak ada data untuk diexport!');
     return;
@@ -1322,7 +1322,7 @@ function exportPDF() {
   var { jsPDF } = window.jspdf;
   var doc = new jsPDF('landscape', 'mm', 'a4');
 
-  // ============ KOP SURAT ============
+  // Header
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.text('LAPORAN KEGIATAN BEKARYE BAPENDA', 148, 15, { align: 'center' });
@@ -1334,7 +1334,7 @@ function exportPDF() {
   doc.setLineWidth(0.5);
   doc.line(15, 27, 282, 27);
 
-  // ============ INFO ============
+  // Info
   var infoY = 35;
   doc.setFontSize(10);
 
@@ -1356,7 +1356,7 @@ function exportPDF() {
 
   doc.line(15, 55, 282, 55);
 
-  // ============ TABLE DATA ============
+  // Table
   var tableData = filteredKegiatan.map(function (k, idx) {
     var poinSatuan = Number(k.poin_satuan) || 0;
     var jumlah = Number(k.jumlah) || 1;
@@ -1364,9 +1364,8 @@ function exportPDF() {
     var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
     var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
     
-    // ⭐ Gunakan "Klik di sini" sebagai text, bukan link
-    var buktiText = k.link_bukti ? String(k.link_bukti).trim() : '-';
-    var buktiDisplay = buktiText && buktiText !== '-' ? 'Klik di sini' : '-';
+    // ⭐ Jika ada link, tampilkan "📎 [klik]"
+    var buktiDisplay = k.link_bukti ? '📎 [klik]' : '-';
 
     return [
       idx + 1,
@@ -1376,7 +1375,7 @@ function exportPDF() {
       perhitungan,
       tp,
       k.status || 'Pending',
-      buktiDisplay  // ⭐ Text placeholder
+      buktiDisplay
     ];
   });
 
@@ -1402,7 +1401,7 @@ function exportPDF() {
       4: { cellWidth: 25, halign: 'center' },
       5: { cellWidth: 18, halign: 'center', fontStyle: 'bold' },
       6: { cellWidth: 22, halign: 'center' },
-      7: { cellWidth: 30, halign: 'center', textColor: [37, 99, 235], fontStyle: 'bold' }
+      7: { cellWidth: 30, halign: 'center' }
     },
     foot: [['', '', '', '', 'TOTAL', totalPoin, '', '']],
     footStyles: {
@@ -1410,77 +1409,52 @@ function exportPDF() {
       textColor: [255, 255, 255],
       fontStyle: 'bold',
       fontSize: 10
-    },
-    // ⭐ PENTING: Tambah link dengan didDrawCell hook
-    didDrawCell: function (data) {
-      // Kolom ke-7 (index 7) = kolom Bukti
-      if (data.section === 'body' && data.column.index === 7) {
-        var rowIdx = data.row.index;
-        var kegiatan = filteredKegiatan[rowIdx];
-        
-        if (kegiatan && kegiatan.link_bukti) {
-          var link = String(kegiatan.link_bukti).trim();
-          
-          if (link && link !== '-' && link.length > 0) {
-            // ⭐ Add hyperlink ke text "Klik di sini"
-            var cellX = data.cell.x;
-            var cellY = data.cell.y;
-            var cellWidth = data.cell.width;
-            var cellHeight = data.cell.height;
-            
-            // Tambah rectangle sebagai clickable area
-            doc.setDrawColor(37, 99, 235);
-            doc.setLineWidth(0.1);
-            
-            // Buat link area
-            doc.textWithLink(
-              'Klik di sini',
-              cellX + cellWidth / 2,
-              cellY + cellHeight / 2 + 1,
-              { pageNumber: doc.internal.getNumberOfPages(), name: 'link_' + rowIdx },
-              'U'
-            );
-            
-            // Atau gunakan addLink dengan exact positioning
-            var linkId = doc.addLink(link);
-            doc.addLinkAnnotation({
-              x: cellX + 1,
-              y: cellY + 1,
-              w: cellWidth - 2,
-              h: cellHeight - 2,
-              URI: link
-            });
-          }
-        }
-      }
+    }
+  });
 
-  // ============ FOOTER ============
-  var finalY = doc.lastAutoTable.finalY + 15;
-  if (finalY > 250) {
-    doc.addPage();
-    finalY = 20;
-  }
-
-  var today = new Date();
-  var ttdY = finalY + 5;
+  // Tambah halaman baru untuk legend link
+  doc.addPage();
   
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text(today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }), 220, ttdY);
-  doc.text('Hormat saya,', 220, ttdY + 6);
-  
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(session.nama || '-', 220, ttdY + 30);
-  
-  doc.setFont('helvetica', 'normal');
-  doc.text('NIP. ' + (session.nip || '-'), 220, ttdY + 35);
+  doc.text('📎 DAFTAR LINK BUKTI KEGIATAN', 15, 20);
 
-  // ============ SAVE ============
+  var linkY = 30;
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+
+  filteredKegiatan.forEach(function (k, idx) {
+    if (k.link_bukti && String(k.link_bukti).trim()) {
+      var noKegiatan = (idx + 1).toString();
+      var link = String(k.link_bukti).trim();
+      
+      // Nomor kegiatan
+      doc.text(noKegiatan + '.', 15, linkY);
+      
+      // Link clickable
+      var linkId = doc.addLink(link);
+      doc.setTextColor(37, 99, 235);
+      doc.setFont('helvetica', 'underline');
+      doc.textWithLink(link.substring(0, 80) + (link.length > 80 ? '...' : ''), 20, linkY, linkId);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont('helvetica', 'normal');
+      
+      linkY += 5;
+      
+      if (linkY > 270) {
+        doc.addPage();
+        linkY = 20;
+      }
+    }
+  });
+
+  // Save
   var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.pdf';
   doc.save(fileName);
 
-  console.log('✅ PDF exported dengan link:', fileName);
+  console.log('✅ PDF exported dengan link page:', fileName);
 }
+    
     // ============================================================
     // EXPORT EXCEL
     // ============================================================
