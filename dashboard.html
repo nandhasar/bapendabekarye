@@ -140,6 +140,9 @@
         <div class="user-info">
           <div class="user-avatar" id="userAvatar">?</div>
           <span class="user-name" id="userName">User</span>
+          <a href="verifikasi.html" id="linkVerifikasi" style="display:none;" class="nav-link">
+  ✅ Verifikasi Kegiatan
+</a>
         </div>
         <button class="btn-logout" id="btnLogout">Logout</button>
       </div>
@@ -308,6 +311,10 @@ function clearSession() {
   localStorage.removeItem(SESSION_KEY);
 }
 
+    if (session.is_verifikator) {
+    document.getElementById('linkVerifikasi').style.display = 'flex';
+  }
+    
 // ============================================================
 // INIT SESSION
 // ============================================================
@@ -447,9 +454,30 @@ function displayKegiatan(kegiatanList) {
   var html = '';
   kegiatanList.forEach(function(k) {
     var statusClass = 'status-pending';
-    if (k.status === 'Selesai') statusClass = 'status-selesai';
-    else if (k.status === 'Proses') statusClass = 'status-proses';
+var statusBadge = '';
 
+// Cek status verifikasi
+if (k.status_verif && k.status_verif !== 'Pending Eselon IV') {
+  if (k.status_verif === 'Final Disetujui') {
+    statusClass = 'status-selesai';
+    statusBadge = '✅ ' + k.status_verif;
+  } else if (k.status_verif === 'Ditolak') {
+    statusClass = 'status-pending';
+    statusBadge = '❌ Ditolak';
+  } else {
+    statusClass = 'status-proses';
+    statusBadge = '⏳ ' + k.status_verif;
+  }
+} else {
+  statusBadge = '⏳ Menunggu Verif';
+}
+
+// Tambahkan catatan jika ditolak
+if (k.status_verif === 'Ditolak' && k.catatan_verif) {
+  statusBadge += '<br><small style="color:var(--red);font-weight:600;margin-top:4px;display:block;">' + k.catatan_verif + '</small>';
+}
+
+html += '<td><span class="status-badge ' + statusClass + '">● ' + statusBadge + '</span></td>';
     var linkBukti = '';
     var linkStr = k.link_bukti ? String(k.link_bukti).trim() : '';
     if (linkStr && linkStr.length > 0) {
