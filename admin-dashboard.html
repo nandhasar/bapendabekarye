@@ -510,44 +510,72 @@
         };
         var charts = {};
 
-        // Load data
-        async function loadData() {
-            try {
-                console.log('Loading admin data...');
-                
-                // Load summary
-                const summaryRes = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'getSummaryPegawai' })
-                });
-                const summaryData = await summaryRes.json();
-                
-                // Load kegiatan details
-                const kegiatanRes = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'getAllKegiatan' })
-                });
-                const kegiatanData = await kegiatanRes.json();
+       // Load data
+async function loadData() {
+    try {
+        console.log('🔄 Loading admin data...');
+        
+        // Show loading
+        document.getElementById('summaryBody').innerHTML = '<tr><td colspan="9" class="loading"><i class="fas fa-spinner"></i> Loading...</td></tr>';
+        document.getElementById('detailsBody').innerHTML = '<tr><td colspan="7" class="loading"><i class="fas fa-spinner"></i> Loading...</td></tr>';
+        
+        // Load summary - PAKAI text/plain biar TIDAK trigger CORS preflight
+        console.log('📊 Fetching summary...');
+        const summaryRes = await fetch(API_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify({ action: 'getSummaryPegawai' })
+        });
+        const summaryData = await summaryRes.json();
+        console.log('✅ Summary response:', summaryData);
+        
+        // Load kegiatan details
+        console.log('📋 Fetching all kegiatan...');
+        const kegiatanRes = await fetch(API_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify({ action: 'getAllKegiatan' })
+        });
+        const kegiatanData = await kegiatanRes.json();
+        console.log('✅ Kegiatan response:', kegiatanData);
 
-                if (summaryData.ok && kegiatanData.ok) {
-                    allData.summary = summaryData.data.summary;
-                    allData.kegiatan = kegiatanData.data.kegiatan;
-                    
-                    populateFilters();
-                    updateStats();
-                    updateTable();
-                    updateCharts();
-                    updateDetails();
-                    
-                    console.log('✅ Data loaded successfully');
-                } else {
-                    console.error('❌ Error loading data');
-                }
-            } catch (err) {
-                console.error('❌ Error:', err);
-            }
+        if (summaryData.ok && kegiatanData.ok) {
+            allData.summary = summaryData.data.summary || [];
+            allData.kegiatan = kegiatanData.data.kegiatan || [];
+            
+            console.log('👥 Total pegawai:', allData.summary.length);
+            console.log('📊 Total kegiatan:', allData.kegiatan.length);
+            
+            populateFilters();
+            updateStats();
+            updateTable();
+            updateCharts();
+            updateDetails();
+            
+            console.log('✅ Data loaded successfully');
+        } else {
+            console.error('❌ Error loading data');
+            console.error('Summary OK:', summaryData.ok, '| Message:', summaryData.message);
+            console.error('Kegiatan OK:', kegiatanData.ok, '| Message:', kegiatanData.message);
+            
+            document.getElementById('summaryBody').innerHTML = 
+                '<tr><td colspan="9" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Error: ' + 
+                (summaryData.message || 'Gagal load data') + '</td></tr>';
         }
-
+    } catch (err) {
+        console.error('❌ Error:', err);
+        document.getElementById('summaryBody').innerHTML = 
+            '<tr><td colspan="9" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Error: ' + 
+            err.message + '</td></tr>';
+    }
+}
+        
         // Populate filter dropdown
         function populateFilters() {
             const units = [...new Set(allData.summary.map(x => x.unit))].filter(u => u);
