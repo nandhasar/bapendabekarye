@@ -370,8 +370,8 @@
             <div class="upload-zone" id="uploadZone">
               <div class="upload-icon">☁️</div>
               <div class="upload-text">Klik atau drag file di sini</div>
-              <div class="upload-sub">Format: PDF, JPG, PNG (Max 25MB)</div>
-              <input type="file" id="fileInput" class="upload-input" accept=".pdf,.jpg,.jpeg,.png" />
+              <div class="upload-sub">Format: PDF, JPG, PNG, DOC, DOCX, XLS, XLSX (Max 25MB)</div>
+              <input type="file" id="fileInput" class="upload-input" accept=".pdf,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.png" />
             </div>
             <div id="fileList"></div>
             <div class="input-hint" style="margin-top:12px;">✅ File akan diupload ke Google Drive otomatis</div>
@@ -1193,7 +1193,7 @@ function handleFileSelect(file) {
 
   var validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
   if (!validTypes.includes(file.type)) {
-    showAlert('❌ Tipe file tidak didukung. Gunakan PDF, JPG, atau PNG', 'error');
+    showAlert('❌ Tipe file tidak didukung. Gunakan PDF, DOC, DOCX, XLS, XLSX, JPG, atau PNG', 'error');
     return;
   }
 
