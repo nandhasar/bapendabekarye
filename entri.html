@@ -630,39 +630,36 @@ function loadMasterKegiatan() {
 }
 
 // ============================================================
-// ✅ FIX BUG #1 & #3 — LOAD DATA KEGIATAN USER
-// Simpan rowIndex dari server langsung di setiap object
-// Jangan pakai array index sebagai rowIndex!
+// ✅ FIX CORS — loadDataKegiatan
+// Hapus ?_t= dari URL, tetap pakai _ts di body
 // ============================================================
 function loadDataKegiatan() {
   var session = loadSession();
   if (!session) return;
 
   var tbody = document.getElementById('tableBody');
-  tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">Memuat data...</div></td></tr>';
+  tbody.innerHTML = '<tr><td colspan="9" class="empty-state">' +
+    '<div class="empty-icon">⏳</div>' +
+    '<div class="empty-text">Memuat data...</div>' +
+    '</td></tr>';
 
-  // ✅ Tambah timestamp di URL untuk paksa no-cache dari browser
-  var url = API_URL + '?_t=' + Date.now();
-
-  fetch(url, {
+  // ✅ TIDAK ada ?_t= di URL — cukup _ts di body
+  fetch(API_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'text/plain;charset=utf-8',
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      'Pragma': 'no-cache'
-    },
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify({
       action: 'getDataKegiatan',
       nip: session.nip,
-      _ts: Date.now() // ✅ Timestamp di body juga untuk paksa server refresh
+      _ts: Date.now() // anti-cache di body, bukan URL
     })
   })
   .then(function(r){ return r.json(); })
   .then(function(j){
-    var kegiatan = (j.data && j.data.kegiatan) || (j.user && j.user.kegiatan) || j.kegiatan || null;
+    var kegiatan = (j.data && j.data.kegiatan) 
+                || (j.user && j.user.kegiatan) 
+                || j.kegiatan 
+                || null;
     if (kegiatan && kegiatan.length > 0) {
-      // ✅ FIX BUG #3: Simpan data RAW dari server dengan rowIndex asli
-      // Server HARUS return rowIndex di setiap record!
       allKegiatanList = kegiatan;
       displayKegiatanTable(kegiatan);
     } else {
@@ -671,7 +668,12 @@ function loadDataKegiatan() {
     }
   })
   .catch(function(err){
-    tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><div class="empty-icon">❌</div><div class="empty-text">Gagal memuat data</div></td></tr>';
+    console.error('Load error:', err);
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">' +
+      '<div class="empty-icon">❌</div>' +
+      '<div class="empty-text">Gagal memuat data</div>' +
+      '<div class="empty-sub">' + err.message + '</div>' +
+      '</td></tr>';
   });
 }
 
@@ -793,18 +795,19 @@ function escapeJs(text) {
 }
 
 // ============================================================
-// ✅ FIX BUG #3 — DELETE KEGIATAN
-// Gunakan rowIndex dari SERVER, bukan dari array index!
+// ✅ FIX CORS + BUG #3 — deleteKegiatan
 // ============================================================
 function deleteKegiatan(rowIndex, namaKeg, tanggal, totalPoin) {
 
-  // ✅ Validasi rowIndex harus angka valid
   if (!rowIndex || isNaN(rowIndex) || rowIndex < 2) {
     showAlert('❌ ID baris tidak valid. Hubungi admin.', 'error');
     return;
   }
 
-  var tglDisplay = tanggal ? new Date(tanggal).toLocaleDateString('id-ID') : '-';
+  var tglDisplay = tanggal 
+    ? new Date(tanggal).toLocaleDateString('id-ID') 
+    : '-';
+
   var msg = '⚠️ PERHATIAN!\n\n' +
     'Yakin hapus kegiatan ini?\n\n' +
     '📌 ' + (namaKeg || 'Kegiatan') + '\n' +
@@ -817,38 +820,52 @@ function deleteKegiatan(rowIndex, namaKeg, tanggal, totalPoin) {
   var session = loadSession();
   if (!session) { showAlert('❌ Session tidak valid', 'error'); return; }
 
-  console.log('🗑️ Deleting rowIndex dari server:', rowIndex);
+  console.log('🗑️ Deleting rowIndex:', rowIndex);
 
-  // ✅ Disable semua tombol hapus saat proses berlangsung (cegah double-click)
-  document.querySelectorAll('.btn-delete').forEach(function(btn){ btn.disabled = true; });
+  // Disable semua tombol hapus (cegah double click)
+  document.querySelectorAll('.btn-delete').forEach(function(btn){ 
+    btn.disabled = true; 
+  });
 
-  fetch(API_URL, {
+  fetch(API_URL, {  // ✅ Tidak ada query param
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify({
       action: 'deleteKegiatan',
       nip: session.nip,
-      rowIndex: rowIndex // ✅ rowIndex ASLI dari server, bukan dari array index!
+      rowIndex: rowIndex
     })
   })
   .then(function(r){ return r.json(); })
   .then(function(j){
-    console.log('📊 Delete response:', j);
-    // ✅ Re-enable tombol
-    document.querySelectorAll('.btn-delete').forEach(function(btn){ btn.disabled = false; });
+    console.log('Delete response:', j);
+
+    // Re-enable tombol
+    document.querySelectorAll('.btn-delete').forEach(function(btn){ 
+      btn.disabled = false; 
+    });
 
     if (j.ok) {
       showAlert('✅ Kegiatan berhasil dihapus!', 'success');
-      // ✅ FIX BUG #1: Delay load untuk beri waktu server sync
-      // Kemudian load ulang 2x: 1s dan 3s (antisipasi GAS cache)
-      setTimeout(function(){ loadDataKegiatan(); }, 1000);
-      setTimeout(function(){ loadDataKegiatan(); }, 3000);
+
+      // ✅ Optimistic update — hapus dari local array langsung
+      // Sehingga UI langsung update tanpa tunggu server
+      allKegiatanList = allKegiatanList.filter(function(k){
+        return parseInt(k.row_index) !== parseInt(rowIndex);
+      });
+      displayKegiatanTable(allKegiatanList);
+
+      // Sync dari server setelah 2 detik (beri waktu GAS update)
+      setTimeout(function(){ loadDataKegiatan(); }, 2000);
+
     } else {
-      showAlert('❌ ' + (j.message || 'Gagal menghapus kegiatan'), 'error');
+      showAlert('❌ ' + (j.message || 'Gagal menghapus'), 'error');
     }
   })
   .catch(function(err){
-    document.querySelectorAll('.btn-delete').forEach(function(btn){ btn.disabled = false; });
+    document.querySelectorAll('.btn-delete').forEach(function(btn){ 
+      btn.disabled = false; 
+    });
     showAlert('❌ Error: ' + err.message, 'error');
   });
 }
