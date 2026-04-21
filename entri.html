@@ -452,17 +452,18 @@
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>Kode</th>
-              <th>Nama Kegiatan</th>
-              <th>Perhitungan</th>
-              <th>Poin</th>
-              <th>Bukti</th>
-              <th>Status Verifikasi</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
+  <tr>
+    <th>Tanggal</th>
+    <th>Kode</th>
+    <th>Nama Kegiatan</th>
+    <th>Perhitungan</th>
+    <th>Poin</th>
+    <th>Catatan</th>
+    <th>Bukti</th>
+    <th>Status Verifikasi</th>
+    <th>Aksi</th>
+  </tr>
+</thead>
           <tbody id="tableBody">
             <tr>
               <td colspan="8" class="empty-state">
@@ -912,7 +913,7 @@ function displayKegiatanTable(kegiatan) {
   var tbody = document.getElementById('tableBody');
 
   if (!kegiatan || kegiatan.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Belum ada kegiatan</div><div class="empty-sub">Mulai inputkan kegiatan di atas</div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Belum ada kegiatan</div><div class="empty-sub">Mulai inputkan kegiatan di atas</div></td></tr>';
     return;
   }
 
@@ -948,6 +949,16 @@ function displayKegiatanTable(kegiatan) {
       }
     }
 
+    // ⭐ CATATAN - Tampilkan dengan tooltip/modal
+    var catatanDisplay = '';
+    var catatanText = k.catatan || '';
+    if (catatanText.trim().length > 0) {
+      var catatanTruncated = catatanText.length > 30 ? catatanText.substring(0, 30) + '...' : catatanText;
+      catatanDisplay = '<button type="button" class="btn-action" style="background: rgba(124, 58, 237, 0.15); color: #7c3aed; border: none;" onclick="showCatatanModal(\'' + escapeHtml(catatanText) + '\', \'' + escapeHtml(k.nama_keg || 'Kegiatan') + '\')" title="Lihat catatan lengkap">📝 ' + catatanTruncated + '</button>';
+    } else {
+      catatanDisplay = '<span style="color: var(--text4); font-size: 12px;">-</span>';
+    }
+
     var buktiLink = '';
     if (k.link_bukti && String(k.link_bukti).trim()) {
       buktiLink = '<a href="' + k.link_bukti + '" target="_blank" class="btn-action btn-view">📎 Lihat</a>';
@@ -973,6 +984,7 @@ function displayKegiatanTable(kegiatan) {
     html += '<td>' + (k.nama_keg || '-') + '</td>';
     html += '<td><span style="background: var(--blue-bg); color: var(--blue); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;">' + perhitungan + '</span></td>';
     html += '<td><strong style="color: var(--blue); font-size: 14px;">' + totalPoin + '</strong></td>';
+    html += '<td>' + catatanDisplay + '</td>';
     html += '<td>' + buktiLink + '</td>';
     html += '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>';
     html += '<td>' + aksiButton + '</td>';
@@ -982,6 +994,18 @@ function displayKegiatanTable(kegiatan) {
   tbody.innerHTML = html;
 }
 
+// ⭐ Helper function to escape HTML
+function escapeHtml(text) {
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+    
 // ============================================================
 // DELETE KEGIATAN
 // ============================================================
@@ -1431,6 +1455,49 @@ initTheme();
 document.getElementById('themeBtn').onclick = toggleTheme;
 loadMasterKegiatan();
 loadDataKegiatan();
+  </script>
+    <!-- ⭐ MODAL CATATAN -->
+  <div id="catatanModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: var(--bg2); border-radius: var(--radius); padding: 32px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow3);">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+        <h2 style="font-size: 20px; font-weight: 800; color: var(--text);">📝 Catatan Kegiatan</h2>
+        <button type="button" onclick="closeCatatanModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text3);">✕</button>
+      </div>
+
+      <div style="background: var(--bg3); border-left: 4px solid var(--purple); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <div style="font-size: 12px; color: var(--text3); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Kegiatan</div>
+        <div id="modalKegiatanNama" style="font-size: 14px; font-weight: 600; color: var(--text);">-</div>
+      </div>
+
+      <div style="background: var(--bg3); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+        <div style="font-size: 12px; color: var(--text3); font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Catatan Lengkap</div>
+        <div id="modalCatatanTeks" style="font-size: 14px; color: var(--text2); line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;">-</div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button type="button" onclick="closeCatatanModal()" class="btn btn-secondary" style="flex: 1;">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ⭐ MODAL FUNCTIONS
+    function showCatatanModal(catatan, namaKeg) {
+      document.getElementById('modalKegiatanNama').textContent = namaKeg;
+      document.getElementById('modalCatatanTeks').textContent = catatan;
+      document.getElementById('catatanModal').style.display = 'flex';
+    }
+
+    function closeCatatanModal() {
+      document.getElementById('catatanModal').style.display = 'none';
+    }
+
+    // Close modal saat klik di luar
+    document.getElementById('catatanModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeCatatanModal();
+      }
+    });
   </script>
 </body>
 </html>
