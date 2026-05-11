@@ -28,6 +28,8 @@
       --red-bg: #fee2e2;
       --yellow: #d97706;
       --yellow-bg: #fef3c7;
+      --orange: #ea580c;
+      --orange-bg: #ffedd5;
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
       --shadow2: 0 8px 30px rgba(0, 0, 0, 0.08);
       --shadow3: 0 20px 60px rgba(0, 0, 0, 0.12);
@@ -54,6 +56,8 @@
       --red-bg: #450a0a;
       --yellow: #fbbf24;
       --yellow-bg: #78350f;
+      --orange: #fb923c;
+      --orange-bg: #431407;
       --border: #334155;
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       --shadow2: 0 8px 30px rgba(0, 0, 0, 0.3);
@@ -284,6 +288,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      gap: 20px;
     }
 
     .page-title-section h1 {
@@ -298,10 +303,36 @@
       color: var(--text3);
     }
 
+    .page-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-tambah {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: var(--radius2);
+      font-size: 14px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: white;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-tambah:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.45);
+    }
+
     /* ============ STATS GRID ============ */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 20px;
       margin-bottom: 30px;
     }
@@ -366,6 +397,10 @@
       background: var(--yellow-bg);
     }
 
+    .stat-icon.orange {
+      background: var(--orange-bg);
+    }
+
     .stat-label {
       font-size: 12px;
       color: var(--text3);
@@ -411,6 +446,27 @@
       background: linear-gradient(90deg, var(--blue), var(--purple));
       border-radius: 4px;
       transition: width 0.3s ease;
+    }
+
+    .stat-progress-fill.green {
+      background: linear-gradient(90deg, var(--green), #10b981);
+    }
+
+    .stat-progress-fill.orange {
+      background: linear-gradient(90deg, var(--orange), #f97316);
+    }
+
+    .stat-detail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text3);
+    }
+
+    .stat-detail i {
+      font-size: 14px;
     }
 
     /* ============ FILTER BAR ============ */
@@ -470,7 +526,6 @@
     .filter-actions {
       display: flex;
       gap: 12px;
-      margin-left: auto;
     }
 
     .btn-export {
@@ -607,6 +662,11 @@
       color: var(--blue);
     }
 
+    .status-eselon {
+      background: var(--orange-bg);
+      color: var(--orange);
+    }
+
     .poin-calculation {
       display: flex;
       align-items: center;
@@ -617,6 +677,14 @@
     .poin-value {
       font-weight: 700;
       color: var(--blue);
+    }
+
+    .poin-value.green {
+      color: var(--green);
+    }
+
+    .poin-value.orange {
+      color: var(--orange);
     }
 
     .btn-action {
@@ -665,27 +733,6 @@
       margin-bottom: 20px;
     }
 
-    .btn-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      border-radius: var(--radius2);
-      font-size: 13px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--blue), var(--purple));
-      color: white;
-      text-decoration: none;
-      transition: all 0.2s;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35);
-    }
-
     .loading {
       display: flex;
       align-items: center;
@@ -710,13 +757,43 @@
       }
     }
 
+    /* ============ LEGEND ============ */
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 24px;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text3);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+    }
+
+    .legend-dot.blue { background: var(--blue); }
+    .legend-dot.green { background: var(--green); }
+    .legend-dot.yellow { background: var(--yellow); }
+    .legend-dot.red { background: var(--red); }
+    .legend-dot.orange { background: var(--orange); }
+
     /* ============ FOOTER ============ */
     .table-footer {
       padding: 20px 24px;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: center;
-      gap: 12px;
     }
 
     /* ============ RESPONSIVE ============ */
@@ -770,11 +847,24 @@
 
       .page-header {
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
+      }
+
+      .page-header-actions {
+        width: 100%;
+      }
+
+      .btn-tambah {
+        flex: 1;
+        justify-content: center;
       }
 
       .stats-grid {
         grid-template-columns: 1fr;
+      }
+
+      .legend-bar {
+        justify-content: center;
       }
 
       table {
@@ -871,14 +961,19 @@
           <h1>📊 Dashboard Kegiatan</h1>
           <p id="pageSub">Pantau poin dan aktivitas Anda bulan ini</p>
         </div>
+
+        <!-- TOMBOL TAMBAH KEGIATAN DIPINDAHKAN KE SINI -->
+        <div class="page-header-actions">
+          <a href="entri.html" class="btn-tambah">➕ Tambah Kegiatan Baru</a>
+        </div>
       </div>
 
       <!-- STATS GRID -->
       <div class="stats-grid">
-        <!-- Poin Bulan Ini -->
+        <!-- Poin Bulan Ini (Total) -->
         <div class="stat-card">
           <div class="stat-icon blue">📈</div>
-          <div class="stat-label">Poin Bulan Ini</div>
+          <div class="stat-label">Total Poin Bulan Ini</div>
           <div class="stat-value">
             <span id="poinBulan">0</span>
             <span class="stat-value-small">poin</span>
@@ -889,17 +984,31 @@
           </div>
         </div>
 
-        <!-- Target Tahunan -->
+        <!-- Poin Sudah Validasi Eselon IV -->
         <div class="stat-card">
-          <div class="stat-icon green">🎯</div>
-          <div class="stat-label">Target Tahunan</div>
+          <div class="stat-icon green">✅</div>
+          <div class="stat-label">Sudah Validasi Eselon IV</div>
           <div class="stat-value">
-            <span id="poinTahun">0</span>
+            <span id="poinValidated" style="color: var(--green)">0</span>
             <span class="stat-value-small">poin</span>
           </div>
-          <div class="stat-sub">Target: <strong id="targetTahun">0</strong> poin</div>
+          <div class="stat-sub">Siap dikirim ke Eselon III</div>
           <div class="stat-progress">
-            <div class="stat-progress-fill" id="progressTahun" style="width: 0%; background: var(--green)"></div>
+            <div class="stat-progress-fill green" id="progressValidated" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Poin Belum Validasi Eselon IV -->
+        <div class="stat-card">
+          <div class="stat-icon orange">⏳</div>
+          <div class="stat-label">Belum Validasi Eselon IV</div>
+          <div class="stat-value">
+            <span id="poinPending" style="color: var(--orange)">0</span>
+            <span class="stat-value-small">poin</span>
+          </div>
+          <div class="stat-sub">Menunggu verifikasi</div>
+          <div class="stat-progress">
+            <div class="stat-progress-fill orange" id="progressPending" style="width: 0%"></div>
           </div>
         </div>
 
@@ -911,16 +1020,6 @@
             <span id="totalKegiatan">0</span>
           </div>
           <div class="stat-sub">Kegiatan bulan ini</div>
-        </div>
-
-        <!-- Status Verifikasi -->
-        <div class="stat-card">
-          <div class="stat-icon yellow">⏳</div>
-          <div class="stat-label">Menunggu Verifikasi</div>
-          <div class="stat-value">
-            <span id="verifPending">0</span>
-          </div>
-          <div class="stat-sub">Kegiatan dalam proses</div>
         </div>
       </div>
 
@@ -960,6 +1059,15 @@
           <div class="table-subtitle" id="tableSubtitle">Semua kegiatan yang telah Anda inputkan</div>
         </div>
 
+        <!-- LEGEND STATUS -->
+        <div class="legend-bar">
+          <span class="legend-item"><span class="legend-dot green"></span> Sudah Final Disetujui</span>
+          <span class="legend-item"><span class="legend-dot orange"></span> Pending Eselon IV</span>
+          <span class="legend-item"><span class="legend-dot blue"></span> Proses Validasi</span>
+          <span class="legend-item"><span class="legend-dot yellow"></span> Pending</span>
+          <span class="legend-item"><span class="legend-dot red"></span> Ditolak</span>
+        </div>
+
         <div class="table-wrapper">
           <table id="tableKegiatan">
             <thead>
@@ -986,8 +1094,9 @@
           </table>
         </div>
 
+        <!-- TOMBOL TAMBAH KEGIATAN DIHAPUS DARI SINI -->
         <div class="table-footer">
-          <a href="entri.html" class="btn-cta">➕ Tambah Kegiatan Baru</a>
+          <span style="font-size: 12px; color: var(--text4);">📝 Scroll ke atas untuk menambah kegiatan baru</span>
         </div>
       </div>
     </div>
@@ -1179,6 +1288,32 @@
     }
 
     // ============================================================
+    // HELPER: Calculate Poin
+    // ============================================================
+    function getPoin(k) {
+      return Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+    }
+
+    // ============================================================
+    // HELPER: Check Status
+    // ============================================================
+    function isValidatedEselon4(k) {
+      // Status "Final Disetujui" berarti sudah melewati Eselon IV
+      return k.status_verif && k.status_verif === 'Final Disetujui';
+    }
+
+    function isPendingEselon4(k) {
+      // Status mengandung "Eselon" tapi bukan Final Disetujui
+      if (k.status_verif && k.status_verif !== 'Final Disetujui' && k.status_verif !== 'Ditolak') {
+        if (k.status_verif.includes('Eselon') || k.status_verif.includes('IV')) {
+          return true;
+        }
+      }
+      // Belum ada status atau Pending
+      return !k.status_verif || k.status_verif === 'Pending';
+    }
+
+    // ============================================================
     // DISPLAY
     // ============================================================
     function displayEmpty() {
@@ -1190,7 +1325,7 @@
               <div class="empty-icon">📭</div>
               <div class="empty-text">Belum ada kegiatan</div>
               <div class="empty-sub">Tidak ada data pada periode terpilih</div>
-              <a href="entri.html" class="btn-cta">➕ Tambah Kegiatan</a>
+              <a href="entri.html" class="btn-tambah">➕ Tambah Kegiatan</a>
             </div>
           </td>
         </tr>
@@ -1217,17 +1352,28 @@
           year: 'numeric'
         }) : '-';
 
+        var poin = getPoin(k);
+        var validated = isValidatedEselon4(k);
+        var pending = isPendingEselon4(k);
+
         // Status badge
         var statusClass = 'status-pending';
         var statusText = '⏳ Pending';
+        var poinClass = 'poin-value';
 
         if (k.status_verif) {
           if (k.status_verif === 'Final Disetujui') {
             statusClass = 'status-approved';
-            statusText = '✅ Disetujui';
+            statusText = '✅ Final Disetujui';
+            poinClass = 'poin-value green';
           } else if (k.status_verif === 'Ditolak') {
             statusClass = 'status-rejected';
             statusText = '❌ Ditolak';
+            poinClass = 'poin-value';
+          } else if (k.status_verif.includes('Eselon') || k.status_verif.includes('IV')) {
+            statusClass = 'status-eselon';
+            statusText = '⏳ ' + k.status_verif;
+            poinClass = 'poin-value orange';
           } else {
             statusClass = 'status-processing';
             statusText = '⏳ ' + k.status_verif;
@@ -1245,7 +1391,6 @@
         // Perhitungan poin
         var poinSatuan = Number(k.poin_satuan) || 0;
         var jumlah = Number(k.jumlah) || 1;
-        var totalPoin = Number(k.total_poin) || (poinSatuan * jumlah);
         var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
 
         html += `
@@ -1254,7 +1399,7 @@
             <td><strong>${k.kode_keg || '-'}</strong></td>
             <td>${k.nama_keg || '-'}</td>
             <td><span class="poin-calculation">${perhitungan}</span></td>
-            <td><strong class="poin-value">${totalPoin}</strong></td>
+            <td><strong class="${poinClass}">${poin}</strong></td>
             <td>${buktiLink}</td>
             <td><span class="status-badge ${statusClass}">${statusText}</span></td>
           </tr>
@@ -1269,195 +1414,208 @@
     // ============================================================
     function calculateStats(kegiatanList) {
       var totalPoin = 0;
+      var totalValidated = 0;
+      var totalPending = 0;
       var totalKegiatan = kegiatanList.length;
-      var verifPending = 0;
 
       kegiatanList.forEach(function (k) {
-        var poin = Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+        var poin = getPoin(k);
         totalPoin += poin;
 
-        if (!k.status_verif || k.status_verif.includes('Pending') || k.status_verif.includes('Eselon')) {
-          verifPending++;
+        if (isValidatedEselon4(k)) {
+          totalValidated += poin;
+        } else if (isPendingEselon4(k)) {
+          totalPending += poin;
         }
       });
 
       var targetBln = Number(session.target_bln) || 0;
-      var targetTh = Number(session.target_th) || 0;
       var bulanFilter = document.getElementById('filterBulan').value;
 
-      var targetCompare = bulanFilter === 'all' ? targetTh : targetBln;
-      var persenBln = targetCompare > 0 ? Math.min(Math.round((totalPoin / targetCompare) * 100), 100) : 0;
-      var persenTh = targetTh > 0 ? Math.min(Math.round((totalPoin / targetTh) * 100), 100) : 0;
+      var persenBln = targetBln > 0 ? Math.min(Math.round((totalPoin / targetBln) * 100), 100) : 0;
+      var persenValidated = totalPoin > 0 ? Math.round((totalValidated / totalPoin) * 100) : 0;
+      var persenPending = totalPoin > 0 ? Math.round((totalPending / totalPoin) * 100) : 0;
 
       document.getElementById('poinBulan').textContent = totalPoin;
-      document.getElementById('targetBulan').textContent = targetCompare;
-      document.getElementById('poinTahun').textContent = totalPoin;
-      document.getElementById('targetTahun').textContent = targetTh;
+      document.getElementById('targetBulan').textContent = targetBln;
+      document.getElementById('poinValidated').textContent = totalValidated;
+      document.getElementById('poinPending').textContent = totalPending;
       document.getElementById('totalKegiatan').textContent = totalKegiatan;
-      document.getElementById('verifPending').textContent = verifPending;
 
       document.getElementById('progressBulan').style.width = persenBln + '%';
-      document.getElementById('progressTahun').style.width = persenTh + '%';
+      document.getElementById('progressValidated').style.width = persenValidated + '%';
+      document.getElementById('progressPending').style.width = persenPending + '%';
     }
 
-  // ============================================================
-// EXPORT PDF (dengan link bukti clickable)
-// ============================================================
-function exportPDF() {
-  if (filteredKegiatan.length === 0) {
-    alert('Tidak ada data untuk diexport!');
-    return;
-  }
+    // ============================================================
+    // EXPORT PDF (dengan link bukti clickable)
+    // ============================================================
+    function exportPDF() {
+      if (filteredKegiatan.length === 0) {
+        alert('Tidak ada data untuk diexport!');
+        return;
+      }
 
-  var bulanFilter = document.getElementById('filterBulan').value;
-  var tahunFilter = document.getElementById('filterTahun').value;
-  var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
-  
-  var totalPoin = 0;
-  filteredKegiatan.forEach(function(k) {
-    totalPoin += Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
-  });
+      var bulanFilter = document.getElementById('filterBulan').value;
+      var tahunFilter = document.getElementById('filterTahun').value;
+      var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
+      
+      var totalPoin = 0;
+      var totalValidated = 0;
+      var totalPending = 0;
+      
+      filteredKegiatan.forEach(function(k) {
+        var poin = getPoin(k);
+        totalPoin += poin;
+        if (isValidatedEselon4(k)) totalValidated += poin;
+        if (isPendingEselon4(k)) totalPending += poin;
+      });
 
-  var { jsPDF } = window.jspdf;
-  var doc = new jsPDF('landscape', 'mm', 'a4');
-  
-  // ============ KOP SURAT ============
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('LAPORAN KEGIATAN BEKARYE BAPENDA', 148, 15, { align: 'center' });
-  
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Badan Pendapatan Daerah', 148, 22, { align: 'center' });
-  
-  doc.setLineWidth(0.5);
-  doc.line(15, 27, 282, 27);
-  
-  // Info pegawai
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  
-  var infoY = 35;
-  doc.text('Nama', 15, infoY);
-  doc.text(': ' + (session.nama || '-'), 40, infoY);
-  
-  doc.text('NIP', 15, infoY + 6);
-  doc.text(': ' + (session.nip || '-'), 40, infoY + 6);
-  
-  doc.text('Jabatan', 15, infoY + 12);
-  doc.text(': ' + (session.jabatan || '-'), 40, infoY + 12);
-  
-  doc.text('Unit', 150, infoY);
-  doc.text(': ' + (session.unit || '-'), 175, infoY);
-  
-  doc.text('Periode', 150, infoY + 6);
-  doc.text(': ' + periode, 175, infoY + 6);
-  
-  doc.setFont('helvetica', 'bold');
-  doc.text('Total Poin', 150, infoY + 12);
-  doc.text(': ' + totalPoin + ' poin', 175, infoY + 12);
-  
-  doc.line(15, 55, 282, 55);
-  
-  // ============ TABLE DATA ============
-  var tableData = filteredKegiatan.map(function(k, idx) {
-    var poinSatuan = Number(k.poin_satuan) || 0;
-    var jumlah = Number(k.jumlah) || 1;
-    var tp = Number(k.total_poin) || (poinSatuan * jumlah);
-    var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
-    var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
-    var linkBukti = k.link_bukti ? String(k.link_bukti).trim() : '';
-    
-    return [
-      idx + 1,
-      tglDisplay,
-      k.kode_keg || '-',
-      k.nama_keg || '-',
-      perhitungan,
-      tp,
-      k.status || 'Pending',
-      linkBukti ? 'Lihat Bukti' : '-'  // Kolom link
-    ];
-  });
-  
-  doc.autoTable({
-    head: [['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Perhitungan', 'Poin', 'Status', 'Bukti']],
-    body: tableData,
-    startY: 60,
-    theme: 'grid',
-    headStyles: {
-      fillColor: [37, 99, 235],
-      textColor: [255, 255, 255],
-      fontStyle: 'bold',
-      fontSize: 9
-    },
-    bodyStyles: {
-      fontSize: 8
-    },
-    columnStyles: {
-      0: { cellWidth: 10, halign: 'center' },
-      1: { cellWidth: 22 },
-      2: { cellWidth: 22 },
-      3: { cellWidth: 85 },
-      4: { cellWidth: 25, halign: 'center' },
-      5: { cellWidth: 18, halign: 'center', fontStyle: 'bold' },
-      6: { cellWidth: 22, halign: 'center' },
-      7: { cellWidth: 30, halign: 'center', textColor: [37, 99, 235], fontStyle: 'bold' }
-    },
-    foot: [['', '', '', '', 'TOTAL', totalPoin, '', '']],
-    footStyles: {
-      fillColor: [37, 99, 235],
-      textColor: [255, 255, 255],
-      fontStyle: 'bold',
-      fontSize: 10
-    },
-    // ⭐ DIDPressCell - tambahkan link clickable
-    didDrawCell: function(data) {
-      // Kolom ke-7 (index 7) = kolom Bukti
-      if (data.section === 'body' && data.column.index === 7) {
-        var rowIdx = data.row.index;
-        var kegiatan = filteredKegiatan[rowIdx];
-        if (kegiatan && kegiatan.link_bukti) {
-          var link = String(kegiatan.link_bukti).trim();
-          if (link) {
-            // Tambahkan hyperlink di cell
-            doc.link(
-              data.cell.x, 
-              data.cell.y, 
-              data.cell.width, 
-              data.cell.height, 
-              { url: link }
-            );
+      var { jsPDF } = window.jspdf;
+      var doc = new jsPDF('landscape', 'mm', 'a4');
+      
+      // ============ KOP SURAT ============
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('LAPORAN KEGIATAN BEKARYE BAPENDA', 148, 15, { align: 'center' });
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Badan Pendapatan Daerah', 148, 22, { align: 'center' });
+      
+      doc.setLineWidth(0.5);
+      doc.line(15, 27, 282, 27);
+      
+      // Info pegawai
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      
+      var infoY = 35;
+      doc.text('Nama', 15, infoY);
+      doc.text(': ' + (session.nama || '-'), 40, infoY);
+      
+      doc.text('NIP', 15, infoY + 6);
+      doc.text(': ' + (session.nip || '-'), 40, infoY + 6);
+      
+      doc.text('Jabatan', 15, infoY + 12);
+      doc.text(': ' + (session.jabatan || '-'), 40, infoY + 12);
+      
+      doc.text('Unit', 150, infoY);
+      doc.text(': ' + (session.unit || '-'), 175, infoY);
+      
+      doc.text('Periode', 150, infoY + 6);
+      doc.text(': ' + periode, 175, infoY + 6);
+      
+      doc.setFont('helvetica', 'bold');
+      doc.text('Total Poin', 150, infoY + 12);
+      doc.text(': ' + totalPoin + ' poin', 175, infoY + 12);
+      
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(5, 150, 105); // Green
+      doc.text('✓ Validasi Eselon IV: ' + totalValidated + ' poin', 150, infoY + 18);
+      doc.setTextColor(234, 88, 12); // Orange
+      doc.text('○ Pending Eselon IV: ' + totalPending + ' poin', 220, infoY + 18);
+      doc.setTextColor(0, 0, 0); // Reset
+      
+      doc.line(15, 58, 282, 58);
+      
+      // ============ TABLE DATA ============
+      var tableData = filteredKegiatan.map(function(k, idx) {
+        var poinSatuan = Number(k.poin_satuan) || 0;
+        var jumlah = Number(k.jumlah) || 1;
+        var tp = getPoin(k);
+        var perhitungan = jumlah > 1 ? poinSatuan + ' × ' + jumlah : String(poinSatuan);
+        var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
+        var linkBukti = k.link_bukti ? String(k.link_bukti).trim() : '';
+        var statusText = k.status_verif || 'Pending';
+        
+        return [
+          idx + 1,
+          tglDisplay,
+          k.kode_keg || '-',
+          k.nama_keg || '-',
+          perhitungan,
+          tp,
+          statusText,
+          linkBukti ? 'Lihat Bukti' : '-'
+        ];
+      });
+      
+      doc.autoTable({
+        head: [['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Perhitungan', 'Poin', 'Status', 'Bukti']],
+        body: tableData,
+        startY: 63,
+        theme: 'grid',
+        headStyles: {
+          fillColor: [37, 99, 235],
+          textColor: [255, 255, 255],
+          fontStyle: 'bold',
+          fontSize: 9
+        },
+        bodyStyles: {
+          fontSize: 8
+        },
+        columnStyles: {
+          0: { cellWidth: 10, halign: 'center' },
+          1: { cellWidth: 22 },
+          2: { cellWidth: 22 },
+          3: { cellWidth: 75 },
+          4: { cellWidth: 25, halign: 'center' },
+          5: { cellWidth: 18, halign: 'center', fontStyle: 'bold' },
+          6: { cellWidth: 30, halign: 'center' },
+          7: { cellWidth: 30, halign: 'center', textColor: [37, 99, 235], fontStyle: 'bold' }
+        },
+        foot: [['', '', '', '', 'TOTAL', totalPoin, '', '']],
+        footStyles: {
+          fillColor: [37, 99, 235],
+          textColor: [255, 255, 255],
+          fontStyle: 'bold',
+          fontSize: 10
+        },
+        didDrawCell: function(data) {
+          if (data.section === 'body' && data.column.index === 7) {
+            var rowIdx = data.row.index;
+            var kegiatan = filteredKegiatan[rowIdx];
+            if (kegiatan && kegiatan.link_bukti) {
+              var link = String(kegiatan.link_bukti).trim();
+              if (link) {
+                doc.link(
+                  data.cell.x, 
+                  data.cell.y, 
+                  data.cell.width, 
+                  data.cell.height, 
+                  { url: link }
+                );
+              }
+            }
           }
         }
+      });
+      
+      // Footer signature
+      var finalY = doc.lastAutoTable.finalY + 15;
+      if (finalY > 180) {
+        doc.addPage();
+        finalY = 20;
       }
+      
+      var today = new Date();
+      var ttdY = finalY + 5;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }), 220, ttdY);
+      doc.text('Hormat saya,', 220, ttdY + 6);
+      doc.setFont('helvetica', 'bold');
+      doc.text(session.nama || '-', 220, ttdY + 30);
+      doc.setFont('helvetica', 'normal');
+      doc.text('NIP. ' + (session.nip || '-'), 220, ttdY + 35);
+      
+      var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.pdf';
+      doc.save(fileName);
+      
+      console.log('✅ PDF exported with clickable links:', fileName);
     }
-  });
-  
-  // Footer signature
-  var finalY = doc.lastAutoTable.finalY + 15;
-  if (finalY > 180) {
-    doc.addPage();
-    finalY = 20;
-  }
-  
-  var today = new Date();
-  var ttdY = finalY + 5;
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text(today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }), 220, ttdY);
-  doc.text('Hormat saya,', 220, ttdY + 6);
-  doc.setFont('helvetica', 'bold');
-  doc.text(session.nama || '-', 220, ttdY + 30);
-  doc.setFont('helvetica', 'normal');
-  doc.text('NIP. ' + (session.nip || '-'), 220, ttdY + 35);
-  
-  // Save
-  var fileName = 'Laporan_BEKARYE_' + (session.nama || 'User').replace(/\s+/g, '_') + '_' + periode.replace(/\s+/g, '_') + '.pdf';
-  doc.save(fileName);
-  
-  console.log('✅ PDF exported with clickable links:', fileName);
-}
     
     // ============================================================
     // EXPORT EXCEL
@@ -1473,8 +1631,14 @@ function exportPDF() {
       var periode = bulanFilter === 'all' ? 'Tahun ' + tahunFilter : BULAN_NAMA[bulanFilter] + ' ' + tahunFilter;
 
       var totalPoin = 0;
+      var totalValidated = 0;
+      var totalPending = 0;
+      
       filteredKegiatan.forEach(function (k) {
-        totalPoin += Number(k.total_poin) || (Number(k.poin_satuan || 0) * Number(k.jumlah || 1));
+        var poin = getPoin(k);
+        totalPoin += poin;
+        if (isValidatedEselon4(k)) totalValidated += poin;
+        if (isPendingEselon4(k)) totalPending += poin;
       });
 
       var wsData = [];
@@ -1483,17 +1647,18 @@ function exportPDF() {
       wsData.push([]);
       wsData.push(['Nama', ':', session.nama || '-', '', 'Periode', ':', periode]);
       wsData.push(['NIP', ':', session.nip || '-', '', 'Total Poin', ':', totalPoin + ' poin']);
-      wsData.push(['Unit', ':', session.unit || '-']);
+      wsData.push(['Unit', ':', session.unit || '-', '', 'Validasi Eselon IV', ':', totalValidated + ' poin']);
+      wsData.push(['', '', '', '', 'Pending Eselon IV', ':', totalPending + ' poin']);
       wsData.push([]);
       wsData.push(['No', 'Tanggal', 'Kode', 'Nama Kegiatan', 'Poin Satuan', 'Jumlah', 'Total Poin', 'Status']);
 
       filteredKegiatan.forEach(function (k, idx) {
         var poinSatuan = Number(k.poin_satuan) || 0;
         var jumlah = Number(k.jumlah) || 1;
-        var tp = Number(k.total_poin) || (poinSatuan * jumlah);
+        var tp = getPoin(k);
         var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
 
-        wsData.push([idx + 1, tglDisplay, k.kode_keg || '-', k.nama_keg || '-', poinSatuan, jumlah, tp, k.status || 'Pending']);
+        wsData.push([idx + 1, tglDisplay, k.kode_keg || '-', k.nama_keg || '-', poinSatuan, jumlah, tp, k.status_verif || 'Pending']);
       });
 
       wsData.push([]);
@@ -1501,7 +1666,7 @@ function exportPDF() {
 
       var ws = XLSX.utils.aoa_to_sheet(wsData);
       ws['!cols'] = [
-        { wch: 5 }, { wch: 12 }, { wch: 12 }, { wch: 40 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 12 }
+        { wch: 5 }, { wch: 12 }, { wch: 12 }, { wch: 40 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 18 }
       ];
 
       var wb = XLSX.utils.book_new();
