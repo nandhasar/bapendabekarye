@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Masuk — BEKARYE Bapenda Kabupaten Lombok Tengah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    :root {
+      --bg-canvas: #f4f6fb;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --text-faint: #94a3b8;
+      --border-hairline: #e2e8f0;
+      --border-strong: #cbd5e1;
+
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-soft: rgba(37, 99, 235, 0.12);
+      --indigo: #4f46e5;
+      --mandalika-red: #e11d48;
+
+      --success: #059669;
+      --success-soft: rgba(5, 150, 105, 0.12);
+      --warning: #d97706;
+      --warning-soft: rgba(217, 119, 6, 0.12);
+      --danger: #dc2626;
+      --danger-soft: rgba(220, 38, 38, 0.12);
+
+      --shadow-sm: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 24px 48px -12px rgba(15, 23, 42, 0.14);
+      --shadow-glow: 0 10px 28px -6px rgba(37, 99, 235, 0.35);
+
+      --radius-xl: 24px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
+
+    [data-theme="dark"] {
+      --bg-canvas: #090d16;
+      --bg-surface: #111827;
+      --bg-subtle: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+      --border-hairline: #1e293b;
+      --border-strong: #334155;
+
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --accent-soft: rgba(59, 130, 246, 0.18);
+      --indigo: #6366f1;
+
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.16);
+      --warning: #f59e0b;
+      --warning-soft: rgba(245, 158, 11, 0.16);
+      --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.16);
+
+      --shadow-sm: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 10px 28px -6px rgba(59, 130, 246, 0.35);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      line-height: 1.55;
+      min-height: 100vh;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ============ SPLIT-SCREEN 2026 LAYOUT ============ */
+    .auth-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      background: var(--bg-surface);
+    }
+
+    /* ============ LEFT VISUAL SHOWCASE (MANDALIKA) ============ */
+    .showcase-pane {
+      position: relative;
+      overflow: hidden;
+      background: #090d16;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px 44px;
+      color: #ffffff;
+    }
+
+    .showcase-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.03);
+      animation: ambientZoom 24s ease-in-out infinite alternate;
+      filter: contrast(1.04) saturate(1.08);
+    }
+
+    @keyframes ambientZoom {
+      from { transform: scale(1.02); }
+      to { transform: scale(1.09); }
+    }
+
+    .showcase-scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 80% 18%, rgba(37, 99, 235, 0.22), transparent 48%),
+        linear-gradient(
+          180deg,
+          rgba(9, 13, 22, 0.62) 0%,
+          rgba(9, 13, 22, 0.22) 38%,
+          rgba(9, 13, 22, 0.78) 72%,
+          rgba(9, 13, 22, 0.96) 100%
+        );
+      pointer-events: none;
+    }
+
+    /* Signature Mandalika Red-White Checkered Kerb Accent */
+    .kerb-divider {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 5px;
+      background: repeating-linear-gradient(
+        180deg,
+        #e11d48 0px,
+        #e11d48 22px,
+        #ffffff 22px,
+        #ffffff 44px
+      );
+      opacity: 0.9;
+      z-index: 3;
+    }
+
+    .showcase-top {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .region-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #f8fafc;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+    }
+
+    .circuit-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(225, 29, 72, 0.22);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffe4e6;
+    }
+
+    .showcase-bottom {
+      position: relative;
+      z-index: 2;
+      max-width: 560px;
+    }
+
+    .showcase-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #93c5fd;
+      margin-bottom: 12px;
+    }
+
+    .showcase-heading {
+      font-size: clamp(26px, 2.6vw, 36px);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+      margin-bottom: 14px;
+      color: #ffffff;
+    }
+
+    .showcase-desc {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(241, 245, 249, 0.84);
+      margin-bottom: 24px;
+    }
+
+    .feature-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .f-pill {
+      background: rgba(15, 23, 42, 0.56);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .f-pill-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(59, 130, 246, 0.25);
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .f-pill-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .f-pill-sub {
+      font-size: 11px;
+      color: rgba(203, 213, 225, 0.78);
+      line-height: 1.35;
+    }
+
+    /* ============ RIGHT AUTH FORM SURFACE ============ */
+    .form-pane {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px 48px;
+      background: var(--bg-surface);
+    }
+
+    .form-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .theme-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 410px;
+      margin: auto;
+      animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: var(--shadow-glow);
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .brand-org {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .welcome-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .welcome-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 26px;
+    }
+
+    /* Alerts */
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 13px 15px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      line-height: 1.45;
+      animation: fadeUp 0.25s ease;
+    }
+
+    .alert.show {
+      display: flex;
+    }
+
+    .alert-error {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+
+    .alert-info {
+      background: var(--success-soft);
+      color: var(--success);
+      border: 1px solid rgba(5, 150, 105, 0.2);
+    }
+
+    /* Form Fields */
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 7px;
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .caps-badge {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--warning);
+      background: var(--warning-soft);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .caps-badge.show {
+      display: inline-flex;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      color: var(--text-faint);
+      font-size: 15px;
+      pointer-events: none;
+      transition: color 0.2s ease;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      height: 48px;
+      padding: 0 44px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-wrap input::placeholder {
+      color: var(--text-faint);
+      font-weight: 500;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--accent);
+      background: var(--bg-surface);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .input-wrap input:focus + .input-icon,
+    .input-wrap:focus-within .input-icon {
+      color: var(--accent);
+    }
+
+    .toggle-pass {
+      position: absolute;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .toggle-pass:hover {
+      background: var(--border-hairline);
+      color: var(--text-primary);
+    }
+
+    .form-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      font-size: 13px;
+    }
+
+    .remember-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .remember-check input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .help-hint {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 50px;
+      border: none;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--shadow-glow);
+      transition: all 0.22s ease;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .auth-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding-top: 24px;
+    }
+
+    /* ============ RESPONSIVE MOBILE / TABLET ============ */
+    @media (max-width: 960px) {
+      .auth-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: 240px 1fr;
+      }
+
+      .showcase-pane {
+        padding: 20px 24px 36px;
+      }
+
+      .kerb-divider {
+        top: auto;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 4px;
+        background: repeating-linear-gradient(
+          90deg,
+          #e11d48 0px,
+          #e11d48 20px,
+          #ffffff 20px,
+          #ffffff 40px
+        );
+      }
+
+      .showcase-desc, .feature-pills {
+        display: none;
+      }
+
+      .showcase-heading {
+        font-size: 20px;
+        margin-bottom: 0;
+      }
+
+      .form-pane {
+        border-radius: 24px 24px 0 0;
+        margin-top: -18px;
+        position: relative;
+        z-index: 5;
+        padding: 24px 22px 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-shell">
+    <!-- LEFT EDITORIAL VISUAL PANEL: PERTAMINA MANDALIKA INTERNATIONAL CIRCUIT -->
+    <aside class="showcase-pane">
+      <img
+        id="mandalikaHeroImg"
+        class="showcase-media"
+        src="assets/mandalika-motogp.jpg"
+        alt="Pertamina Mandalika International Circuit — Kabupaten Lombok Tengah"
+        onerror="applyMandalikaFallback(this)"
+      />
+      <div class="showcase-scrim"></div>
+      <div class="kerb-divider" aria-hidden="true"></div>
+
+      <div class="showcase-top">
+        <div class="region-pill">
+          <span class="status-dot"></span>
+          <span>Bapenda Kabupaten Lombok Tengah</span>
+        </div>
+        <div class="circuit-tag">
+          <i class="fa-solid fa-flag-checkered"></i>
+          <span>Mandalika • NTB</span>
+        </div>
+      </div>
+
+      <div class="showcase-bottom">
+        <div class="showcase-eyebrow">
+          <i class="fa-solid fa-bolt"></i>
+          <span>Sistem Informasi Kinerja Pegawai</span>
+        </div>
+        <h2 class="showcase-heading">Kecepatan, Presisi, dan Akuntabilitas Kinerja Daerah</h2>
+        <p class="showcase-desc">
+          Terinspirasi semangat kelas dunia dari Sirkuit Internasional Pertamina Mandalika, BEKARYE menghadirkan pencatatan aktivitas harian dan evaluasi poin ASN Bapenda secara transparan.
+        </p>
+
+        <div class="feature-pills">
+          <div class="f-pill">
+            <div class="f-pill-icon"><i class="fa-solid fa-camera"></i></div>
+            <div class="f-pill-title">Bukti Geo-Tag</div>
+            <div class="f-pill-sub">Dokumentasi kegiatan lapangan terverifikasi</div>
+          </div>
+          <div class="f-pill">
+            <div class="f-pill-icon"><i class="fa-solid fa-shield-check"></i></div>
+            <div class="f-pill-title">Validasi Berjenjang</div>
+            <div class="f-pill-sub">Persetujuan terstruktur Eselon IV hingga II</div>
+          </div>
+          <div class="f-pill">
+            <div class="f-pill-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="f-pill-title">Poin Real-Time</div>
+            <div class="f-pill-sub">Pantau capaian target bulanan & triwulan</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT AUTHENTICATION PANEL -->
+    <main class="form-pane">
+      <div class="form-topbar">
+        <button type="button" class="theme-btn" id="themeBtn" title="Ganti tema gelap/terang" aria-label="Ganti tema">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+      </div>
+
+      <div class="auth-box">
+        <div class="brand-lockup">
+          <div class="brand-icon">
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+          <div>
+            <div class="brand-name">BEKARYE Bapenda</div>
+            <div class="brand-org">Badan Pendapatan Daerah Kab. Lombok Tengah</div>
+          </div>
+        </div>
+
+        <h1 class="welcome-title">Selamat Datang</h1>
+        <p class="welcome-sub">Masuk menggunakan NIP dan kata sandi akun pegawai Anda.</p>
+
+        <div id="alertErr" class="alert alert-error" role="alert"></div>
+        <div id="alertInfo" class="alert alert-info" role="status"></div>
+
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <div class="field-header">
+              <label for="inNIP">Nomor Induk Pegawai (NIP)</label>
+            </div>
+            <div class="input-wrap">
+              <input
+                type="text"
+                id="inNIP"
+                class="tabular"
+                inputmode="numeric"
+                placeholder="Contoh: 199509222017081002"
+                required
+                autocomplete="username"
+                maxlength="21"
+              />
+              <i class="fa-solid fa-id-card input-icon"></i>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-header">
+              <label for="inPass">Password</label>
+              <span class="caps-badge" id="capsWarning">
+                <i class="fa-solid fa-triangle-exclamation"></i> Caps Lock Aktif
+              </span>
+            </div>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="inPass"
+                placeholder="Masukkan password Anda"
+                required
+                autocomplete="current-password"
+              />
+              <i class="fa-solid fa-lock input-icon"></i>
+              <button type="button" class="toggle-pass" id="togglePassBtn" title="Tampilkan / Sembunyikan Password" aria-label="Tampilkan password">
+                <i class="fa-solid fa-eye" id="togglePassIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-meta">
+            <label class="remember-check">
+              <input type="checkbox" id="rememberNip" checked />
+              <span>Ingat NIP saya</span>
+            </label>
+            <span class="help-hint">Lupa sandi? Hubungi Admin</span>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btnSubmit">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span>Masuk ke Dashboard</span>
+          </button>
+        </form>
+      </div>
+
+      <footer class="auth-footer">
+        &copy; <span id="yearNow"></span> BEKARYE — Badan Pendapatan Daerah Kabupaten Lombok Tengah
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // ============================================================
+    // KONFIGURASI API & STORAGE KEYS
+    // ============================================================
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzl99Ev78a6Tw8d0HZiESOOidmLUm-kKwRYkd5WkYIsItG856mqn7neAOeEnodPSVxjeA/exec';
+    const SESSION_KEY = 'bekarye-session';
+    const THEME_KEY = 'bekarye-theme';
+    const REMEMBER_NIP_KEY = 'bekarye-remember-nip';
+
+    // ============================================================
+    // FALLBACK ILUSTRASI MANDALIKA JIKA FILE LOKAL BELUM DITEMPATKAN
+    // ============================================================
+    function applyMandalikaFallback(imgEl) {
+      imgEl.onerror = null;
+      const svgFallback = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0f172a"/>
+              <stop offset="35%" stop-color="#1e3a8a"/>
+              <stop offset="62%" stop-color="#ea580c"/>
+              <stop offset="78%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#0284c7"/>
+            </linearGradient>
+            <linearGradient id="sea" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0369a1"/>
+              <stop offset="50%" stop-color="#0d9488"/>
+              <stop offset="100%" stop-color="#0f172a"/>
+            </linearGradient>
+            <linearGradient id="asphalt" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1e293b"/>
+              <stop offset="100%" stop-color="#090d16"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="1600" fill="url(#sky)"/>
+          <circle cx="860" cy="520" r="130" fill="#fde68a" opacity="0.55"/>
+          <!-- Bukit Hijau Kuta Mandalika -->
+          <path d="M0,740 Q260,560 540,680 T1200,620 L1200,920 L0,920 Z" fill="#064e3b" opacity="0.88"/>
+          <path d="M0,790 Q380,650 760,760 T1200,720 L1200,960 L0,960 Z" fill="#065f46"/>
+          <!-- Teluk & Laut Mandalika -->
+          <rect x="0" y="840" width="1200" height="320" fill="url(#sea)"/>
+          <path d="M0,910 Q320,885 640,915 T1200,900" stroke="#7dd3fc" stroke-width="3" fill="none" opacity="0.4"/>
+          <!-- Lintasan Sirkuit Pertamina Mandalika -->
+          <path d="M-80,1620 C140,1260 540,1040 1280,980 L1280,1620 Z" fill="url(#asphalt)"/>
+          <!-- Kerb Merah-Putih Khas Mandalika -->
+          <path d="M-60,1590 C160,1245 550,1032 1260,972" stroke="#ffffff" stroke-width="26" fill="none"/>
+          <path d="M-60,1590 C160,1245 550,1032 1260,972" stroke="#e11d48" stroke-width="26" stroke-dasharray="48 48" fill="none"/>
+          <!-- Garis Balap Putih -->
+          <path d="M180,1620 C360,1340 690,1160 1260,1110" stroke="#f8fafc" stroke-width="6" stroke-dasharray="32 24" fill="none" opacity="0.45"/>
+        </svg>
+      `.trim();
+      imgEl.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgFallback);
+    }
+
+    // ============================================================
+    // TEMA GELAP / TERANG (TERSINKRONISASI DENGAN DASHBOARD)
+    // ============================================================
+    function initTheme() {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+      updateThemeIcon();
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem(THEME_KEY, 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem(THEME_KEY, 'dark');
+      }
+      updateThemeIcon();
+    }
+
+    function updateThemeIcon() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const icon = document.getElementById('themeIcon');
+      if (icon) {
+        icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      }
+    }
+
+    // ============================================================
+    // ALERT & UI HELPERS
+    // ============================================================
+    let alertTimer = null;
+
+    function showAlert(msg, type) {
+      hideAlerts();
+      const el = document.getElementById(type === 'error' ? 'alertErr' : 'alertInfo');
+      if (!el) return;
+      const icon = type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check';
+      el.innerHTML = `<i class="fa-solid ${icon}" style="margin-top: 2px;"></i><span>${escapeHtml(msg)}</span>`;
+      el.classList.add('show');
+
+      clearTimeout(alertTimer);
+      alertTimer = setTimeout(hideAlerts, 6000);
+    }
+
+    function hideAlerts() {
+      document.getElementById('alertErr').classList.remove('show');
+      document.getElementById('alertInfo').classList.remove('show');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+
+    // ============================================================
+    // INTERAKSI FORM (SHOW PASSWORD, CAPS LOCK, REMEMBER NIP)
+    // ============================================================
+    function setupFormInteractions() {
+      const passInput = document.getElementById('inPass');
+      const toggleBtn = document.getElementById('togglePassBtn');
+      const toggleIcon = document.getElementById('togglePassIcon');
+      const capsBadge = document.getElementById('capsWarning');
+
+      toggleBtn.addEventListener('click', () => {
+        const isPassword = passInput.type === 'password';
+        passInput.type = isPassword ? 'text' : 'password';
+        toggleIcon.className = isPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+      });
+
+      const checkCaps = (e) => {
+        if (e.getModifierState && e.getModifierState('CapsLock')) {
+          capsBadge.classList.add('show');
+        } else {
+          capsBadge.classList.remove('show');
+        }
+      };
+
+      passInput.addEventListener('keydown', checkCaps);
+      passInput.addEventListener('keyup', checkCaps);
+      passInput.addEventListener('blur', () => capsBadge.classList.remove('show'));
+
+      // Muat NIP tersimpan jika sebelumnya dicentang
+      const savedNip = localStorage.getItem(REMEMBER_NIP_KEY);
+      if (savedNip) {
+        document.getElementById('inNIP').value = savedNip;
+        document.getElementById('rememberNip').checked = true;
+      }
+    }
+
+    // ============================================================
+    // VALIDASI SESI AMAN (MENCEGAH REDIRECT LOOP)
+    // ============================================================
+    function checkExistingSession() {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (!raw) return;
+
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object' && parsed.nip && parsed.token) {
+          window.location.href = 'dashboard.html';
+        } else {
+          // Bersihkan sesi korup/tidak lengkap agar tidak loop
+          localStorage.removeItem(SESSION_KEY);
+        }
+      } catch (e) {
+        localStorage.removeItem(SESSION_KEY);
+      }
+    }
+
+    // ============================================================
+    // LOGIN HANDLER
+    // ============================================================
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      hideAlerts();
+
+      const nip = document.getElementById('inNIP').value.trim();
+      const pwd = document.getElementById('inPass').value;
+      const remember = document.getElementById('rememberNip').checked;
+      const btn = document.getElementById('btnSubmit');
+
+      if (!nip || !pwd) {
+        showAlert('NIP dan password wajib diisi sebelum masuk.', 'error');
+        return;
+      }
+
+      if (remember) {
+        localStorage.setItem(REMEMBER_NIP_KEY, nip);
+      } else {
+        localStorage.removeItem(REMEMBER_NIP_KEY);
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i><span>Memverifikasi Akun...</span>';
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'login',
+            username: nip,
+            nip: nip,
+            password: pwd
+          })
+        });
+
+        const result = await response.json();
+
+        if (result && result.ok) {
+          const userData = result.user || result.data || {};
+
+          const sessionData = {
+            nip: userData.nip || nip,
+            nama: userData.nama || '',
+            jabatan: userData.jabatan || '',
+            unit: userData.unit || '',
+            tier: userData.tier || '',
+            target_th: userData.target_th || 0,
+            target_bln: userData.target_bln || 0,
+            eselon: userData.eselon || 'Staff',
+            is_verifikator: Boolean(userData.is_verifikator),
+            nip_atasan_iv: userData.nip_atasan_iv || '',
+            nip_atasan_iii: userData.nip_atasan_iii || '',
+            nip_atasan_ii: userData.nip_atasan_ii || '',
+            token: userData.token || result.token || 'bekarye-session-active',
+            apiKey: userData.apiKey || ''
+          };
+
+          localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+
+          showAlert('Login berhasil! Mengalihkan ke dashboard...', 'info');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 650);
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i><span>Masuk ke Dashboard</span>';
+          showAlert((result && result.message) || 'NIP atau password tidak sesuai.', 'error');
+        }
+      } catch (err) {
+        console.error('Login network error:', err);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i><span>Masuk ke Dashboard</span>';
+        showAlert('Koneksi ke server gagal. Periksa jaringan internet Anda dan coba lagi.', 'error');
+      }
+    });
+
+    // ============================================================
+    // BOOTSTRAP
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+      document.getElementById('yearNow').textContent = new Date().getFullYear();
+      setupFormInteractions();
+      checkExistingSession();
+    });
+  </script>
+</body>
+</html>
