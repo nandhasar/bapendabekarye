@@ -1,682 +1,2369 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verifikasi Kegiatan - BEKARYE</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifikasi Kegiatan — BEKARYE Bapenda Kabupaten Lombok Tengah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    :root{--bg:#f1f5f9;--bg2:#ffffff;--bg3:#f8fafc;--text:#0f172a;--text2:#334155;--text3:#64748b;--border:#e2e8f0;--blue:#2563eb;--green:#059669;--red:#dc2626;--yellow:#f59e0b}
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text)}
-    
-    /* NAVBAR */
-    .navbar{background:var(--bg2);padding:16px 20px;border-bottom:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06)}
-    .navbar-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:20px}
-    .navbar-brand{font-size:18px;font-weight:800}
-    .navbar-right{display:flex;gap:10px;align-items:center}
-    .nav-info{font-size:13px;color:var(--text2);font-weight:600}
-    .btn-logout{padding:8px 14px;background:var(--red);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;transition:all .2s}
-    .btn-logout:hover{background:#b91c1c;transform:translateY(-1px)}
-    
-    /* MAIN */
-    .main{max-width:1400px;margin:0 auto;padding:20px}
-    
-    /* HEADER */
-    .header{background:var(--bg2);padding:24px;border-radius:12px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-    .header h1{font-size:24px;margin-bottom:4px}
-    .header p{color:var(--text3);font-size:14px}
-    
-    /* STATS */
-    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-    .stat-card{background:var(--bg2);padding:20px;border-radius:12px;border-left:4px solid;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-    .stat-card.pending{border-left-color:var(--yellow)}
-    .stat-card.approved{border-left-color:var(--green)}
-    .stat-card.rejected{border-left-color:var(--red)}
-    .stat-label{font-size:12px;color:var(--text3);text-transform:uppercase;font-weight:600;margin-bottom:4px}
-    .stat-value{font-size:28px;font-weight:800}
-    
-    /* FILTER & BULK ACTIONS */
-    .filter-bar{background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-    .filter-bar select{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:var(--bg2);color:var(--text)}
-    .filter-bar select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-    
-    .bulk-actions{display:flex;gap:10px;align-items:center;margin-left:auto;padding:10px 16px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)}
-    .bulk-info{font-size:12px;font-weight:600;color:var(--text2);white-space:nowrap}
-    .btn-action-group{display:flex;gap:8px}
-    
-    .btn-refresh{padding:10px 16px;background:var(--blue);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all .2s}
-    .btn-refresh:hover{background:#1d4ed8;transform:translateY(-1px)}
-    .btn-approve-all{padding:10px 14px;background:var(--green);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all .2s;font-size:12px}
-    .btn-approve-all:hover{background:#047857;transform:translateY(-1px)}
-    .btn-reject-all{padding:10px 14px;background:var(--red);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all .2s;font-size:12px}
-    .btn-reject-all:hover{background:#b91c1c;transform:translateY(-1px)}
-    .btn-clear{padding:10px 14px;background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-weight:600;transition:all .2s;font-size:12px}
-    .btn-clear:hover{background:var(--border)}
-    
-    /* TABLE */
-    .table-wrap{background:var(--bg2);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow-x:auto}
-    table{width:100%;border-collapse:collapse;min-width:800px}
-    th{padding:14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text2);background:#f8fafc;border-bottom:2px solid var(--border)}
-    td{padding:14px;border-bottom:1px solid var(--border);font-size:13px}
-    tr:hover{background:#f8fafc}
-    
-    /* CHECKBOX */
-    input[type="checkbox"]{width:18px;height:18px;cursor:pointer;accent-color:var(--blue)}
-    th input[type="checkbox"]{margin:0}
-    
-    .badge{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600}
-    .badge-pending{background:rgba(245,158,11,.15);color:var(--yellow)}
-    .badge-approved{background:rgba(5,150,105,.15);color:var(--green)}
-    .badge-rejected{background:rgba(220,38,38,.15);color:var(--red)}
-    
-    .btn-link{color:var(--blue);cursor:pointer;text-decoration:none;font-weight:600;font-size:12px}
-    .btn-link:hover{text-decoration:underline}
-    
-    .actions{display:flex;gap:6px}
-    .btn-action{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;transition:all .2s}
-    .btn-approve{background:var(--green);color:white}
-    .btn-approve:hover{background:#047857}
-    .btn-reject{background:var(--red);color:white}
-    .btn-reject:hover{background:#b91c1c}
-    
-    .empty{text-align:center;padding:40px 20px;color:var(--text3)}
-    .loading{text-align:center;padding:40px 20px}
-    .spinner{display:inline-block;width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    
-    /* MODAL */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
-    .modal-overlay.active{display:flex}
-    .modal{background:var(--bg2);padding:24px;border-radius:12px;max-width:500px;width:90%}
-    .modal h3{margin-bottom:16px;font-size:16px}
-    .modal-info{background:var(--bg);padding:14px;border-radius:8px;margin-bottom:16px;font-size:13px;line-height:1.6}
-    .modal-info strong{display:block;margin-bottom:4px;color:var(--blue)}
-    .modal textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;min-height:80px;resize:vertical}
-    .modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
-    .modal-actions .btn-action{flex:1}
-    
-    .alert{padding:16px;border-radius:8px;margin-bottom:16px;display:none}
-    .alert.show{display:block}
-    .alert-error{background:rgba(220,38,38,.1);color:var(--red);border-left:4px solid var(--red)}
-    .alert-success{background:rgba(5,150,105,.1);color:var(--green);border-left:4px solid var(--green)}
-    
-    @media(max-width:768px){
-      .navbar-inner{flex-direction:column;gap:10px}
-      .filter-bar{flex-direction:column}
-      .filter-bar select{width:100%}
-      .bulk-actions{width:100%;margin-left:0}
-      .btn-action-group{flex-wrap:wrap}
-      .actions{flex-wrap:wrap}
-      th,td{padding:10px 6px;font-size:11px}
-      .bulk-info{display:none}
+    :root {
+      --bg-canvas: #f4f6fb;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f8fafc;
+      --bg-glass: rgba(255, 255, 255, 0.88);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --text-faint: #94a3b8;
+      --border-hairline: #e2e8f0;
+      --border-strong: #cbd5e1;
+
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-soft: rgba(37, 99, 235, 0.10);
+      --indigo: #4f46e5;
+      --indigo-soft: rgba(79, 70, 229, 0.10);
+      --mandalika-red: #e11d48;
+
+      --success: #059669;
+      --success-hover: #047857;
+      --success-soft: rgba(5, 150, 105, 0.12);
+      --warning: #d97706;
+      --warning-soft: rgba(217, 119, 6, 0.14);
+      --danger: #dc2626;
+      --danger-hover: #b91c1c;
+      --danger-soft: rgba(220, 38, 38, 0.12);
+
+      --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-sm: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 12px 32px -4px rgba(15, 23, 42, 0.10);
+      --shadow-glow: 0 8px 24px -4px rgba(37, 99, 235, 0.28);
+
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    [data-theme="dark"] {
+      --bg-canvas: #090d16;
+      --bg-surface: #111827;
+      --bg-subtle: #1e293b;
+      --bg-glass: rgba(17, 24, 39, 0.88);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+      --border-hairline: #1e293b;
+      --border-strong: #334155;
+
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --accent-soft: rgba(59, 130, 246, 0.16);
+      --indigo: #6366f1;
+      --indigo-soft: rgba(99, 102, 241, 0.16);
+
+      --success: #10b981;
+      --success-hover: #059669;
+      --success-soft: rgba(16, 185, 129, 0.16);
+      --warning: #f59e0b;
+      --warning-soft: rgba(245, 158, 11, 0.18);
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --danger-soft: rgba(239, 68, 68, 0.16);
+
+      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-sm: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 12px 32px -4px rgba(0, 0, 0, 0.55);
+      --shadow-glow: 0 8px 24px -4px rgba(59, 130, 246, 0.32);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      line-height: 1.55;
+      min-height: 100vh;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button, input, select, textarea { font-family: inherit; }
+    .tabular { font-variant-numeric: tabular-nums; }
+
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+    /* ============ TOP MANDALIKA SIGNATURE ACCENT ============ */
+    .kerb-top-bar {
+      height: 3px;
+      width: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--mandalika-red) 0px,
+        var(--mandalika-red) 24px,
+        var(--accent) 24px,
+        var(--accent) 48px
+      );
+    }
+
+    /* ============ GLASSMORPHIC NAVBAR ============ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      height: 68px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-hairline);
+      padding: 0 24px;
+    }
+
+    .navbar-inner {
+      max-width: 1520px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-primary);
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: var(--shadow-glow);
+      flex-shrink: 0;
+    }
+
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-title { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+    .brand-sub { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-hairline);
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover { color: var(--text-primary); background: var(--bg-surface); }
+    .nav-link.active { background: var(--bg-surface); color: var(--accent); box-shadow: var(--shadow-xs); }
+
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 15px;
+    }
+
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 14px 5px 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 999px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .user-meta { display: flex; flex-direction: column; line-height: 1.2; }
+    .user-name { font-size: 12.5px; font-weight: 700; color: var(--text-primary); max-width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 10.5px; font-weight: 600; color: var(--text-muted); }
+
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(220, 38, 38, 0.22);
+      background: var(--danger-soft);
+      color: var(--danger);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover { background: var(--danger); color: #ffffff; }
+
+    /* ============ MAIN CONTAINER ============ */
+    .container {
+      max-width: 1520px;
+      margin: 0 auto;
+      padding: 24px 24px 96px;
+    }
+
+    /* ============ HERO HEADER ============ */
+    .hero-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-xl);
+      padding: 22px 26px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .hero-sub {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .eselon-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .btn-refresh {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-refresh:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-surface); }
+    .spin { animation: spin 0.9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============ KPI STATS ROW ============ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-xs);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .stat-meta { display: flex; flex-direction: column; }
+    .stat-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+    .stat-value { font-size: 26px; font-weight: 800; line-height: 1.15; margin-top: 4px; }
+    .stat-hint { font-size: 11.5px; color: var(--text-faint); margin-top: 3px; }
+
+    .stat-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.amber { background: var(--warning-soft); color: var(--warning); }
+    .stat-icon.green { background: var(--success-soft); color: var(--success); }
+    .stat-icon.red { background: var(--danger-soft); color: var(--danger); }
+    .stat-icon.blue { background: var(--accent-soft); color: var(--accent); }
+
+    /* ============ MONTH SELECTOR BAR ============ */
+    .month-bar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-xs);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .month-bar-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .month-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 0;
+      flex: 1;
+    }
+
+    .month-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+    }
+
+    .month-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--bg-surface);
+    }
+
+    .month-pill.active {
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .month-pill .pill-badge {
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    .month-pill.active .pill-badge {
+      background: rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+    }
+
+    .month-pill .pill-badge.done {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .month-pill.active .pill-badge.done {
+      background: rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+    }
+
+    /* ============ TWO-PANE WORKSPACE (PER ORANG) ============ */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* LEFT PANE: SUBORDINATE DIRECTORY */
+    .sidebar-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      position: sticky;
+      top: 86px;
+    }
+
+    .sidebar-head {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .sidebar-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .count-chip {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border-hairline);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-faint);
+      font-size: 13px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 9px 12px 9px 34px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-size: 12.5px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--bg-surface);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .toggle-pending-only {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-pending-only input {
+      accent-color: var(--accent);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .sub-list {
+      max-height: calc(100vh - 290px);
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sub-card {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1.5px solid transparent;
+      background: var(--bg-subtle);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sub-card:hover {
+      background: var(--bg-surface);
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .sub-card.active {
+      background: var(--bg-surface);
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px -2px rgba(37, 99, 235, 0.16);
+    }
+
+    .sub-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-size: 13.5px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .sub-card.active .sub-avatar {
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+    }
+
+    .sub-dot {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--warning);
+      border: 2px solid var(--bg-surface);
+    }
+
+    .sub-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sub-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sub-role {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 1px;
+    }
+
+    .sub-stats-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .mini-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .mini-tag.pending { background: var(--warning-soft); color: var(--warning); }
+    .mini-tag.done { background: var(--success-soft); color: var(--success); }
+    .mini-tag.neutral { background: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border-hairline); }
+
+    /* RIGHT PANE: DETAIL WORKSPACE */
+    .detail-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .person-banner {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-xl);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .person-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .person-avatar-lg {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .person-name { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+    .person-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+    .person-badges { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+
+    .p-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .p-badge.blue { background: var(--accent-soft); color: var(--accent); }
+    .p-badge.amber { background: var(--warning-soft); color: var(--warning); }
+    .p-badge.green { background: var(--success-soft); color: var(--success); }
+    .p-badge.red { background: var(--danger-soft); color: var(--danger); }
+
+    .btn-approve-person {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 12px;
+      border: none;
+      background: var(--success);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px -4px rgba(5, 150, 105, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-approve-person:hover { background: var(--success-hover); transform: translateY(-1px); }
+
+    /* TOOLBAR INSIDE DETAIL */
+    .detail-toolbar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .status-tab {
+      padding: 7px 12px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .status-tab:hover { background: var(--bg-subtle); color: var(--text-primary); }
+    .status-tab.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: rgba(37, 99, 235, 0.2);
+    }
+
+    .activity-search {
+      position: relative;
+      min-width: 220px;
+    }
+
+    .activity-search i {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-faint);
+      font-size: 12px;
+    }
+
+    .activity-search input {
+      width: 100%;
+      padding: 8px 12px 8px 32px;
+      border-radius: 9px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-size: 12.5px;
+    }
+
+    .activity-search input:focus { outline: none; border-color: var(--accent); background: var(--bg-surface); }
+
+    /* ACTIVITY TABLE CARD */
+    .table-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-scroll { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th {
+      padding: 13px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-hairline);
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-subtle); }
+    tr.row-selected td { background: var(--accent-soft); }
+
+    input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .keg-title { font-weight: 700; color: var(--text-primary); line-height: 1.4; }
+    .keg-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .keg-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; padding: 1px 6px; border-radius: 5px; background: var(--bg-subtle); border: 1px solid var(--border-hairline); }
+    .keg-note {
+      margin-top: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: var(--bg-subtle);
+      border-left: 3px solid var(--accent);
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+
+    .poin-pill {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .poin-main { font-size: 14.5px; font-weight: 800; color: var(--accent); }
+    .poin-sub { font-size: 11px; color: var(--text-faint); }
+
+    .btn-proof {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 8px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-proof:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-pending { background: var(--warning-soft); color: var(--warning); }
+    .badge-approved { background: var(--success-soft); color: var(--success); }
+    .badge-rejected { background: var(--danger-soft); color: var(--danger); }
+
+    .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-xs {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 11px;
+      border-radius: 8px;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-xs.approve { background: var(--success); color: #ffffff; }
+    .btn-xs.approve:hover { background: var(--success-hover); transform: translateY(-1px); }
+    .btn-xs.reject { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(220, 38, 38, 0.25); }
+    .btn-xs.reject:hover { background: var(--danger); color: #ffffff; }
+    .btn-xs:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    /* EMPTY & LOADING STATES */
+    .state-box {
+      padding: 54px 24px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .state-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--bg-subtle);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .state-title { font-size: 15px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
+    .state-desc { font-size: 13px; color: var(--text-muted); }
+
+    /* FLOATING BULK BAR */
+    .floating-bulk {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      z-index: 950;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--accent);
+      border-radius: 999px;
+      padding: 10px 14px 10px 22px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      max-width: calc(100vw - 32px);
+    }
+
+    .floating-bulk.show { transform: translateX(-50%) translateY(0); }
+
+    .bulk-summary {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .bulk-summary span { color: var(--accent); font-weight: 800; }
+
+    .bulk-btns { display: flex; align-items: center; gap: 8px; }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 15px;
+      border-radius: 999px;
+      border: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .btn-pill.approve { background: var(--success); color: #ffffff; }
+    .btn-pill.approve:hover { background: var(--success-hover); }
+    .btn-pill.reject { background: var(--danger); color: #ffffff; }
+    .btn-pill.reject:hover { background: var(--danger-hover); }
+    .btn-pill.ghost { background: var(--bg-subtle); color: var(--text-secondary); border: 1px solid var(--border-hairline); }
+
+    /* MODALS */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 520px;
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      animation: popIn 0.2s ease;
+    }
+
+    .modal-box.wide { max-width: 820px; }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .modal-title { font-size: 16.5px; font-weight: 800; }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .modal-detail-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .quick-reasons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .reason-chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .reason-chip:hover { border-color: var(--danger); color: var(--danger); }
+
+    .modal-textarea {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 12px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-size: 13px;
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .modal-textarea:focus { outline: none; border-color: var(--danger); background: var(--bg-surface); }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .proof-frame {
+      width: 100%;
+      height: 460px;
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      background: var(--bg-subtle);
+    }
+
+    /* TOAST */
+    .toast-stack {
+      position: fixed;
+      top: 82px;
+      right: 24px;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 380px;
+    }
+
+    .toast {
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.25s ease;
+    }
+
+    .toast.success { border-left: 4px solid var(--success); }
+    .toast.error { border-left: 4px solid var(--danger); }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+    /* RESPONSIVE */
+    @media (max-width: 1080px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+      .sidebar-panel { position: static; }
+      .sub-list {
+        max-height: none;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 10px 14px;
+      }
+      .sub-card { min-width: 240px; flex-shrink: 0; }
+    }
+
+    @media (max-width: 860px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 540px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .container { padding: 16px 14px 96px; }
+      .floating-bulk { border-radius: 18px; flex-direction: column; align-items: stretch; padding: 12px 14px; }
     }
   </style>
 </head>
 <body>
-  <!-- ALERT -->
-  <div class="alert alert-error" id="alertError"></div>
-  <div class="alert alert-success" id="alertSuccess"></div>
+  <div class="kerb-top-bar" aria-hidden="true"></div>
+  <div class="toast-stack" id="toastStack"></div>
 
   <!-- NAVBAR -->
-  <nav class="navbar">
+  <header class="navbar">
     <div class="navbar-inner">
-      <div class="navbar-brand">✅ Verifikasi Kegiatan</div>
-      <div class="navbar-right">
-        <div class="nav-info">
-          <span id="infoAtasan">Loading...</span>
+      <a href="dashboard.html" class="brand">
+        <div class="brand-badge">
+          <i class="fa-solid fa-clipboard-check"></i>
         </div>
-        <a href="dashboard.html" style="padding:8px 14px;background:#e2e8f0;border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;color:var(--text2)">📊 Dashboard</a>
-        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+        <div class="brand-text">
+          <span class="brand-title">BEKARYE Bapenda</span>
+          <span class="brand-sub">Kabupaten Lombok Tengah</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Menu Utama">
+        <a href="dashboard.html" class="nav-link">
+          <i class="fa-solid fa-house"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="entri.html" class="nav-link">
+          <i class="fa-solid fa-circle-plus"></i>
+          <span>Entri Kegiatan</span>
+        </a>
+        <a href="verifikasi.html" class="nav-link active">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span>Verifikasi</span>
+        </a>
+        <a href="admin-dashboard.html" class="nav-link" id="linkAdmin" style="display: none;">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Rekap &amp; Poin</span>
+        </a>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="icon-btn" id="themeBtn" title="Ganti tema gelap/terang" aria-label="Ganti tema">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+
+        <div class="user-pill">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <div class="user-meta">
+            <span class="user-name" id="userName">Memuat...</span>
+            <span class="user-role" id="userJabatan">-</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn-logout" id="btnLogout" title="Keluar dari aplikasi">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Keluar</span>
+        </button>
       </div>
     </div>
-  </nav>
+  </header>
 
   <!-- MAIN -->
-  <div class="main">
-    <!-- HEADER -->
-    <div class="header">
-      <h1>✅ Panel Verifikasi Kegiatan</h1>
-      <p id="headerSub">Verifikasi kegiatan bawahan Anda</p>
-    </div>
-
-    <!-- STATS -->
-    <div class="stats">
-      <div class="stat-card pending">
-        <div class="stat-label">⏳ Menunggu</div>
-        <div class="stat-value" id="statPending">-</div>
-      </div>
-      <div class="stat-card approved">
-        <div class="stat-label">✅ Disetujui</div>
-        <div class="stat-value" id="statApproved">-</div>
-      </div>
-      <div class="stat-card rejected">
-        <div class="stat-label">❌ Ditolak</div>
-        <div class="stat-value" id="statRejected">-</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">👥 Total Bawahan</div>
-        <div class="stat-value" id="statBawahan">-</div>
-      </div>
-    </div>
-
-    <!-- FILTER -->
-    <div class="filter-bar">
-      <select id="filterStatus">
-        <option value="">⏳ Semua Status</option>
-        <option value="pending">Menunggu Verifikasi</option>
-        <option value="approved">Disetujui</option>
-        <option value="rejected">Ditolak</option>
-      </select>
-      <select id="filterPegawai">
-        <option value="">Semua Pegawai</option>
-      </select>
-      <button class="btn-refresh" onclick="loadData()">🔄 Refresh</button>
-
-      <!-- ⭐ BULK ACTIONS -->
-      <div class="bulk-actions" id="bulkActionsBar" style="display: none;">
-        <span class="bulk-info">
-          <strong id="selectedCount">0</strong> dipilih
-        </span>
-        <div class="btn-action-group">
-          <button class="btn-approve-all" onclick="bulkApprove()" title="Validasi semua yang dipilih">
-            ✅ Validasi Semua
-          </button>
-          <button class="btn-reject-all" onclick="openBulkRejectModal()" title="Tolak semua yang dipilih">
-            ❌ Tolak Semua
-          </button>
-          <button class="btn-clear" onclick="clearAllCheckbox()" title="Batal pilihan">
-            Batal
-          </button>
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero-card">
+      <div>
+        <div class="hero-eyebrow">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Panel Verifikasi Berjenjang</span>
+        </div>
+        <h1 class="hero-title">Verifikasi Kegiatan Bawahan</h1>
+        <div class="hero-sub">
+          <span id="headerSub">Dikelompokkan per bulan dan per pegawai agar pemeriksaan lebih fokus</span>
+          <span class="eselon-chip" id="eselonBadge">Eselon -</span>
         </div>
       </div>
-    </div>
 
-    <!-- TABLE -->
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <!-- ⭐ CHECKBOX COLUMN -->
-            <th style="width: 40px;">
-              <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()" title="Pilih semua">
-            </th>
-            <th>Pegawai</th>
-            <th>Tanggal</th>
-            <th>Kegiatan</th>
-            <th>Poin</th>
-            <th>Bukti</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr>
-            <td colspan="8" class="loading">
-              <div class="spinner"></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <button type="button" class="btn-refresh" id="btnRefresh" onclick="loadData(true)">
+        <i class="fa-solid fa-arrows-rotate" id="refreshIcon"></i>
+        <span>Segarkan Data</span>
+      </button>
+    </section>
+
+    <!-- KPI STATS (DINAMIS SESUAI BULAN TERPILIH) -->
+    <section class="stats-grid">
+      <article class="stat-card">
+        <div class="stat-meta">
+          <span class="stat-label">Menunggu Verifikasi</span>
+          <span class="stat-value tabular" id="statPending">-</span>
+          <span class="stat-hint" id="statPendingHint">Pada bulan terpilih</span>
+        </div>
+        <div class="stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-meta">
+          <span class="stat-label">Sudah Disetujui</span>
+          <span class="stat-value tabular" id="statApproved">-</span>
+          <span class="stat-hint">Diteruskan / Final</span>
+        </div>
+        <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-meta">
+          <span class="stat-label">Ditolak</span>
+          <span class="stat-value tabular" id="statRejected">-</span>
+          <span class="stat-hint">Perlu perbaikan staff</span>
+        </div>
+        <div class="stat-icon red"><i class="fa-solid fa-circle-xmark"></i></div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-meta">
+          <span class="stat-label">Bawahan Aktif</span>
+          <span class="stat-value tabular" id="statBawahan">-</span>
+          <span class="stat-hint" id="statBawahanHint">Melapor pada bulan ini</span>
+        </div>
+        <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+      </article>
+    </section>
+
+    <!-- MONTH SELECTOR BAR -->
+    <section class="month-bar" aria-label="Filter Periode Bulan">
+      <div class="month-bar-label">
+        <i class="fa-regular fa-calendar-days" style="color:var(--accent)"></i>
+        <span>Periode Bulan:</span>
+      </div>
+      <div class="month-pills" id="monthPills">
+        <span class="month-pill active">Memuat periode...</span>
+      </div>
+    </section>
+
+    <!-- TWO-PANE WORKSPACE: PER ORANG -->
+    <section class="workspace-grid">
+      <!-- LEFT: DAFTAR PEGAWAI BAWAHAN -->
+      <aside class="sidebar-panel">
+        <div class="sidebar-head">
+          <div class="sidebar-title-row">
+            <span class="sidebar-title">
+              <i class="fa-solid fa-user-group" style="color:var(--accent)"></i>
+              Daftar Pegawai
+            </span>
+            <span class="count-chip tabular" id="subCountChip">0 orang</span>
+          </div>
+
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchPegawaiInput" placeholder="Cari nama atau NIP pegawai..." />
+          </div>
+
+          <label class="toggle-pending-only">
+            <input type="checkbox" id="onlyPendingPegawai" />
+            <span>Hanya tampilkan yang punya antrean pending</span>
+          </label>
+        </div>
+
+        <div class="sub-list" id="subordinateList">
+          <div class="state-box">
+            <div class="state-icon"><i class="fa-solid fa-spinner spin"></i></div>
+            <div class="state-desc">Memuat daftar bawahan...</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT: KEGIATAN PEGAWAI TERPILIH -->
+      <div class="detail-panel">
+        <!-- PERSON HEADER BANNER -->
+        <div class="person-banner" id="personBanner">
+          <div class="person-profile">
+            <div class="person-avatar-lg" id="selPersonAvatar">-</div>
+            <div>
+              <div class="person-name" id="selPersonName">Pilih Pegawai di Samping</div>
+              <div class="person-sub" id="selPersonRole">Menampilkan kegiatan berdasarkan bulan dan pegawai terpilih</div>
+              <div class="person-badges" id="selPersonBadges"></div>
+            </div>
+          </div>
+
+          <div id="personQuickActions"></div>
+        </div>
+
+        <!-- STATUS TABS & ACTIVITY SEARCH -->
+        <div class="detail-toolbar">
+          <div class="status-tabs" id="statusTabs">
+            <button type="button" class="status-tab active" data-status="all">Semua</button>
+            <button type="button" class="status-tab" data-status="pending">⏳ Menunggu</button>
+            <button type="button" class="status-tab" data-status="approved">✅ Disetujui</button>
+            <button type="button" class="status-tab" data-status="rejected">❌ Ditolak</button>
+          </div>
+
+          <div class="activity-search">
+            <i class="fa-solid fa-filter"></i>
+            <input type="text" id="searchKegiatanInput" placeholder="Filter nama / kode kegiatan..." />
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-card">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 42px;">
+                    <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()" title="Pilih semua yang menunggu verifikasi" />
+                  </th>
+                  <th style="width: 115px;">Tanggal</th>
+                  <th>Uraian Kegiatan</th>
+                  <th style="width: 100px; text-align: right;">Poin</th>
+                  <th style="width: 105px;">Bukti</th>
+                  <th style="width: 155px;">Status</th>
+                  <th style="width: 175px;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr>
+                  <td colspan="7">
+                    <div class="state-box">
+                      <div class="state-icon"><i class="fa-solid fa-spinner spin"></i></div>
+                      <div class="state-title">Memuat Data Verifikasi</div>
+                      <div class="state-desc">Menghubungkan ke server BEKARYE Bapenda...</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FLOATING BULK ACTION BAR -->
+  <div class="floating-bulk" id="floatingBulkBar">
+    <div class="bulk-summary">
+      <span id="selectedCount">0</span> kegiatan terpilih (<span id="selectedPoints">0</span> poin)
+    </div>
+    <div class="bulk-btns">
+      <button type="button" class="btn-pill approve" onclick="confirmBulkApprove()">
+        <i class="fa-solid fa-check-double"></i> Validasi Terpilih
+      </button>
+      <button type="button" class="btn-pill reject" onclick="openRejectModal('bulk')">
+        <i class="fa-solid fa-xmark"></i> Tolak Terpilih
+      </button>
+      <button type="button" class="btn-pill ghost" onclick="clearSelection()">Batal</button>
     </div>
   </div>
 
-  <!-- MODAL VERIFIKASI SINGLE -->
-  <div class="modal-overlay" id="modalVerif">
-    <div class="modal">
-      <h3 id="modalTitle">Verifikasi Kegiatan</h3>
-      <div class="modal-info" id="modalInfo"></div>
-      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;">Catatan (jika ditolak):</label>
-      <textarea id="catatanVerif" placeholder="Tulis alasan penolakan..."></textarea>
-      <div class="modal-actions">
-        <button class="btn-action" onclick="closeModal()" style="background:var(--bg3);color:var(--text2);border:1px solid var(--border)">Batal</button>
-        <button class="btn-action btn-reject" onclick="verifikasi('tolak')">❌ Tolak</button>
-        <button class="btn-action btn-approve" onclick="verifikasi('setuju')">✅ Setuju</button>
+  <!-- MODAL TOLAK (SINGLE / BULK) -->
+  <div class="modal-overlay" id="modalReject">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 class="modal-title" id="rejectModalTitle">❌ Tolak Kegiatan</h3>
+        <button type="button" class="modal-close" onclick="closeRejectModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-detail-box" id="rejectModalInfo"></div>
+
+      <label style="font-size:12.5px;font-weight:700;display:block;margin-bottom:8px;">Pilih alasan cepat atau tulis catatan:</label>
+      <div class="quick-reasons">
+        <button type="button" class="reason-chip" onclick="appendReason('Bukti lampiran tidak jelas / tidak terbaca')">Bukti tidak jelas</button>
+        <button type="button" class="reason-chip" onclick="appendReason('Tanggal pelaksanaan tidak sesuai bukti')">Tanggal tidak sesuai</button>
+        <button type="button" class="reason-chip" onclick="appendReason('Kegiatan tidak sesuai uraian tugas')">Tidak sesuai tupoksi</button>
+        <button type="button" class="reason-chip" onclick="appendReason('Jumlah volume kegiatan perlu disesuaikan')">Volume tidak sesuai</button>
+      </div>
+
+      <textarea class="modal-textarea" id="catatanRejectInput" placeholder="Tuliskan alasan penolakan agar pegawai dapat memperbaikinya..."></textarea>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-pill ghost" onclick="closeRejectModal()">Batal</button>
+        <button type="button" class="btn-pill reject" id="btnSubmitReject" onclick="submitReject()">
+          <i class="fa-solid fa-xmark"></i> Konfirmasi Tolak
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL BULK REJECT -->
-  <div class="modal-overlay" id="modalBulkReject">
-    <div class="modal">
-      <h3>❌ Tolak Semua yang Dipilih</h3>
-      <div class="modal-info" style="background:rgba(220,38,38,.1);color:var(--red)">
-        <strong id="bulkRejectCount">0</strong> kegiatan akan ditolak
+  <!-- MODAL PREVIEW BUKTI -->
+  <div class="modal-overlay" id="modalProof">
+    <div class="modal-box wide">
+      <div class="modal-head">
+        <h3 class="modal-title" id="proofModalTitle">📎 Pratinjau Bukti Kegiatan</h3>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <a id="proofExternalLink" href="#" target="_blank" rel="noopener" class="btn-proof">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Tab Baru
+          </a>
+          <button type="button" class="modal-close" onclick="closeProofModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
       </div>
-      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;">Alasan penolakan (berlaku untuk semua):</label>
-      <textarea id="catatanBulkReject" placeholder="Tulis alasan penolakan..."></textarea>
-      <div class="modal-actions">
-        <button class="btn-action" onclick="closeBulkRejectModal()" style="background:var(--bg3);color:var(--text2);border:1px solid var(--border)">Batal</button>
-        <button class="btn-action btn-reject" onclick="bulkReject()">❌ Tolak Semua</button>
-      </div>
+      <iframe id="proofIframe" class="proof-frame" src="about:blank" title="Pratinjau Bukti"></iframe>
     </div>
   </div>
 
   <script>
     // ============================================================
-    // CONFIG
+    // KONFIGURASI API & KONSTANTA
     // ============================================================
-    var API_URL = 'https://script.google.com/macros/s/AKfycbzl99Ev78a6Tw8d0HZiESOOidmLUm-kKwRYkd5WkYIsItG856mqn7neAOeEnodPSVxjeA/exec';
-    var SESSION_KEY = 'bekarye-session';
-    
-    var session = null;
-    var allKegiatan = [];
-    var filteredKegiatan = [];
-    var selectedItems = new Set();
-    var currentItem = null;
-    var bawahan = [];
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyUSZV_eZleX8yiBuaSzaWU98EY-PQpy1SgOaKsKW21vpBW_WF3ACDYtcnIb5toDWnUnw/exec';
+    const SESSION_KEY = 'bekarye-session';
+    const THEME_KEY = 'bekarye-theme';
+    const BULAN_NAMA = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    let session = null;
+    let allKegiatan = [];
+    let bawahanList = [];
+
+    // State Pengelompokan Per Bulan & Per Orang
+    let selectedMonthKey = ''; // Format: 'YYYY-MM' atau 'ALL'
+    let selectedNip = '';      // NIP bawahan yang sedang dibuka
+    let statusFilter = 'all';  // 'all' | 'pending' | 'approved' | 'rejected'
+    let searchPegawaiQuery = '';
+    let onlyPendingPegawai = false;
+    let searchKegiatanQuery = '';
+
+    // Selection & Modal State
+    let selectedRowKeys = new Set(); // Key unik: `${nip}::${row_index}`
+    let visibleItems = [];
+    let rejectMode = 'single'; // 'single' | 'bulk'
+    let rejectTargetItem = null;
 
     // ============================================================
-    // INIT
+    // UTILITAS
+    // ============================================================
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+
+    function safeUrl(url) {
+      const raw = String(url ?? '').trim();
+      return /^https?:\/\//i.test(raw) ? raw : '';
+    }
+
+    function getInitials(name) {
+      const parts = String(name || '?').trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function parseTanggal(val) {
+      if (!val) return null;
+      if (val instanceof Date && !isNaN(val.getTime())) return val;
+      const str = String(val).trim();
+      const ymd = str.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+      if (ymd) return new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));
+      const dmy = str.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
+      if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));
+      const d = new Date(str);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    function getMonthKey(val) {
+      const d = parseTanggal(val);
+      if (!d) return 'UNKNOWN';
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      return `${y}-${m}`;
+    }
+
+    function formatMonthLabel(monthKey) {
+      if (monthKey === 'ALL') return 'Semua Bulan';
+      if (monthKey === 'UNKNOWN') return 'Tanpa Tanggal';
+      const [y, m] = monthKey.split('-');
+      const idx = parseInt(m, 10) - 1;
+      return `${BULAN_NAMA[idx] || m} ${y}`;
+    }
+
+    function formatTanggalID(val) {
+      const d = parseTanggal(val);
+      if (!d) return '-';
+      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function makeItemKey(item) {
+      return `${item.nip}::${item.row_index}`;
+    }
+
+    function showToast(msg, type = 'success') {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'}" style="color:var(--${type === 'error' ? 'danger' : 'success'})"></i><span>${escapeHtml(msg)}</span>`;
+      stack.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateX(20px)';
+        el.style.transition = 'all 0.25s ease';
+        setTimeout(() => el.remove(), 260);
+      }, 4000);
+    }
+
+    // ============================================================
+    // TEMA GELAP / TERANG
+    // ============================================================
+    function initTheme() {
+      if (localStorage.getItem(THEME_KEY) === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+      updateThemeIcon();
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem(THEME_KEY, 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem(THEME_KEY, 'dark');
+      }
+      updateThemeIcon();
+    }
+
+    function updateThemeIcon() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+
+    // ============================================================
+    // INISIALISASI
     // ============================================================
     function initApp() {
-      try {
-        console.log('🚀 Verifikasi page loading...');
-        
-        session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
-        
-        if (!session || !session.token || !session.nip) {
-          alert('⚠️ Sesi tidak valid. Silakan login kembali.');
+      initTheme();
+      document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+      document.getElementById('btnLogout').addEventListener('click', () => {
+        if (confirm('Keluar dari aplikasi BEKARYE?')) {
+          localStorage.removeItem(SESSION_KEY);
           location.href = 'index.html';
-          return;
         }
-        
-        var canVerify = session.is_verifikator || 
-                       session.eselon === 'II' || 
-                       session.eselon === 'III' || 
-                       session.eselon === 'IV';
-        
-        if (!canVerify) {
-          showAlert('❌ Akses ditolak. Hanya pejabat eselon II/III/IV yang bisa verifikasi.', 'error');
-          setTimeout(() => location.href = 'dashboard.html', 2000);
-          return;
-        }
-        
-        setupUI();
-        loadData();
-      } catch (err) {
-        console.error('❌ Init error:', err);
-        showAlert('❌ Error: ' + err.message, 'error');
+      });
+
+      try {
+        session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+      } catch (e) {
+        session = null;
       }
+
+      if (!session || !session.token || !session.nip) {
+        location.href = 'index.html';
+        return;
+      }
+
+      const eselon = String(session.eselon || '').trim();
+      const canVerify = session.is_verifikator || ['II', 'III', 'IV'].includes(eselon);
+      if (!canVerify) {
+        showToast('Akses ditolak. Halaman ini khusus pejabat verifikator.', 'error');
+        setTimeout(() => location.href = 'dashboard.html', 1500);
+        return;
+      }
+
+      // Navbar & Header Info
+      document.getElementById('userAvatar').textContent = getInitials(session.nama);
+      document.getElementById('userName').textContent = session.nama || session.nip;
+      document.getElementById('userJabatan').textContent = session.jabatan || `Eselon ${eselon}`;
+      document.getElementById('eselonBadge').innerHTML = `<i class="fa-solid fa-user-tie"></i> Verifikator Eselon ${escapeHtml(eselon)}`;
+
+      if (eselon === 'II' || eselon === 'III' || session.is_admin) {
+        const linkAdmin = document.getElementById('linkAdmin');
+        if (linkAdmin) linkAdmin.style.display = 'inline-flex';
+      }
+
+      bindControls();
+      loadData(false);
     }
 
-    function setupUI() {
-      var eselon = session.eselon || 'Staff';
-      document.getElementById('infoAtasan').textContent = 
-        session.nama + ' — ' + session.jabatan + ' — Eselon ' + eselon;
-      document.getElementById('headerSub').textContent = 
-        'Verifikasi kegiatan bawahan Eselon ' + eselon + ' dan di bawahnya';
+    function bindControls() {
+      document.getElementById('searchPegawaiInput').addEventListener('input', (e) => {
+        searchPegawaiQuery = e.target.value.trim().toLowerCase();
+        renderSubordinateList();
+      });
+
+      document.getElementById('onlyPendingPegawai').addEventListener('change', (e) => {
+        onlyPendingPegawai = e.target.checked;
+        renderSubordinateList();
+      });
+
+      document.getElementById('searchKegiatanInput').addEventListener('input', (e) => {
+        searchKegiatanQuery = e.target.value.trim().toLowerCase();
+        renderActivityTable();
+      });
+
+      document.querySelectorAll('#statusTabs .status-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#statusTabs .status-tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          statusFilter = btn.dataset.status;
+          selectedRowKeys.clear();
+          updateFloatingBulkBar();
+          renderActivityTable();
+        });
+      });
+
+      document.getElementById('modalReject').addEventListener('click', (e) => {
+        if (e.target.id === 'modalReject') closeRejectModal();
+      });
+      document.getElementById('modalProof').addEventListener('click', (e) => {
+        if (e.target.id === 'modalProof') closeProofModal();
+      });
     }
 
     // ============================================================
-    // ALERT
+    // LOAD DATA DARI APPS SCRIPT
     // ============================================================
-    function showAlert(msg, type) {
-      var elem = type === 'error' ? document.getElementById('alertError') : document.getElementById('alertSuccess');
-      if (!elem) return;
-      elem.textContent = msg;
-      elem.classList.add('show');
-      setTimeout(() => elem.classList.remove('show'), 5000);
-    }
+    function loadData(isManualRefresh) {
+      const icon = document.getElementById('refreshIcon');
+      if (icon) icon.classList.add('spin');
 
-    // ============================================================
-    // LOAD DATA
-    // ============================================================
-    function loadData() {
-      console.log('🔄 Loading kegiatan...');
-      document.getElementById('tableBody').innerHTML = '<tr><td colspan="8" class="loading"><div class="spinner"></div></td></tr>';
-      
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ 
-          action: 'getKegiatanVerifikasi', 
+        body: JSON.stringify({
+          action: 'getKegiatanVerifikasi',
           nip: session.nip,
           eselon: session.eselon
         })
       })
       .then(r => r.json())
       .then(j => {
-        if (j.ok) {
-          allKegiatan = j.data && j.data.kegiatan ? j.data.kegiatan : [];
-          bawahan = j.data && j.data.bawahan ? j.data.bawahan : [];
-          
-          var selectP = document.getElementById('filterPegawai');
-          selectP.innerHTML = '<option value="">Semua Pegawai</option>';
-          bawahan.forEach(b => {
-            selectP.innerHTML += '<option value="' + (b.nip || '') + '">' + (b.nama || 'Unknown') + '</option>';
-          });
-          
-          document.getElementById('statBawahan').textContent = bawahan.length;
-          selectedItems.clear();
-          updateStats();
-          renderTable();
-        } else {
-          showAlert('❌ Error: ' + j.message, 'error');
-          document.getElementById('tableBody').innerHTML = '<tr><td colspan="8" class="empty">❌ Error: ' + j.message + '</td></tr>';
+        if (!j.ok) {
+          showToast(j.message || 'Gagal memuat data verifikasi', 'error');
+          return;
+        }
+
+        allKegiatan = (j.data && Array.isArray(j.data.kegiatan)) ? j.data.kegiatan : [];
+        bawahanList = (j.data && Array.isArray(j.data.bawahan)) ? j.data.bawahan : [];
+
+        // Tambahkan monthKey pada setiap item
+        allKegiatan.forEach(k => {
+          k._monthKey = getMonthKey(k.tanggal);
+        });
+
+        selectedRowKeys.clear();
+        updateFloatingBulkBar();
+
+        buildMonthPills();
+        refreshWorkspaceView(true);
+
+        if (isManualRefresh) {
+          showToast('Data verifikasi berhasil diperbarui', 'success');
         }
       })
       .catch(err => {
-        console.error('❌ Fetch error:', err);
-        showAlert('❌ Fetch error: ' + err.message, 'error');
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="8" class="empty">❌ Error load data</td></tr>';
+        console.error(err);
+        showToast('Terjadi kesalahan jaringan: ' + err.message, 'error');
+      })
+      .finally(() => {
+        if (icon) icon.classList.remove('spin');
       });
     }
 
     // ============================================================
-    // UPDATE STATS
+    // 1. PENGELOMPOKAN PER BULAN
     // ============================================================
-    function updateStats() {
-      var pending = allKegiatan.filter(k => k.can_verify).length;
-      var approved = allKegiatan.filter(k => k.status_verif && k.status_verif.includes('Disetujui')).length;
-      var rejected = allKegiatan.filter(k => k.status_verif === 'Ditolak').length;
-      
-      document.getElementById('statPending').textContent = pending;
-      document.getElementById('statApproved').textContent = approved;
-      document.getElementById('statRejected').textContent = rejected;
-    }
+    function buildMonthPills() {
+      const monthMap = new Map();
 
-    // ============================================================
-    // RENDER TABLE
-    // ============================================================
-    function renderTable() {
-      var statusFilter = document.getElementById('filterStatus').value;
-      var pegawaiFilter = document.getElementById('filterPegawai').value;
-      
-      filteredKegiatan = allKegiatan.filter(k => {
-        if (pegawaiFilter && k.nip !== pegawaiFilter) return false;
-        if (statusFilter === 'pending' && !k.can_verify) return false;
-        if (statusFilter === 'approved' && (!k.status_verif || k.status_verif === 'Ditolak')) return false;
-        if (statusFilter === 'rejected' && k.status_verif !== 'Ditolak') return false;
-        return true;
+      allKegiatan.forEach(k => {
+        const mk = k._monthKey;
+        if (!monthMap.has(mk)) {
+          monthMap.set(mk, { key: mk, total: 0, pending: 0 });
+        }
+        const entry = monthMap.get(mk);
+        entry.total++;
+        if (k.can_verify) entry.pending++;
       });
-      
-      var tbody = document.getElementById('tableBody');
-      if (filteredKegiatan.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="empty">📭 Tidak ada data</td></tr>';
+
+      // Urutkan bulan terbaru di paling kiri
+      const months = Array.from(monthMap.values()).sort((a, b) => b.key.localeCompare(a.key));
+
+      // Jika belum ada bulan dipilih atau bulan lama hilang, pilih bulan dengan pending terbaru atau bulan terbaru
+      if (!selectedMonthKey || (selectedMonthKey !== 'ALL' && !monthMap.has(selectedMonthKey))) {
+        const monthWithPending = months.find(m => m.pending > 0);
+        selectedMonthKey = monthWithPending ? monthWithPending.key : (months[0] ? months[0].key : 'ALL');
+      }
+
+      const container = document.getElementById('monthPills');
+      if (months.length === 0) {
+        container.innerHTML = `<span class="month-pill active">Belum ada data kegiatan</span>`;
         return;
       }
-      
-      var html = '';
-      filteredKegiatan.forEach((k, idx) => {
-        var tglDisplay = k.tanggal ? new Date(k.tanggal).toLocaleDateString('id-ID') : '-';
-        var linkBukti = k.link_bukti ? '<a href="' + k.link_bukti + '" target="_blank" class="btn-link">📎 Lihat</a>' : '-';
-        
-        var statusBadge = '';
-        if (k.can_verify) {
-          statusBadge = '<span class="badge badge-pending">⏳ Pending</span>';
-        } else if (k.status_verif === 'Ditolak') {
-          statusBadge = '<span class="badge badge-rejected">❌ Ditolak</span>';
-        } else {
-          statusBadge = '<span class="badge badge-approved">✅ ' + (k.status_verif || 'Disetujui') + '</span>';
-        }
-        
-        var actions = '';
-        if (k.can_verify) {
-          actions = '<button class="btn-action btn-approve" onclick="openModal(' + idx + ')">✅ Verifikasi</button>';
-        } else if (k.status_verif === 'Ditolak' && k.catatan_verif) {
-          actions = '<small style="color:var(--red);font-weight:600;word-break:break-word;">❌ ' + k.catatan_verif + '</small>';
-        } else {
-          actions = '<small style="color:var(--green);font-weight:600;">✅ Sudah diverifikasi</small>';
-        }
-        
-        var isChecked = selectedItems.has(idx) ? 'checked' : '';
-        
-        html += '<tr>';
-        html += '<td><input type="checkbox" ' + isChecked + ' onchange="toggleCheckbox(' + idx + ')" class="row-checkbox"></td>';
-        html += '<td><strong>' + (k.nama || '-') + '</strong><br><small style="color:var(--text3)">' + (k.jabatan || '-') + '</small></td>';
-        html += '<td>' + tglDisplay + '</td>';
-        html += '<td>' + (k.nama_keg || '-') + '<br><small style="color:var(--text3)">' + (k.kode_keg || '-') + '</small></td>';
-        html += '<td><strong style="color:var(--blue)">' + (k.total_poin || 0) + '</strong></td>';
-        html += '<td>' + linkBukti + '</td>';
-        html += '<td>' + statusBadge + '</td>';
-        html += '<td>' + actions + '</td>';
-        html += '</tr>';
-        
-        k._idx = idx;
+
+      let html = '';
+      months.forEach(m => {
+        const active = selectedMonthKey === m.key ? 'active' : '';
+        const badgeHtml = m.pending > 0
+          ? `<span class="pill-badge">${m.pending} pending</span>`
+          : `<span class="pill-badge done"><i class="fa-solid fa-check"></i> ${m.total}</span>`;
+        html += `
+          <button type="button" class="month-pill ${active}" onclick="selectMonth('${m.key}')">
+            <span>${escapeHtml(formatMonthLabel(m.key))}</span>
+            ${badgeHtml}
+          </button>
+        `;
       });
-      
-      tbody.innerHTML = html;
-      window._filteredKegiatan = filteredKegiatan;
+
+      // Opsi tambahan jika ingin melihat lintas bulan
+      const totalPendingAll = allKegiatan.filter(k => k.can_verify).length;
+      html += `
+        <button type="button" class="month-pill ${selectedMonthKey === 'ALL' ? 'active' : ''}" onclick="selectMonth('ALL')">
+          <span>Semua Bulan</span>
+          <span class="pill-badge ${totalPendingAll === 0 ? 'done' : ''}">${totalPendingAll > 0 ? totalPendingAll + ' pending' : allKegiatan.length}</span>
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function selectMonth(monthKey) {
+      selectedMonthKey = monthKey;
+      selectedRowKeys.clear();
+      updateFloatingBulkBar();
+      buildMonthPills();
+      refreshWorkspaceView(true);
+    }
+
+    function getActivitiesForSelectedMonth() {
+      if (selectedMonthKey === 'ALL') return allKegiatan;
+      return allKegiatan.filter(k => k._monthKey === selectedMonthKey);
+    }
+
+    // ============================================================
+    // 2. STATISTIK & PENGELOMPOKAN PER ORANG (BAWAHAN)
+    // ============================================================
+    function refreshWorkspaceView(autoPickPerson) {
+      const monthItems = getActivitiesForSelectedMonth();
+
+      // Update KPI Cards sesuai bulan terpilih
+      const pending = monthItems.filter(k => k.can_verify).length;
+      const approved = monthItems.filter(k => k.status_verif && k.status_verif !== 'Ditolak' && !k.can_verify).length;
+      const rejected = monthItems.filter(k => k.status_verif === 'Ditolak').length;
+      const activeNips = new Set(monthItems.map(k => k.nip));
+
+      document.getElementById('statPending').textContent = pending;
+      document.getElementById('statPendingHint').textContent = formatMonthLabel(selectedMonthKey);
+      document.getElementById('statApproved').textContent = approved;
+      document.getElementById('statRejected').textContent = rejected;
+      document.getElementById('statBawahan').textContent = `${activeNips.size} / ${bawahanList.length || activeNips.size}`;
+      document.getElementById('statBawahanHint').textContent = `Dari total ${bawahanList.length || activeNips.size} bawahan`;
+
+      // Susun profil agregasi per orang
+      const peopleMap = new Map();
+
+      // Masukkan seluruh bawahan resmi agar tetap terpantau meski belum melapor di bulan tsb
+      bawahanList.forEach(b => {
+        peopleMap.set(String(b.nip).trim(), {
+          nip: String(b.nip).trim(),
+          nama: b.nama || b.nip,
+          jabatan: b.jabatan || '-',
+          unit: b.unit || '-',
+          totalKeg: 0,
+          pendingCount: 0,
+          approvedCount: 0,
+          rejectedCount: 0,
+          totalPoin: 0
+        });
+      });
+
+      monthItems.forEach(k => {
+        const nip = String(k.nip).trim();
+        if (!peopleMap.has(nip)) {
+          peopleMap.set(nip, {
+            nip,
+            nama: k.nama || nip,
+            jabatan: k.jabatan || '-',
+            unit: k.unit || '-',
+            totalKeg: 0,
+            pendingCount: 0,
+            approvedCount: 0,
+            rejectedCount: 0,
+            totalPoin: 0
+          });
+        }
+        const p = peopleMap.get(nip);
+        p.totalKeg++;
+        if (k.can_verify) p.pendingCount++;
+        else if (k.status_verif === 'Ditolak') p.rejectedCount++;
+        else p.approvedCount++;
+
+        if (k.status_verif !== 'Ditolak') {
+          p.totalPoin += Number(k.total_poin) || 0;
+        }
+      });
+
+      // Urutkan: yang punya antrean pending paling banyak di atas, lalu yang punya kegiatan, lalu abjad nama
+      window._peopleAgg = Array.from(peopleMap.values()).sort((a, b) => {
+        if (b.pendingCount !== a.pendingCount) return b.pendingCount - a.pendingCount;
+        if (b.totalKeg !== a.totalKeg) return b.totalKeg - a.totalKeg;
+        return a.nama.localeCompare(b.nama);
+      });
+
+      // Pilih otomatis pegawai pertama yang relevan jika belum dipilih atau diminta reset
+      if (autoPickPerson || !selectedNip || !peopleMap.has(selectedNip)) {
+        const firstActive = window._peopleAgg.find(p => p.pendingCount > 0) ||
+                            window._peopleAgg.find(p => p.totalKeg > 0) ||
+                            window._peopleAgg[0];
+        selectedNip = firstActive ? firstActive.nip : '';
+      }
+
+      renderSubordinateList();
+      renderPersonDetail();
+    }
+
+    function renderSubordinateList() {
+      const container = document.getElementById('subordinateList');
+      let list = window._peopleAgg || [];
+
+      if (searchPegawaiQuery) {
+        list = list.filter(p =>
+          p.nama.toLowerCase().includes(searchPegawaiQuery) ||
+          p.nip.toLowerCase().includes(searchPegawaiQuery) ||
+          p.jabatan.toLowerCase().includes(searchPegawaiQuery)
+        );
+      }
+
+      if (onlyPendingPegawai) {
+        list = list.filter(p => p.pendingCount > 0);
+      }
+
+      document.getElementById('subCountChip').textContent = `${list.length} orang`;
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="state-box" style="padding:28px 14px;">
+            <div class="state-desc">Tidak ada pegawai yang sesuai filter.</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(p => {
+        const isActive = p.nip === selectedNip ? 'active' : '';
+        let statusTag = '';
+        if (p.pendingCount > 0) {
+          statusTag = `<span class="mini-tag pending">⏳ ${p.pendingCount} menunggu</span>`;
+        } else if (p.totalKeg > 0) {
+          statusTag = `<span class="mini-tag done">✅ Selesai (${p.totalKeg})</span>`;
+        } else {
+          statusTag = `<span class="mini-tag neutral">Belum ada laporan</span>`;
+        }
+
+        const poinRounded = Math.round(p.totalPoin * 100) / 100;
+
+        return `
+          <button type="button" class="sub-card ${isActive}" onclick="selectPerson('${escapeHtml(p.nip)}')">
+            <div class="sub-avatar">
+              ${escapeHtml(getInitials(p.nama))}
+              ${p.pendingCount > 0 ? '<span class="sub-dot" title="Ada kegiatan menunggu verifikasi"></span>' : ''}
+            </div>
+            <div class="sub-info">
+              <div class="sub-name">${escapeHtml(p.nama)}</div>
+              <div class="sub-role">${escapeHtml(p.jabatan)}</div>
+              <div class="sub-stats-line">
+                ${statusTag}
+                ${p.totalKeg > 0 ? `<span class="mini-tag neutral tabular">${poinRounded} poin</span>` : ''}
+              </div>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectPerson(nip) {
+      selectedNip = nip;
+      selectedRowKeys.clear();
+      updateFloatingBulkBar();
+      renderSubordinateList();
+      renderPersonDetail();
+    }
+
+    function renderPersonDetail() {
+      const person = (window._peopleAgg || []).find(p => p.nip === selectedNip);
+      const quickActionsEl = document.getElementById('personQuickActions');
+
+      if (!person) {
+        document.getElementById('selPersonAvatar').textContent = '?';
+        document.getElementById('selPersonName').textContent = 'Tidak ada pegawai dipilih';
+        document.getElementById('selPersonRole').textContent = '-';
+        document.getElementById('selPersonBadges').innerHTML = '';
+        quickActionsEl.innerHTML = '';
+        renderActivityTable();
+        return;
+      }
+
+      const poinRounded = Math.round(person.totalPoin * 100) / 100;
+      document.getElementById('selPersonAvatar').textContent = getInitials(person.nama);
+      document.getElementById('selPersonName').textContent = person.nama;
+      document.getElementById('selPersonRole').textContent = `${person.jabatan} • ${person.unit} • NIP ${person.nip}`;
+
+      document.getElementById('selPersonBadges').innerHTML = `
+        <span class="p-badge blue"><i class="fa-regular fa-calendar"></i> ${escapeHtml(formatMonthLabel(selectedMonthKey))}</span>
+        <span class="p-badge blue tabular"><i class="fa-solid fa-star"></i> ${poinRounded} Total Poin</span>
+        ${person.pendingCount > 0 ? `<span class="p-badge amber tabular">⏳ ${person.pendingCount} Menunggu</span>` : ''}
+        ${person.approvedCount > 0 ? `<span class="p-badge green tabular">✅ ${person.approvedCount} Disetujui</span>` : ''}
+        ${person.rejectedCount > 0 ? `<span class="p-badge red tabular">❌ ${person.rejectedCount} Ditolak</span>` : ''}
+      `;
+
+      if (person.pendingCount > 0) {
+        quickActionsEl.innerHTML = `
+          <button type="button" class="btn-approve-person" onclick="approveAllForCurrentPerson()">
+            <i class="fa-solid fa-check-double"></i>
+            <span>Validasi Semua (${person.pendingCount})</span>
+          </button>
+        `;
+      } else {
+        quickActionsEl.innerHTML = '';
+      }
+
+      renderActivityTable();
+    }
+
+    // ============================================================
+    // 3. TABEL KEGIATAN PEGAWAI & BULAN TERPILIH
+    // ============================================================
+    function renderActivityTable() {
+      const tbody = document.getElementById('tableBody');
+      if (!selectedNip) {
+        tbody.innerHTML = `
+          <tr><td colspan="7">
+            <div class="state-box">
+              <div class="state-icon"><i class="fa-solid fa-user-check"></i></div>
+              <div class="state-title">Pilih Pegawai Terlebih Dahulu</div>
+              <div class="state-desc">Klik nama pegawai di daftar sebelah kiri untuk melihat rincian kegiatannya.</div>
+            </div>
+          </td></tr>`;
+        return;
+      }
+
+      const monthItems = getActivitiesForSelectedMonth();
+      visibleItems = monthItems.filter(k => {
+        if (String(k.nip).trim() !== selectedNip) return false;
+        if (statusFilter === 'pending' && !k.can_verify) return false;
+        if (statusFilter === 'approved' && (k.can_verify || k.status_verif === 'Ditolak')) return false;
+        if (statusFilter === 'rejected' && k.status_verif !== 'Ditolak') return false;
+        if (searchKegiatanQuery) {
+          const hay = `${k.nama_keg || ''} ${k.kode_keg || ''} ${k.catatan || ''}`.toLowerCase();
+          if (!hay.includes(searchKegiatanQuery)) return false;
+        }
+        return true;
+      });
+
+      // Urutkan pending di atas, lalu berdasarkan tanggal terbaru
+      visibleItems.sort((a, b) => {
+        if (a.can_verify !== b.can_verify) return a.can_verify ? -1 : 1;
+        const da = parseTanggal(a.tanggal);
+        const db = parseTanggal(b.tanggal);
+        return (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
+      });
+
+      if (visibleItems.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="7">
+            <div class="state-box">
+              <div class="state-icon"><i class="fa-regular fa-folder-open"></i></div>
+              <div class="state-title">Tidak Ada Kegiatan</div>
+              <div class="state-desc">Tidak ditemukan aktivitas untuk pegawai ini pada periode/filter yang dipilih.</div>
+            </div>
+          </td></tr>`;
+        updateSelectAllCheckbox();
+        return;
+      }
+
+      tbody.innerHTML = visibleItems.map((k, idx) => {
+        const key = makeItemKey(k);
+        const isChecked = selectedRowKeys.has(key);
+        const proofUrl = safeUrl(k.link_bukti);
+
+        let badgeHtml = '';
+        if (k.can_verify) {
+          badgeHtml = `<span class="badge badge-pending"><i class="fa-solid fa-clock"></i> ${escapeHtml(k.status_verif || 'Pending')}</span>`;
+        } else if (k.status_verif === 'Ditolak') {
+          badgeHtml = `<span class="badge badge-rejected"><i class="fa-solid fa-xmark"></i> Ditolak</span>`;
+        } else {
+          badgeHtml = `<span class="badge badge-approved"><i class="fa-solid fa-check"></i> ${escapeHtml(k.status_verif || 'Disetujui')}</span>`;
+        }
+
+        let actionHtml = '';
+        if (k.can_verify) {
+          actionHtml = `
+            <div class="row-actions">
+              <button type="button" class="btn-xs approve" onclick="quickApproveSingle(${idx}, this)" title="Setujui kegiatan ini">
+                <i class="fa-solid fa-check"></i> Setuju
+              </button>
+              <button type="button" class="btn-xs reject" onclick="openRejectModal('single', ${idx})" title="Tolak dengan catatan">
+                <i class="fa-solid fa-xmark"></i> Tolak
+              </button>
+            </div>
+          `;
+        } else if (k.status_verif === 'Ditolak') {
+          actionHtml = `<span style="font-size:12px;color:var(--danger);font-weight:600;">${escapeHtml(k.catatan_verif || 'Ditolak verifikator')}</span>`;
+        } else {
+          actionHtml = `<span style="font-size:12px;color:var(--success);font-weight:700;"><i class="fa-solid fa-circle-check"></i> Terverifikasi</span>`;
+        }
+
+        return `
+          <tr class="${isChecked ? 'row-selected' : ''}">
+            <td>
+              ${k.can_verify
+                ? `<input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleRowCheckbox('${escapeHtml(key)}')" />`
+                : `<input type="checkbox" disabled style="opacity:0.25;cursor:not-allowed;" />`}
+            </td>
+            <td class="tabular" style="font-weight:600;white-space:nowrap;">${escapeHtml(formatTanggalID(k.tanggal))}</td>
+            <td>
+              <div class="keg-title">${escapeHtml(k.nama_keg || '-')}</div>
+              <div class="keg-meta">
+                <span class="keg-code">${escapeHtml(k.kode_keg || '-')}</span>
+                <span>Volume: <strong>${escapeHtml(k.jumlah || 1)}</strong> × ${escapeHtml(k.poin_satuan || 0)} poin</span>
+              </div>
+              ${k.catatan ? `<div class="keg-note"><strong>Catatan Pegawai:</strong> ${escapeHtml(k.catatan)}</div>` : ''}
+            </td>
+            <td style="text-align:right;" class="tabular">
+              <div class="poin-pill">
+                <span class="poin-main">${escapeHtml(k.total_poin || 0)}</span>
+                <span class="poin-sub">poin</span>
+              </div>
+            </td>
+            <td>
+              ${proofUrl
+                ? `<button type="button" class="btn-proof" onclick="openProofModal(${idx})"><i class="fa-solid fa-paperclip"></i> Bukti</button>`
+                : `<span style="font-size:12px;color:var(--text-faint);">Tanpa bukti</span>`}
+            </td>
+            <td>${badgeHtml}</td>
+            <td>${actionHtml}</td>
+          </tr>
+        `;
+      }).join('');
+
       updateSelectAllCheckbox();
     }
 
     // ============================================================
-    // CHECKBOX FUNCTIONS
+    // 4. CHECKBOX & BULK SELECTION
     // ============================================================
-    function toggleCheckbox(idx) {
-      if (selectedItems.has(idx)) {
-        selectedItems.delete(idx);
-      } else {
-        selectedItems.add(idx);
-      }
-      updateBulkActionsBar();
-      updateSelectAllCheckbox();
+    function toggleRowCheckbox(key) {
+      if (selectedRowKeys.has(key)) selectedRowKeys.delete(key);
+      else selectedRowKeys.add(key);
+      renderActivityTable();
+      updateFloatingBulkBar();
     }
 
     function toggleSelectAll() {
-      var checkbox = document.getElementById('selectAllCheckbox');
-      if (checkbox.checked) {
-        filteredKegiatan.forEach((k, idx) => {
-          if (k.can_verify) selectedItems.add(idx);
-        });
+      const master = document.getElementById('selectAllCheckbox');
+      const verifiable = visibleItems.filter(k => k.can_verify);
+      if (master.checked) {
+        verifiable.forEach(k => selectedRowKeys.add(makeItemKey(k)));
       } else {
-        selectedItems.clear();
+        verifiable.forEach(k => selectedRowKeys.delete(makeItemKey(k)));
       }
-      renderTable();
-      updateBulkActionsBar();
+      renderActivityTable();
+      updateFloatingBulkBar();
     }
 
     function updateSelectAllCheckbox() {
-      var checkbox = document.getElementById('selectAllCheckbox');
-      var selectableCount = filteredKegiatan.filter(k => k.can_verify).length;
-      var selectedCount = Array.from(selectedItems).filter(idx => 
-        filteredKegiatan[idx] && filteredKegiatan[idx].can_verify
-      ).length;
-      
-      checkbox.indeterminate = selectedCount > 0 && selectedCount < selectableCount;
-      checkbox.checked = selectableCount > 0 && selectedCount === selectableCount;
+      const master = document.getElementById('selectAllCheckbox');
+      if (!master) return;
+      const verifiable = visibleItems.filter(k => k.can_verify);
+      const checkedCount = verifiable.filter(k => selectedRowKeys.has(makeItemKey(k))).length;
+      master.disabled = verifiable.length === 0;
+      master.indeterminate = checkedCount > 0 && checkedCount < verifiable.length;
+      master.checked = verifiable.length > 0 && checkedCount === verifiable.length;
     }
 
-    function updateBulkActionsBar() {
-      var bar = document.getElementById('bulkActionsBar');
-      if (selectedItems.size > 0) {
-        bar.style.display = 'flex';
-        document.getElementById('selectedCount').textContent = selectedItems.size;
-      } else {
-        bar.style.display = 'none';
-      }
-    }
-
-    function clearAllCheckbox() {
-      selectedItems.clear();
-      document.getElementById('selectAllCheckbox').checked = false;
-      renderTable();
-      updateBulkActionsBar();
-    }
-
-    // ============================================================
-    // SINGLE VERIFICATION
-    // ============================================================
-    function openModal(displayIdx) {
-      currentItem = window._filteredKegiatan[displayIdx];
-      document.getElementById('modalTitle').textContent = '✅ Verifikasi Kegiatan';
-      document.getElementById('modalInfo').innerHTML = 
-        '<strong>' + (currentItem.nama || '-') + '</strong> — ' + (currentItem.jabatan || '-') + '<br>' +
-        '<span style="display:block;margin-top:6px;"><strong>Kegiatan:</strong> ' + (currentItem.nama_keg || '-') + '</span>' +
-        '<span style="display:block;"><strong>Tanggal:</strong> ' + (currentItem.tanggal ? new Date(currentItem.tanggal).toLocaleDateString('id-ID') : '-') + '</span>' +
-        '<span style="display:block;"><strong>Poin:</strong> ' + (currentItem.total_poin || 0) + '</span>' +
-        (currentItem.catatan ? '<span style="display:block;"><strong>Catatan Staff:</strong> ' + currentItem.catatan + '</span>' : '');
-      
-      document.getElementById('catatanVerif').value = '';
-      document.getElementById('modalVerif').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('modalVerif').classList.remove('active');
-      currentItem = null;
-    }
-
-    function verifikasi(action) {
-      if (!currentItem) return;
-      var catatan = action === 'tolak' ? document.getElementById('catatanVerif').value.trim() : '';
-      if (action === 'tolak' && !catatan) {
-        alert('⚠️ Masukkan alasan penolakan!');
+    function updateFloatingBulkBar() {
+      const bar = document.getElementById('floatingBulkBar');
+      const count = selectedRowKeys.size;
+      if (count === 0) {
+        bar.classList.remove('show');
         return;
       }
-      
-      var btn = event.target;
-      btn.disabled = true;
-      btn.textContent = 'Memproses...';
-      
-      fetch(API_URL, {
+
+      let totalPts = 0;
+      allKegiatan.forEach(k => {
+        if (selectedRowKeys.has(makeItemKey(k))) {
+          totalPts += Number(k.total_poin) || 0;
+        }
+      });
+
+      document.getElementById('selectedCount').textContent = count;
+      document.getElementById('selectedPoints').textContent = Math.round(totalPts * 100) / 100;
+      bar.classList.add('show');
+    }
+
+    function clearSelection() {
+      selectedRowKeys.clear();
+      renderActivityTable();
+      updateFloatingBulkBar();
+    }
+
+    // ============================================================
+    // 5. AKSI VERIFIKASI (SINGLE, PER ORANG, & BULK)
+    // ============================================================
+    function sendVerifRequest(item, action, catatan) {
+      return fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'verifikasiKegiatan',
-          nip_pegawai: currentItem.nip,
-          row_index: currentItem.row_index,
+          nip_pegawai: item.nip,
+          row_index: item.row_index,
           action_verif: action,
           eselon_atasan: session.eselon,
-          catatan: catatan
+          catatan: catatan || ''
         })
-      })
-      .then(r => r.json())
-      .then(j => {
-        if (j.ok) {
-          showAlert('✅ Kegiatan berhasil ' + (action === 'tolak' ? 'ditolak' : 'disetujui'), 'success');
-          closeModal();
-          setTimeout(() => loadData(), 1000);
-        } else {
-          showAlert('❌ Error: ' + (j.message || 'Verifikasi gagal'), 'error');
-        }
-      })
-      .catch(err => {
-        console.error('❌ Error:', err);
-        showAlert('❌ Error: ' + err.message, 'error');
-      })
-      .finally(() => {
-        btn.disabled = false;
-        btn.textContent = action === 'tolak' ? '❌ Tolak' : '✅ Setuju';
-      });
+      }).then(r => r.json());
     }
 
-    // ============================================================
-    // BULK VERIFICATION
-    // ============================================================
-    function bulkApprove() {
-      if (selectedItems.size === 0) {
-        alert('⚠️ Pilih minimal 1 kegiatan!');
-        return;
-      }
-      if (!confirm('⚠️ Validasi ' + selectedItems.size + ' kegiatan?')) return;
-      processBulkVerification('setuju', '');
-    }
+    function quickApproveSingle(idx, btnEl) {
+      const item = visibleItems[idx];
+      if (!item || !item.can_verify) return;
 
-    function openBulkRejectModal() {
-      if (selectedItems.size === 0) {
-        alert('⚠️ Pilih minimal 1 kegiatan!');
-        return;
-      }
-      document.getElementById('bulkRejectCount').textContent = selectedItems.size;
-      document.getElementById('modalBulkReject').classList.add('active');
-    }
-
-    function closeBulkRejectModal() {
-      document.getElementById('modalBulkReject').classList.remove('active');
-      document.getElementById('catatanBulkReject').value = '';
-    }
-
-    function bulkReject() {
-      var catatan = document.getElementById('catatanBulkReject').value.trim();
-      if (!catatan) {
-        alert('⚠️ Masukkan alasan penolakan!');
-        return;
-      }
-      if (!confirm('⚠️ Tolak ' + selectedItems.size + ' kegiatan?')) return;
-      closeBulkRejectModal();
-      processBulkVerification('tolak', catatan);
-    }
-
-    function processBulkVerification(action, catatan) {
-      console.log('🔄 Processing bulk verification... Count:', selectedItems.size);
-      
-      var selectedArray = Array.from(selectedItems)
-        .map(idx => window._filteredKegiatan[idx])
-        .filter(k => k && k.can_verify);
-
-      if (selectedArray.length === 0) {
-        showAlert('⚠️ Tidak ada kegiatan yang bisa diverifikasi', 'error');
-        return;
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerHTML = '<i class="fa-solid fa-spinner spin"></i>';
       }
 
-      var promises = selectedArray.map(item => {
-        return fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: 'verifikasiKegiatan',
-            nip_pegawai: item.nip,
-            row_index: item.row_index,
-            action_verif: action,
-            eselon_atasan: session.eselon,
-            catatan: catatan
-          })
-        }).then(r => r.json());
-      });
-
-      Promise.all(promises)
-        .then(results => {
-          var success = results.filter(r => r.ok).length;
-          var failed = results.length - success;
-
-          if (success > 0) {
-            showAlert(
-              '✅ ' + success + ' kegiatan berhasil ' + (action === 'tolak' ? 'ditolak' : 'divalidasi') +
-              (failed > 0 ? '\n⚠️ ' + failed + ' kegiatan gagal' : ''),
-              'success'
-            );
+      sendVerifRequest(item, 'setuju', '')
+        .then(res => {
+          if (res.ok) {
+            showToast(`Disetujui: ${item.nama_keg}`, 'success');
+            loadData(false);
+          } else {
+            showToast(res.message || 'Gagal menyetujui kegiatan', 'error');
+            if (btnEl) {
+              btnEl.disabled = false;
+              btnEl.innerHTML = '<i class="fa-solid fa-check"></i> Setuju';
+            }
           }
-          if (failed > 0) {
-            showAlert('❌ ' + failed + ' kegiatan gagal diproses', 'error');
-          }
-
-          setTimeout(() => {
-            selectedItems.clear();
-            loadData();
-          }, 1500);
         })
         .catch(err => {
-          console.error('❌ Bulk error:', err);
-          showAlert('❌ Error: ' + err.message, 'error');
+          showToast('Error: ' + err.message, 'error');
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.innerHTML = '<i class="fa-solid fa-check"></i> Setuju';
+          }
         });
     }
 
-    // ============================================================
-    // LOGOUT
-    // ============================================================
-    function logout() {
-      if (confirm('⚠️ Anda yakin ingin logout?')) {
-        localStorage.removeItem(SESSION_KEY);
-        location.href = 'index.html';
+    async function processSequentialBatch(items, action, catatan) {
+      let okCount = 0;
+      let failCount = 0;
+
+      for (const item of items) {
+        try {
+          const res = await sendVerifRequest(item, action, catatan);
+          if (res && res.ok) okCount++;
+          else failCount++;
+        } catch (e) {
+          failCount++;
+        }
       }
+
+      if (okCount > 0) {
+        showToast(`${okCount} kegiatan berhasil ${action === 'setuju' ? 'divalidasi' : 'ditolak'}`, 'success');
+      }
+      if (failCount > 0) {
+        showToast(`${failCount} kegiatan gagal diproses`, 'error');
+      }
+
+      selectedRowKeys.clear();
+      updateFloatingBulkBar();
+      loadData(false);
+    }
+
+    function approveAllForCurrentPerson() {
+      const items = getActivitiesForSelectedMonth().filter(k => String(k.nip).trim() === selectedNip && k.can_verify);
+      if (items.length === 0) return;
+      const person = (window._peopleAgg || []).find(p => p.nip === selectedNip);
+      const nama = person ? person.nama : selectedNip;
+      if (!confirm(`Validasi semua ${items.length} kegiatan milik ${nama} pada ${formatMonthLabel(selectedMonthKey)}?`)) return;
+      showToast(`Memproses ${items.length} kegiatan...`, 'success');
+      processSequentialBatch(items, 'setuju', '');
+    }
+
+    function confirmBulkApprove() {
+      const items = allKegiatan.filter(k => selectedRowKeys.has(makeItemKey(k)) && k.can_verify);
+      if (items.length === 0) return;
+      if (!confirm(`Validasi ${items.length} kegiatan yang dipilih?`)) return;
+      showToast(`Memproses ${items.length} kegiatan...`, 'success');
+      processSequentialBatch(items, 'setuju', '');
     }
 
     // ============================================================
-    // EVENT LISTENERS
+    // 6. MODAL PENOLAKAN & MODAL PREVIEW BUKTI
     // ============================================================
-    document.getElementById('filterStatus').addEventListener('change', renderTable);
-    document.getElementById('filterPegawai').addEventListener('change', renderTable);
+    function openRejectModal(mode, idx) {
+      rejectMode = mode;
+      document.getElementById('catatanRejectInput').value = '';
 
-    document.getElementById('modalVerif').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('modalVerif')) closeModal();
-    });
+      if (mode === 'single') {
+        rejectTargetItem = visibleItems[idx];
+        if (!rejectTargetItem) return;
+        document.getElementById('rejectModalTitle').textContent = '❌ Tolak Kegiatan Pegawai';
+        document.getElementById('rejectModalInfo').innerHTML = `
+          <strong>${escapeHtml(rejectTargetItem.nama)}</strong> — ${escapeHtml(formatTanggalID(rejectTargetItem.tanggal))}<br>
+          <span style="color:var(--text-secondary);">${escapeHtml(rejectTargetItem.nama_keg)} (${escapeHtml(rejectTargetItem.total_poin)} poin)</span>
+        `;
+      } else {
+        rejectTargetItem = null;
+        const count = selectedRowKeys.size;
+        if (count === 0) return;
+        document.getElementById('rejectModalTitle').textContent = '❌ Tolak Kegiatan Terpilih';
+        document.getElementById('rejectModalInfo').innerHTML = `
+          Anda akan menolak <strong>${count} kegiatan</strong> sekaligus dengan catatan penolakan yang sama.
+        `;
+      }
 
-    document.getElementById('modalBulkReject').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('modalBulkReject')) closeBulkRejectModal();
-    });
+      document.getElementById('modalReject').classList.add('active');
+      setTimeout(() => document.getElementById('catatanRejectInput').focus(), 60);
+    }
+
+    function closeRejectModal() {
+      document.getElementById('modalReject').classList.remove('active');
+      rejectTargetItem = null;
+    }
+
+    function appendReason(text) {
+      const ta = document.getElementById('catatanRejectInput');
+      ta.value = ta.value.trim() ? `${ta.value.trim()}; ${text}` : text;
+      ta.focus();
+    }
+
+    function submitReject() {
+      const catatan = document.getElementById('catatanRejectInput').value.trim();
+      if (!catatan) {
+        showToast('Alasan penolakan wajib diisi!', 'error');
+        document.getElementById('catatanRejectInput').focus();
+        return;
+      }
+
+      const btn = document.getElementById('btnSubmitReject');
+      btn.disabled = true;
+
+      if (rejectMode === 'single' && rejectTargetItem) {
+        const target = rejectTargetItem;
+        closeRejectModal();
+        btn.disabled = false;
+        sendVerifRequest(target, 'tolak', catatan)
+          .then(res => {
+            if (res.ok) {
+              showToast('Kegiatan berhasil ditolak', 'success');
+              loadData(false);
+            } else {
+              showToast(res.message || 'Gagal menolak kegiatan', 'error');
+            }
+          })
+          .catch(err => showToast('Error: ' + err.message, 'error'));
+      } else {
+        const items = allKegiatan.filter(k => selectedRowKeys.has(makeItemKey(k)) && k.can_verify);
+        closeRejectModal();
+        btn.disabled = false;
+        showToast(`Menolak ${items.length} kegiatan...`, 'success');
+        processSequentialBatch(items, 'tolak', catatan);
+      }
+    }
+
+    function openProofModal(idx) {
+      const item = visibleItems[idx];
+      if (!item || !item.link_bukti) return;
+      const rawUrl = safeUrl(item.link_bukti);
+      if (!rawUrl) return;
+
+      // Ubah link Google Drive /view atau /open menjadi /preview agar tampil langsung di iframe
+      let embedUrl = rawUrl;
+      const driveMatch = rawUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || rawUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        embedUrl = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+      }
+
+      document.getElementById('proofModalTitle').textContent = `📎 Bukti: ${item.nama_keg || 'Kegiatan'}`;
+      document.getElementById('proofExternalLink').href = rawUrl;
+      document.getElementById('proofIframe').src = embedUrl;
+      document.getElementById('modalProof').classList.add('active');
+    }
+
+    function closeProofModal() {
+      document.getElementById('modalProof').classList.remove('active');
+      document.getElementById('proofIframe').src = 'about:blank';
+    }
 
     // ============================================================
-    // INIT
+    // STARTUP
     // ============================================================
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initApp);
