@@ -472,15 +472,6 @@
     .form-control::placeholder { color: var(--text-faint); }
     textarea.form-control { min-height: 88px; resize: vertical; line-height: 1.5; }
 
-    .input-hint {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     .input-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -798,24 +789,109 @@
 
     .btn-remove:hover { background: var(--danger); color: #ffffff; }
 
-    /* Camera + GPS */
-    .gps-banner {
+    /* ============ TELEMETRY TIMESTAMP & GPS CARD ============ */
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 12px;
+    }
+
+    .tele-card {
       background: var(--bg-subtle);
       border: 1px solid var(--border-hairline);
       border-radius: var(--radius-md);
-      padding: 12px 14px;
+      padding: 13px 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tele-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3.5px;
+      background: linear-gradient(180deg, var(--accent), var(--indigo));
+    }
+
+    .tele-card.gps-card::before {
+      background: linear-gradient(180deg, var(--success), var(--accent));
+    }
+
+    .tele-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      font-size: 12.5px;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
     }
 
-    .gps-status { display: flex; align-items: center; gap: 9px; font-weight: 700; }
-    .gps-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-faint); }
+    .tele-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .tele-clock {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      line-height: 1.15;
+    }
+
+    .tele-sub {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .gps-status { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--text-primary); }
+    .gps-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--text-faint); flex-shrink: 0; }
     .gps-dot.active { background: var(--success); box-shadow: 0 0 0 4px var(--success-soft); }
-    .gps-coords { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; font-weight: 700; color: var(--accent); }
+    .gps-coords {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .map-mini-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .map-mini-link:hover { border-color: var(--accent); }
 
     .camera-container {
       border: 1px solid var(--border-hairline);
@@ -823,6 +899,7 @@
       overflow: hidden;
       background: #000000;
       margin-top: 12px;
+      position: relative;
     }
 
     video { width: 100%; max-height: 360px; object-fit: cover; display: block; background: #000; }
@@ -832,28 +909,50 @@
       margin-top: 12px;
       background: var(--bg-subtle);
       border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-md);
-      padding: 12px;
+      border-radius: var(--radius-lg);
+      padding: 14px;
     }
 
     .preview-img {
       width: 100%;
-      max-height: 340px;
+      max-height: 360px;
       object-fit: contain;
-      border-radius: 10px;
-      background: #000;
+      border-radius: 12px;
+      background: #0f172a;
       display: block;
     }
 
-    .photo-meta-row {
+    .stamp-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .stamp-meta-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .stamp-meta-lbl {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--text-secondary);
+      gap: 5px;
+      margin-bottom: 3px;
+    }
+
+    .stamp-meta-val {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      word-break: break-word;
     }
 
     .camera-controls {
@@ -1389,6 +1488,8 @@
     @media (max-width: 860px) {
       .nav-links { display: none; }
       .mobile-dock { display: flex; }
+      .telemetry-grid { grid-template-columns: 1fr; }
+      .stamp-meta-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
@@ -1592,7 +1693,7 @@
               <div class="step-num">2</div>
               <div>
                 <div class="step-title">Catatan &amp; Bukti Pelaksanaan</div>
-                <div class="step-desc">Lampirkan dokumen atau foto lokasi untuk mempercepat verifikasi atasan</div>
+                <div class="step-desc">Lampirkan dokumen atau foto geotagging untuk mempercepat verifikasi atasan</div>
               </div>
             </div>
 
@@ -1625,7 +1726,7 @@
                 </button>
                 <button type="button" class="bukti-tab" data-tab="camera" onclick="switchBuktiTab('camera')">
                   <i class="fa-solid fa-camera"></i>
-                  <span>Ambil Foto + GPS</span>
+                  <span>Ambil Foto + Timestamp GPS</span>
                 </button>
               </div>
 
@@ -1645,14 +1746,38 @@
                 <div id="fileList"></div>
               </div>
 
-              <!-- TAB 2: CAMERA + GPS -->
+              <!-- TAB 2: CAMERA + TIMESTAMP & GPS -->
               <div id="camera" class="bukti-content">
-                <div class="gps-banner">
-                  <div class="gps-status">
-                    <span class="gps-dot" id="gpsIndicator"></span>
-                    <span id="gpsStatusText">GPS siap diaktifkan saat kamera dibuka</span>
+                <div class="telemetry-grid">
+                  <!-- LIVE DIGITAL TIMESTAMP CARD -->
+                  <div class="tele-card">
+                    <div class="tele-head">
+                      <span><i class="fa-regular fa-clock" style="color:var(--accent)"></i> Stempel Waktu</span>
+                      <span class="tele-pill"><i class="fa-solid fa-shield-check"></i> Otomatis</span>
+                    </div>
+                    <div class="tele-clock tabular" id="liveClockDisplay">--:--:--</div>
+                    <div class="tele-sub">
+                      <span id="liveDateDisplay">Memuat tanggal...</span>
+                    </div>
                   </div>
-                  <div id="gpsCoords" class="gps-coords">-</div>
+
+                  <!-- LIVE GPS TELEMETRY CARD -->
+                  <div class="tele-card gps-card">
+                    <div class="tele-head">
+                      <span><i class="fa-solid fa-location-crosshairs" style="color:var(--success)"></i> Lokasi GPS</span>
+                      <a id="gpsMapLink" href="#" target="_blank" rel="noopener noreferrer" class="map-mini-link" style="display:none;">
+                        <i class="fa-solid fa-map-location-dot"></i> Peta
+                      </a>
+                    </div>
+                    <div class="gps-status">
+                      <span class="gps-dot" id="gpsIndicator"></span>
+                      <span id="gpsStatusText" style="font-size:12.5px;">Siap diaktifkan saat kamera dibuka</span>
+                    </div>
+                    <div class="tele-sub">
+                      <span id="gpsCoords" class="gps-coords">-</span>
+                      <span id="gpsAccuracyBadge" style="font-size:11px;color:var(--text-muted);"></span>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="camera-container" id="cameraContainer" style="display:none;">
@@ -1662,9 +1787,20 @@
                 <div class="preview-container" id="photoPreview" style="display:none;">
                   <canvas id="cameraCanvas"></canvas>
                   <img id="capturedImg" class="preview-img" alt="Hasil foto kegiatan" />
-                  <div class="photo-meta-row">
-                    <span><i class="fa-regular fa-clock"></i> <strong id="photoTime">-</strong></span>
-                    <span class="gps-coords"><i class="fa-solid fa-location-dot"></i> <span id="photoGPS">-</span></span>
+
+                  <div class="stamp-meta-grid">
+                    <div class="stamp-meta-item">
+                      <div class="stamp-meta-lbl"><i class="fa-regular fa-clock" style="color:var(--accent)"></i> Waktu Pengambilan</div>
+                      <div class="stamp-meta-val tabular" id="photoTime">-</div>
+                    </div>
+                    <div class="stamp-meta-item">
+                      <div class="stamp-meta-lbl"><i class="fa-solid fa-location-dot" style="color:var(--success)"></i> Koordinat GPS</div>
+                      <div class="stamp-meta-val tabular" id="photoGPS">-</div>
+                    </div>
+                    <div class="stamp-meta-item">
+                      <div class="stamp-meta-lbl"><i class="fa-solid fa-user-check" style="color:var(--indigo)"></i> Identitas Pegawai</div>
+                      <div class="stamp-meta-val" id="photoSigner">-</div>
+                    </div>
                   </div>
                 </div>
 
@@ -1673,7 +1809,7 @@
                     <i class="fa-solid fa-video"></i> Buka Kamera
                   </button>
                   <button type="button" class="btn-cam btn-cam-capture" id="btnCapture" onclick="capturePhoto()" style="display:none;">
-                    <i class="fa-solid fa-camera"></i> Ambil Foto
+                    <i class="fa-solid fa-camera"></i> Ambil Foto + Stamp
                   </button>
                   <button type="button" class="btn-cam btn-cam-stop" id="btnStopCamera" onclick="stopCamera()" style="display:none;">
                     <i class="fa-solid fa-stop"></i> Tutup Kamera
@@ -1880,6 +2016,8 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbyUSZV_eZleX8yiBuaSzaWU98EY-PQpy1SgOaKsKW21vpBW_WF3ACDYtcnIb5toDWnUnw/exec';
     const SESSION_KEY = 'bekarye-session';
     const THEME_KEY = 'bekarye-theme';
+    const MASTER_CACHE_KEY = 'bekarye-master-kegiatan-v1';
+    const MASTER_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 jam
 
     let session = null;
     let MASTER_KEGIATAN = [];
@@ -1894,6 +2032,7 @@
     let stream = null;
     let gpsData = null;
     let gpsWatchId = null;
+    let clockInterval = null;
     let acFocusIndex = -1;
 
     // ============================================================
@@ -1949,6 +2088,28 @@
 
     function roundPts(num) {
       return Math.round((Number(num) || 0) * 100) / 100;
+    }
+
+    async function fetchJsonWithTimeout(url, payload, timeoutMs = 15000) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return await res.json();
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          throw new Error('Koneksi ke server melebihi batas waktu (15 detik). Silakan coba lagi.');
+        }
+        throw err;
+      } finally {
+        clearTimeout(timer);
+      }
     }
 
     function showToast(msg, type = 'success') {
@@ -2031,6 +2192,41 @@
     }
 
     // ============================================================
+    // LIVE DIGITAL CLOCK UNTUK TAB KAMERA
+    // ============================================================
+    function updateLiveClockUI() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      const clockEl = document.getElementById('liveClockDisplay');
+      const dateEl = document.getElementById('liveDateDisplay');
+      if (clockEl) clockEl.textContent = `${hh}:${mm}:${ss}`;
+      if (dateEl) {
+        dateEl.textContent = now.toLocaleDateString('id-ID', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+      }
+    }
+
+    function startLiveClock() {
+      updateLiveClockUI();
+      if (!clockInterval) {
+        clockInterval = setInterval(updateLiveClockUI, 1000);
+      }
+    }
+
+    function stopLiveClock() {
+      if (clockInterval) {
+        clearInterval(clockInterval);
+        clockInterval = null;
+      }
+    }
+
+    // ============================================================
     // TANGGAL, VOLUME STEPPER & LIVE RINGKASAN
     // ============================================================
     function setQuickDate(offsetDays) {
@@ -2091,7 +2287,7 @@
       if (selectedFile) {
         sumBukti.innerHTML = `<span style="color:var(--success)"><i class="fa-solid fa-file-check"></i> ${escapeHtml(selectedFile.name)}</span>`;
       } else if (photoData) {
-        sumBukti.innerHTML = `<span style="color:var(--success)"><i class="fa-solid fa-camera"></i> Foto Kamera + GPS siap</span>`;
+        sumBukti.innerHTML = `<span style="color:var(--success)"><i class="fa-solid fa-camera"></i> Foto Timestamp + GPS siap</span>`;
       } else {
         sumBukti.innerHTML = `<span style="color:var(--text-muted)">Belum ada file/foto</span>`;
       }
@@ -2238,6 +2434,11 @@
         el.classList.toggle('active', el.dataset.tab === tabName);
       });
       document.getElementById(tabName).classList.add('active');
+      if (tabName === 'camera') {
+        startLiveClock();
+      } else {
+        stopLiveClock();
+      }
     }
 
     const uploadZone = document.getElementById('uploadZone');
@@ -2267,7 +2468,6 @@
         return;
       }
 
-      // Jika sebelumnya ada foto kamera, bersihkan agar tidak ambigu
       if (photoData) {
         photoData = null;
         document.getElementById('inPhotoBase64').value = '';
@@ -2337,9 +2537,18 @@
             accuracy: pos.coords.accuracy,
             timestamp: new Date().toLocaleString('id-ID')
           };
-          document.getElementById('gpsStatusText').textContent = `GPS Terkunci (±${Math.round(gpsData.accuracy)}m)`;
+          const latStr = gpsData.latitude.toFixed(6);
+          const lngStr = gpsData.longitude.toFixed(6);
+          document.getElementById('gpsStatusText').textContent = 'Sinyal GPS Terkunci';
           document.getElementById('gpsIndicator').classList.add('active');
-          document.getElementById('gpsCoords').textContent = `${gpsData.latitude.toFixed(6)}, ${gpsData.longitude.toFixed(6)}`;
+          document.getElementById('gpsCoords').textContent = `${latStr}, ${lngStr}`;
+          document.getElementById('gpsAccuracyBadge').textContent = `Akurasi ±${Math.round(gpsData.accuracy)}m`;
+
+          const mapLink = document.getElementById('gpsMapLink');
+          if (mapLink) {
+            mapLink.href = `https://www.google.com/maps?q=${latStr},${lngStr}`;
+            mapLink.style.display = 'inline-flex';
+          }
         },
         (err) => {
           document.getElementById('gpsStatusText').textContent = 'GPS tidak aktif (' + err.message + ')';
@@ -2360,6 +2569,7 @@
         showToast('Kamera tidak didukung di browser ini.', 'error');
         return;
       }
+      startLiveClock();
       initGPS();
       try {
         try {
@@ -2380,13 +2590,115 @@
       }
     }
 
+    function roundRectPath(ctx, x, y, width, height, radius) {
+      const r = Math.min(radius, width / 2, height / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + width, y, x + width, y + height, r);
+      ctx.arcTo(x + width, y + height, x, y + height, r);
+      ctx.arcTo(x, y + height, x, y, r);
+      ctx.arcTo(x, y, x + width, y, r);
+      ctx.closePath();
+    }
+
+    function drawStampOverlay(ctx, w, h, nowDate) {
+      const pad = Math.max(16, Math.round(w * 0.022));
+      const cardW = Math.min(w - pad * 2, Math.max(360, Math.round(w * 0.62)));
+      const baseUnit = Math.max(12, Math.round(w / 62));
+      const cardH = Math.round(baseUnit * 9.2);
+      const cardX = pad;
+      const cardY = h - cardH - pad;
+      const radius = Math.round(baseUnit * 1.1);
+
+      ctx.save();
+
+      // 1. Dark glass backdrop card
+      roundRectPath(ctx, cardX, cardY, cardW, cardH, radius);
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.82)';
+      ctx.fill();
+      ctx.lineWidth = Math.max(1.5, baseUnit * 0.1);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.24)';
+      ctx.stroke();
+
+      // 2. Signature Mandalika/Bapenda left accent bar
+      const barW = Math.max(5, Math.round(baseUnit * 0.45));
+      const barMargin = Math.round(baseUnit * 0.9);
+      const barX = cardX + barMargin;
+      const barY = cardY + barMargin;
+      const barTotalH = cardH - barMargin * 2;
+      const halfH = Math.floor(barTotalH / 2);
+
+      roundRectPath(ctx, barX, barY, barW, halfH - 2, 3);
+      ctx.fillStyle = '#e11d48';
+      ctx.fill();
+
+      roundRectPath(ctx, barX, barY + halfH + 2, barW, halfH - 2, 3);
+      ctx.fillStyle = '#3b82f6';
+      ctx.fill();
+
+      const contentX = barX + barW + Math.round(baseUnit * 0.95);
+      const maxTextW = cardW - (contentX - cardX) - barMargin;
+
+      // 3. Header agency label
+      ctx.font = `700 ${Math.round(baseUnit * 0.85)}px sans-serif`;
+      ctx.fillStyle = '#93c5fd';
+      ctx.fillText('BEKARYE • BAPENDA KAB. LOMBOK TENGAH', contentX, cardY + Math.round(baseUnit * 1.75));
+
+      // 4. Prominent digital clock + Indonesian date
+      const hh = String(nowDate.getHours()).padStart(2, '0');
+      const mm = String(nowDate.getMinutes()).padStart(2, '0');
+      const ss = String(nowDate.getSeconds()).padStart(2, '0');
+      const timeText = `${hh}:${mm}:${ss}`;
+      const dateText = nowDate.toLocaleDateString('id-ID', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      ctx.font = `800 ${Math.round(baseUnit * 2.05)}px sans-serif`;
+      ctx.fillStyle = '#ffffff';
+      const timeY = cardY + Math.round(baseUnit * 3.95);
+      ctx.fillText(timeText, contentX, timeY);
+
+      const timeWidth = ctx.measureText(timeText).width;
+      ctx.font = `600 ${Math.round(baseUnit * 1.05)}px sans-serif`;
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillText(dateText, contentX + timeWidth + Math.round(baseUnit * 0.85), timeY - Math.round(baseUnit * 0.25), Math.max(80, maxTextW - timeWidth - baseUnit));
+
+      // 5. Subtle divider line
+      const divY = cardY + Math.round(baseUnit * 4.85);
+      ctx.beginPath();
+      ctx.moveTo(contentX, divY);
+      ctx.lineTo(cardX + cardW - barMargin, divY);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // 6. Metadata lines (GPS & Pegawai)
+      ctx.font = `600 ${Math.round(baseUnit * 0.92)}px sans-serif`;
+      ctx.fillStyle = '#6ee7b7';
+      const gpsLabel = gpsData
+        ? `GPS: ${gpsData.latitude.toFixed(6)}, ${gpsData.longitude.toFixed(6)} (±${Math.round(gpsData.accuracy)}m)`
+        : 'GPS: Koordinat perangkat tidak aktif';
+      ctx.fillText(gpsLabel, contentX, cardY + Math.round(baseUnit * 6.45), maxTextW);
+
+      ctx.font = `600 ${Math.round(baseUnit * 0.9)}px sans-serif`;
+      ctx.fillStyle = '#cbd5e1';
+      const userNama = (session && session.nama) ? session.nama : 'ASN Bapenda';
+      const userNip = (session && session.nip) ? session.nip : '-';
+      const kegTag = selectedKegiatan ? ` • [${selectedKegiatan.kode}]` : '';
+      ctx.fillText(`ASN: ${userNama} (${userNip})${kegTag}`, contentX, cardY + Math.round(baseUnit * 8.0), maxTextW);
+
+      ctx.restore();
+    }
+
     function capturePhoto() {
       if (!stream) return;
       const video = document.getElementById('cameraVideo');
       const canvas = document.getElementById('cameraCanvas');
       const ctx = canvas.getContext('2d');
 
-      // Skalakan ke maks 1600px agar upload cepat & ringan
       const maxDim = 1600;
       let w = video.videoWidth || 1280;
       let h = video.videoHeight || 720;
@@ -2404,27 +2716,21 @@
       canvas.height = h;
       ctx.drawImage(video, 0, 0, w, h);
 
-      // Watermark timestamp + GPS
-      const fontSize = Math.max(16, Math.floor(h / 26));
-      ctx.font = `bold ${fontSize}px sans-serif`;
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.85)';
-      ctx.lineWidth = Math.max(2, Math.floor(fontSize / 8));
-
-      const tsStr = new Date().toLocaleString('id-ID');
-      let yPos = h - fontSize * 2.2;
-      ctx.strokeText('Waktu: ' + tsStr, 18, yPos);
-      ctx.fillText('Waktu: ' + tsStr, 18, yPos);
-
-      if (gpsData) {
-        const gpsStr = `GPS: ${gpsData.latitude.toFixed(6)}, ${gpsData.longitude.toFixed(6)}`;
-        yPos = h - fontSize * 0.8;
-        ctx.strokeText(gpsStr, 18, yPos);
-        ctx.fillText(gpsStr, 18, yPos);
-      }
+      const nowDate = new Date();
+      drawStampOverlay(ctx, w, h, nowDate);
 
       const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
       if (selectedFile) removeFile();
+
+      const tsStr = nowDate.toLocaleString('id-ID', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
 
       photoData = {
         base64: dataUrl.split(',')[1],
@@ -2435,8 +2741,11 @@
       document.getElementById('capturedImg').src = dataUrl;
       document.getElementById('photoTime').textContent = photoData.timestamp;
       document.getElementById('photoGPS').textContent = gpsData
-        ? `${gpsData.latitude.toFixed(6)}, ${gpsData.longitude.toFixed(6)}`
-        : 'Koordinat tidak tersedia';
+        ? `${gpsData.latitude.toFixed(6)}, ${gpsData.longitude.toFixed(6)} (±${Math.round(gpsData.accuracy)}m)`
+        : 'Tidak tersedia';
+      document.getElementById('photoSigner').textContent = session
+        ? `${session.nama || 'Pegawai'} (${session.nip})`
+        : '-';
 
       document.getElementById('inPhotoBase64').value = photoData.base64;
       document.getElementById('inPhotoMetadata').value = JSON.stringify({ timestamp: photoData.timestamp, gps: photoData.gps });
@@ -2448,7 +2757,7 @@
       document.getElementById('btnRetake').style.display = 'inline-flex';
 
       updateSummaryCard();
-      showToast('Foto bukti berhasil diambil!', 'success');
+      showToast('Foto bukti dengan stempel waktu & GPS berhasil diambil!', 'success');
     }
 
     function stopCamera() {
@@ -2457,6 +2766,7 @@
         stream = null;
       }
       stopGPS();
+      stopLiveClock();
       document.getElementById('cameraContainer').style.display = 'none';
       document.getElementById('btnStartCamera').style.display = 'inline-flex';
       document.getElementById('btnCapture').style.display = 'none';
@@ -2474,27 +2784,69 @@
     }
 
     // ============================================================
-    // API: LOAD MASTER KEGIATAN & RIWAYAT KEGIATAN
+    // API: LOAD MASTER KEGIATAN (DENGAN CACHE INSTAN) & RIWAYAT
     // ============================================================
+    function readCachedMaster() {
+      try {
+        const raw = localStorage.getItem(MASTER_CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !Array.isArray(parsed.items) || parsed.items.length === 0) return null;
+        return parsed;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function writeCachedMaster(items) {
+      try {
+        localStorage.setItem(MASTER_CACHE_KEY, JSON.stringify({
+          ts: Date.now(),
+          items: items
+        }));
+      } catch (_) {}
+    }
+
     async function loadMasterKegiatan() {
       const hint = document.getElementById('hintKeg');
+      const cached = readCachedMaster();
+      let hasCache = false;
+
+      if (cached) {
+        MASTER_KEGIATAN = cached.items;
+        hasCache = true;
+        hint.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--success)"></i> ${cached.items.length} jenis kegiatan siap`;
+        if (Date.now() - cached.ts < MASTER_CACHE_TTL) {
+          // Segarkan diam-diam di latar belakang
+          fetchJsonWithTimeout(API_URL, { action: 'getMasterKegiatan' }, 15000)
+            .then(j => {
+              const fresh = (j.data && j.data.kegiatan) || (j.user && j.user.kegiatan) || j.kegiatan || [];
+              if (fresh.length > 0) {
+                MASTER_KEGIATAN = fresh;
+                writeCachedMaster(fresh);
+                hint.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--success)"></i> ${fresh.length} jenis kegiatan tersedia`;
+              }
+            })
+            .catch(() => {});
+          return;
+        }
+      }
+
       try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'getMasterKegiatan' })
-        });
-        const j = await res.json();
+        const j = await fetchJsonWithTimeout(API_URL, { action: 'getMasterKegiatan' }, 15000);
         const kegiatan = (j.data && j.data.kegiatan) || (j.user && j.user.kegiatan) || j.kegiatan || [];
         if (kegiatan.length > 0) {
           MASTER_KEGIATAN = kegiatan;
+          writeCachedMaster(kegiatan);
           hint.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--success)"></i> ${kegiatan.length} jenis kegiatan tersedia`;
-        } else {
+        } else if (!hasCache) {
           hint.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:var(--warning)"></i> Katalog kegiatan kosong`;
         }
       } catch (err) {
-        hint.innerHTML = `<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i> Gagal memuat katalog`;
-        showToast('Gagal memuat daftar master kegiatan: ' + err.message, 'error');
+        if (!hasCache) {
+          hint.innerHTML = `<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i> Gagal memuat katalog <button type="button" class="chip-btn" style="margin-left:6px;" onclick="loadMasterKegiatan()">Coba Lagi</button>`;
+          showToast('Gagal memuat daftar master kegiatan: ' + err.message, 'error');
+        }
       }
     }
 
@@ -2505,16 +2857,12 @@
       if (icon) icon.classList.add('spin');
 
       try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: 'getDataKegiatan',
-            nip: session.nip,
-            _ts: Date.now()
-          })
-        });
-        const j = await res.json();
+        const j = await fetchJsonWithTimeout(API_URL, {
+          action: 'getDataKegiatan',
+          nip: session.nip,
+          _ts: Date.now()
+        }, 15000);
+
         const kegiatan = (j.data && j.data.kegiatan) || (j.user && j.user.kegiatan) || j.kegiatan || [];
         allKegiatanList = Array.isArray(kegiatan) ? kegiatan : [];
         renderHistoryTable();
@@ -2526,8 +2874,11 @@
             <td colspan="8">
               <div class="state-box">
                 <div class="state-icon" style="color:var(--danger)"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                <div class="state-title">Gagal Memuat Data</div>
-                <div class="state-desc">${escapeHtml(err.message)}</div>
+                <div class="state-title">Gagal Memuat Data Kegiatan</div>
+                <div class="state-desc" style="margin-bottom:14px;">${escapeHtml(err.message)}</div>
+                <button type="button" class="btn-secondary" onclick="loadDataKegiatan(true)">
+                  <i class="fa-solid fa-arrows-rotate"></i> Muat Ulang Sekarang
+                </button>
               </div>
             </td>
           </tr>
@@ -2557,7 +2908,7 @@
       const tbody = document.getElementById('tableBody');
       const kw = (document.getElementById('tableSearchInput').value || '').trim().toLowerCase();
 
-      let cAll = allKegiatanList.length;
+      const cAll = allKegiatanList.length;
       let cPending = 0;
       let cApproved = 0;
       let cRejected = 0;
@@ -2711,17 +3062,13 @@
         mimeType = mimeMap[ext] || 'application/octet-stream';
       }
 
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          action: 'uploadFile',
-          nip: session.nip,
-          fileName: file.name,
-          mimeType: mimeType,
-          fileData: base64Data
-        })
-      }).then(r => r.json());
+      const res = await fetchJsonWithTimeout(API_URL, {
+        action: 'uploadFile',
+        nip: session.nip,
+        fileName: file.name,
+        mimeType: mimeType,
+        fileData: base64Data
+      }, 30000);
 
       const link = (res.data && res.data.link) || (res.user && res.user.link) || res.link || null;
       if (res.ok && link) return link;
@@ -2732,17 +3079,13 @@
       const ts = new Date().toISOString().replace(/\D/g, '').substring(0, 14);
       const fileName = `BEKARYE_${session.nip}_${ts}.jpg`;
 
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          action: 'uploadFile',
-          nip: session.nip,
-          fileName: fileName,
-          mimeType: 'image/jpeg',
-          fileData: base64Str
-        })
-      }).then(r => r.json());
+      const res = await fetchJsonWithTimeout(API_URL, {
+        action: 'uploadFile',
+        nip: session.nip,
+        fileName: fileName,
+        mimeType: 'image/jpeg',
+        fileData: base64Str
+      }, 30000);
 
       const link = (res.data && res.data.link) || (res.user && res.user.link) || res.link || null;
       if (res.ok && link) return link;
@@ -2813,31 +3156,27 @@
         const poinSatuan = parseFloat(selectedKegiatan.poin) || 0;
         const totalCalc = roundPts(poinSatuan * jumlah);
 
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: 'saveKegiatan',
-            nip: session.nip,
-            kegiatan: {
-              tanggal: tanggal,
-              kode_keg: selectedKegiatan.kode,
-              nama_keg: namaKeg,
-              poin: poinSatuan,
-              jumlah: jumlah,
-              link_bukti: linkBukti || '',
-              status: 'Selesai',
-              catatan: catatan
-            }
-          })
-        }).then(r => r.json());
+        const res = await fetchJsonWithTimeout(API_URL, {
+          action: 'saveKegiatan',
+          nip: session.nip,
+          kegiatan: {
+            tanggal: tanggal,
+            kode_keg: selectedKegiatan.kode,
+            nama_keg: namaKeg,
+            poin: poinSatuan,
+            jumlah: jumlah,
+            link_bukti: linkBukti || '',
+            status: 'Selesai',
+            catatan: catatan
+          }
+        }, 20000);
 
         if (res && res.ok) {
           showToast(`Kegiatan tersimpan! (+${totalCalc} poin)`, 'success');
           resetFormAll(false);
           setTimeout(() => loadDataKegiatan(false), 600);
         } else {
-          showToast(res.message || 'Gagal menyimpan kegiatan', 'error');
+          showToast((res && res.message) || 'Gagal menyimpan kegiatan', 'error');
         }
       } catch (err) {
         showToast(err.message || 'Terjadi kesalahan koneksi', 'error');
@@ -2862,33 +3201,26 @@
       const tglStr = formatTanggalID(item.tanggal);
       const totalPoin = Number(item.total_poin) || roundPts((Number(item.poin_satuan) || 0) * (Number(item.jumlah) || 1));
 
-      const confirmMsg =
-        `Hapus kegiatan berikut?
-
-` +
-        `• Kegiatan: ${item.nama_keg || '-'}
-` +
-        `• Tanggal: ${tglStr}
-` +
-        `• Poin: ${totalPoin}
-
-` +
-        `Tindakan ini tidak dapat dibatalkan.`;
+      const confirmMsg = [
+        'Hapus kegiatan berikut?',
+        '',
+        '• Kegiatan: ' + (item.nama_keg || '-'),
+        '• Tanggal: ' + tglStr,
+        '• Poin: ' + totalPoin,
+        '',
+        'Tindakan ini tidak dapat dibatalkan.'
+      ].join('\n');
 
       if (!confirm(confirmMsg)) return;
 
-      document.querySelectorAll('.btn-delete').forEach(b => b.disabled = true);
+      document.querySelectorAll('.btn-delete').forEach(b => { b.disabled = true; });
 
       try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: 'deleteKegiatan',
-            nip: session.nip,
-            rowIndex: rowIndex
-          })
-        }).then(r => r.json());
+        const res = await fetchJsonWithTimeout(API_URL, {
+          action: 'deleteKegiatan',
+          nip: session.nip,
+          rowIndex: rowIndex
+        }, 15000);
 
         if (res && res.ok) {
           showToast('Kegiatan berhasil dihapus', 'success');
@@ -2896,12 +3228,12 @@
           renderHistoryTable();
           setTimeout(() => loadDataKegiatan(false), 1800);
         } else {
-          showToast(res.message || 'Gagal menghapus kegiatan', 'error');
+          showToast((res && res.message) || 'Gagal menghapus kegiatan', 'error');
         }
       } catch (err) {
         showToast('Gagal menghapus: ' + err.message, 'error');
       } finally {
-        document.querySelectorAll('.btn-delete').forEach(b => b.disabled = false);
+        document.querySelectorAll('.btn-delete').forEach(b => { b.disabled = false; });
       }
     }
 
@@ -2912,16 +3244,10 @@
       const item = displayedList[idx];
       if (!item) return;
       document.getElementById('modalKegiatanNama').textContent = `${item.kode_keg || ''} — ${item.nama_keg || 'Kegiatan'}`;
-      let fullText = '';
-      if (item.catatan) fullText += `Catatan Pegawai:
-${item.catatan}`;
-      if (item.catatan_verif) {
-        fullText += (fullText ? '
-
-' : '') + `Catatan Verifikator:
-${item.catatan_verif}`;
-      }
-      document.getElementById('modalCatatanTeks').textContent = fullText || '-';
+      const parts = [];
+      if (item.catatan) parts.push('Catatan Pegawai:\n' + item.catatan);
+      if (item.catatan_verif) parts.push('Catatan Verifikator:\n' + item.catatan_verif);
+      document.getElementById('modalCatatanTeks').textContent = parts.join('\n\n') || '-';
       document.getElementById('catatanModal').classList.add('active');
     }
 
@@ -2984,6 +3310,7 @@ ${item.catatan_verif}`;
       document.getElementById('inTanggal').value = getLocalYMD(0);
       updateQuickDateChips();
       updateSummaryCard();
+      updateLiveClockUI();
 
       loadMasterKegiatan();
       loadDataKegiatan(false);
