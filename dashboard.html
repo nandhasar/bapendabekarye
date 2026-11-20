@@ -16,7 +16,7 @@
       --bg-canvas: #f4f6fb;
       --bg-surface: #ffffff;
       --bg-subtle: #f8fafc;
-      --bg-glass: rgba(255, 255, 255, 0.85);
+      --bg-glass: rgba(255, 255, 255, 0.88);
       --text-primary: #0f172a;
       --text-secondary: #334155;
       --text-muted: #64748b;
@@ -32,15 +32,17 @@
       --mandalika-red: #e11d48;
 
       --success: #059669;
+      --success-hover: #047857;
       --success-soft: rgba(5, 150, 105, 0.12);
       --warning: #d97706;
-      --warning-soft: rgba(217, 119, 6, 0.12);
+      --warning-soft: rgba(217, 119, 6, 0.14);
       --danger: #dc2626;
+      --danger-hover: #b91c1c;
       --danger-soft: rgba(220, 38, 38, 0.12);
 
       --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
       --shadow-sm: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
-      --shadow-md: 0 12px 32px -4px rgba(15, 23, 42, 0.08);
+      --shadow-md: 0 12px 32px -4px rgba(15, 23, 42, 0.10);
       --shadow-glow: 0 8px 24px -4px rgba(37, 99, 235, 0.28);
 
       --radius-xl: 20px;
@@ -53,7 +55,7 @@
       --bg-canvas: #090d16;
       --bg-surface: #111827;
       --bg-subtle: #1e293b;
-      --bg-glass: rgba(17, 24, 39, 0.85);
+      --bg-glass: rgba(17, 24, 39, 0.88);
       --text-primary: #f8fafc;
       --text-secondary: #cbd5e1;
       --text-muted: #94a3b8;
@@ -68,15 +70,17 @@
       --indigo-soft: rgba(99, 102, 241, 0.16);
 
       --success: #10b981;
+      --success-hover: #059669;
       --success-soft: rgba(16, 185, 129, 0.16);
       --warning: #f59e0b;
-      --warning-soft: rgba(245, 158, 11, 0.16);
+      --warning-soft: rgba(245, 158, 11, 0.18);
       --danger: #ef4444;
+      --danger-hover: #dc2626;
       --danger-soft: rgba(239, 68, 68, 0.16);
 
       --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
       --shadow-sm: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
-      --shadow-md: 0 12px 32px -4px rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 12px 32px -4px rgba(0, 0, 0, 0.55);
       --shadow-glow: 0 8px 24px -4px rgba(59, 130, 246, 0.32);
     }
 
@@ -96,30 +100,13 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+    a { text-decoration: none; color: inherit; }
+    button, input, select { font-family: inherit; }
+    .tabular { font-variant-numeric: tabular-nums; }
 
-    button {
-      font-family: inherit;
-    }
-
-    .tabular {
-      font-variant-numeric: tabular-nums;
-    }
-
-    ::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-strong);
-      border-radius: 4px;
-    }
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 
     /* ============ TOP MANDALIKA SIGNATURE ACCENT ============ */
     .kerb-top-bar {
@@ -138,7 +125,7 @@
     .navbar {
       position: sticky;
       top: 0;
-      z-index: 1000;
+      z-index: 900;
       height: 68px;
       background: var(--bg-glass);
       backdrop-filter: blur(16px);
@@ -178,23 +165,9 @@
       flex-shrink: 0;
     }
 
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand-title {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-    }
-
-    .brand-sub {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-title { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+    .brand-sub { font-size: 11px; font-weight: 600; color: var(--text-muted); }
 
     .nav-links {
       display: flex;
@@ -218,22 +191,10 @@
       transition: all 0.2s ease;
     }
 
-    .nav-link:hover {
-      color: var(--text-primary);
-      background: var(--bg-surface);
-    }
+    .nav-link:hover { color: var(--text-primary); background: var(--bg-surface); }
+    .nav-link.active { background: var(--bg-surface); color: var(--accent); box-shadow: var(--shadow-xs); }
 
-    .nav-link.active {
-      background: var(--bg-surface);
-      color: var(--accent);
-      box-shadow: var(--shadow-xs);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
 
     .icon-btn {
       width: 38px;
@@ -250,11 +211,7 @@
       font-size: 15px;
     }
 
-    .icon-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-1px);
-    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
 
     .user-pill {
       display: flex;
@@ -280,127 +237,97 @@
       flex-shrink: 0;
     }
 
-    .user-meta {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
-
-    .user-name {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--text-primary);
-      max-width: 170px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .user-role {
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--text-muted);
-      max-width: 170px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .user-meta { display: flex; flex-direction: column; line-height: 1.2; }
+    .user-name { font-size: 12.5px; font-weight: 700; color: var(--text-primary); max-width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 10.5px; font-weight: 600; color: var(--text-muted); max-width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .btn-logout {
-      padding: 8px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--danger-soft);
-      background: var(--danger-soft);
-      color: var(--danger);
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(220, 38, 38, 0.22);
+      background: var(--danger-soft);
+      color: var(--danger);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .btn-logout:hover {
-      background: var(--danger);
-      color: #ffffff;
-    }
+    .btn-logout:hover { background: var(--danger); color: #ffffff; }
 
     /* ============ MAIN CONTAINER ============ */
     .container {
       max-width: 1520px;
       margin: 0 auto;
-      padding: 28px 24px 80px;
+      padding: 24px 24px 96px;
     }
 
-    /* ============ HERO HEADER BENTO ============ */
-    .hero-bento {
+    /* ============ 1. HERO HEADER CARD ============ */
+    .hero-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-hairline);
       border-radius: var(--radius-xl);
-      padding: 26px 28px;
-      margin-bottom: 24px;
+      padding: 22px 26px;
       box-shadow: var(--shadow-sm);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
       flex-wrap: wrap;
-    }
-
-    .hero-left {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      margin-bottom: 18px;
     }
 
     .hero-eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
       font-size: 11.5px;
       font-weight: 700;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+      margin-bottom: 8px;
     }
 
     .live-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--success);
-      box-shadow: 0 0 0 4px var(--success-soft);
-      display: inline-block;
+      box-shadow: 0 0 0 3px var(--success-soft);
     }
 
     .hero-title {
-      font-size: 26px;
+      font-size: 23px;
       font-weight: 800;
-      letter-spacing: -0.025em;
-      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
     }
 
-    .hero-subtitle {
+    .hero-sub {
       font-size: 13.5px;
       color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .sync-tag {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
       font-size: 11.5px;
       font-weight: 600;
       color: var(--text-muted);
-      background: var(--bg-subtle);
-      padding: 3px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border-hairline);
     }
 
     .hero-actions {
@@ -414,299 +341,377 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 11px 16px;
-      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      border-radius: 12px;
       border: 1px solid var(--border-hairline);
       background: var(--bg-subtle);
-      color: var(--text-secondary);
+      color: var(--text-primary);
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .btn-secondary:hover:not(:disabled) {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--bg-surface);
-    }
-
-    .btn-secondary:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    .btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: var(--bg-surface); }
+    .btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .btn-primary {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      padding: 12px 20px;
-      border-radius: var(--radius-md);
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 12px;
       border: none;
       background: linear-gradient(135deg, var(--accent), var(--indigo));
       color: #ffffff;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       box-shadow: var(--shadow-glow);
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.06);
-    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.06); }
+    .spin { animation: spin 0.9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ============ KPI STATS BENTO GRID ============ */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
+    /* ============ 2. PERIOD BAR (TAHUN + MONTH PILLS) ============ */
+    .period-bar {
       background: var(--bg-surface);
       border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-xl);
-      padding: 22px;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--border-strong);
-    }
-
-    .stat-top {
+      border-radius: var(--radius-lg);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-xs);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .stat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-
-    .stat-icon.blue { background: var(--accent-soft); color: var(--accent); }
-    .stat-icon.green { background: var(--success-soft); color: var(--success); }
-    .stat-icon.amber { background: var(--warning-soft); color: var(--warning); }
-    .stat-icon.indigo { background: var(--indigo-soft); color: var(--indigo); }
-
-    .stat-value-row {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      margin-bottom: 6px;
-    }
-
-    .stat-value {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--text-primary);
-      line-height: 1.1;
-    }
-
-    .stat-unit {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .stat-sub {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .stat-pct {
-      font-weight: 800;
-      color: var(--text-secondary);
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 7px;
-      background: var(--bg-subtle);
-      border-radius: 999px;
-      overflow: hidden;
-      border: 1px solid var(--border-hairline);
-    }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent), var(--indigo));
-      transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .progress-fill.green {
-      background: linear-gradient(90deg, var(--success), #34d399);
-    }
-
-    .progress-fill.amber {
-      background: linear-gradient(90deg, var(--warning), #fbbf24);
-    }
-
-    .mini-pills {
-      display: flex;
-      gap: 6px;
+      gap: 14px;
       flex-wrap: wrap;
-      margin-top: 10px;
     }
 
-    .mini-pill {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 6px;
+    .year-picker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 14px;
+      border-right: 1px solid var(--border-hairline);
+    }
+
+    .year-picker label {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .year-select {
+      padding: 7px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .year-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+    .month-pills {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 2px 0;
+      flex: 1;
+    }
+
+    .month-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-hairline);
       background: var(--bg-subtle);
       color: var(--text-secondary);
-      border: 1px solid var(--border-hairline);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s ease;
     }
 
-    /* ============ FILTER & TOOLBAR ============ */
-    .toolbar-card {
+    .month-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-surface); }
+
+    .month-pill.active {
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .month-pill .m-pts {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .month-pill.active .m-pts {
+      background: rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+    }
+
+    /* ============ 3. OVERVIEW BENTO: TARGET PROGRESS + VERIFICATION PIPELINE ============ */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .target-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-hairline);
       border-radius: var(--radius-xl);
-      padding: 18px 22px;
-      margin-bottom: 24px;
+      padding: 24px 26px;
       box-shadow: var(--shadow-sm);
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .target-top {
+      display: flex;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
       flex-wrap: wrap;
     }
 
-    .filter-group {
+    .target-kicker {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
+      gap: 7px;
+    }
+
+    .target-big-row {
+      display: flex;
+      align-items: baseline;
       gap: 10px;
+      margin-top: 6px;
       flex-wrap: wrap;
-      flex: 1;
     }
 
-    .control-box {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .control-box i {
-      position: absolute;
-      left: 13px;
-      font-size: 13px;
-      color: var(--text-faint);
-      pointer-events: none;
-    }
-
-    .filter-select, .filter-input {
-      height: 40px;
-      padding: 0 14px 0 36px;
-      border-radius: 10px;
-      border: 1px solid var(--border-hairline);
-      background: var(--bg-subtle);
+    .target-big-val {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
       color: var(--text-primary);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      outline: none;
-      transition: all 0.2s ease;
     }
 
-    .filter-input {
-      min-width: 220px;
+    .target-big-denom {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
     }
 
-    .filter-select:hover, .filter-input:hover {
-      border-color: var(--border-strong);
-    }
-
-    .filter-select:focus, .filter-input:focus {
-      border-color: var(--accent);
-      background: var(--bg-surface);
-      box-shadow: 0 0 0 3px var(--accent-soft);
-    }
-
-    .toolbar-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .period-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 13px;
-      border-radius: 10px;
+    .target-pct-pill {
+      padding: 6px 13px;
+      border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent);
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 800;
     }
 
-    .btn-export {
-      height: 40px;
-      padding: 0 15px;
-      border-radius: 10px;
-      border: none;
+    .target-pct-pill.complete {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    /* Stacked Progress Bar */
+    .stacked-track {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      overflow: hidden;
+      display: flex;
+    }
+
+    .seg-approved {
+      height: 100%;
+      background: linear-gradient(90deg, var(--success), #34d399);
+      transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .seg-pending {
+      height: 100%;
+      background: linear-gradient(90deg, var(--warning), #fbbf24);
+      transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .target-legend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
       font-size: 12.5px;
-      font-weight: 700;
-      color: #ffffff;
+      color: var(--text-secondary);
+      padding-top: 4px;
+    }
+
+    .legend-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .legend-dot-item {
       display: inline-flex;
       align-items: center;
       gap: 7px;
+      font-weight: 600;
+    }
+
+    .s-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .s-dot.green { background: var(--success); }
+    .s-dot.amber { background: var(--warning); }
+    .s-dot.gray { background: var(--border-strong); }
+
+    .target-note {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* Right Pipeline Stack (3 Clickable Cards) */
+    .pipeline-stack {
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .pipe-card {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      box-shadow: var(--shadow-xs);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      text-align: left;
+      transition: all 0.18s ease;
     }
 
-    .btn-pdf {
+    .pipe-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pipe-card.selected {
+      border-color: var(--accent);
+      background: var(--bg-surface);
+      box-shadow: 0 4px 16px -2px rgba(37, 99, 235, 0.15);
+    }
+
+    .pipe-left {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+    }
+
+    .pipe-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .pipe-icon.green { background: var(--success-soft); color: var(--success); }
+    .pipe-icon.amber { background: var(--warning-soft); color: var(--warning); }
+    .pipe-icon.red { background: var(--danger-soft); color: var(--danger); }
+
+    .pipe-title { font-size: 13px; font-weight: 800; color: var(--text-primary); }
+    .pipe-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+
+    .pipe-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .pipe-pts { font-size: 18px; font-weight: 800; line-height: 1.15; }
+    .pipe-cnt { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-top: 2px; }
+
+    /* ============ REJECTED WARNING BANNER ============ */
+    .reject-alert {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 14px 18px;
+      border-radius: var(--radius-lg);
+      background: var(--danger-soft);
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      color: var(--danger);
+      margin-bottom: 18px;
+    }
+
+    .reject-alert.show { display: flex; }
+
+    .reject-alert-text {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .btn-review-reject {
+      padding: 7px 13px;
+      border-radius: 9px;
+      border: none;
       background: var(--danger);
-      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.22);
-    }
-    .btn-pdf:hover {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
-    }
-
-    .btn-excel {
-      background: var(--success);
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.22);
-    }
-    .btn-excel:hover {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    /* ============ TABLE CARD ============ */
-    .table-card {
+    /* ============ 4. ACTIVITY WORKSPACE & EXPORT CARD ============ */
+    .workspace-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-hairline);
       border-radius: var(--radius-xl);
@@ -714,7 +719,7 @@
       overflow: hidden;
     }
 
-    .table-head-bar {
+    .workspace-header {
       padding: 20px 24px;
       border-bottom: 1px solid var(--border-hairline);
       display: flex;
@@ -724,66 +729,151 @@
       flex-wrap: wrap;
     }
 
-    .table-title {
+    .workspace-title {
       font-size: 17px;
       font-weight: 800;
-      color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 9px;
     }
 
-    .table-sub {
+    .workspace-sub {
       font-size: 12.5px;
       color: var(--text-muted);
       margin-top: 2px;
     }
 
-    .legend-pills {
+    .export-group {
       display: flex;
       align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .btn-export {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-pdf { background: var(--danger); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2); }
+    .btn-pdf:hover { background: var(--danger-hover); transform: translateY(-1px); }
+
+    .btn-excel { background: var(--success); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2); }
+    .btn-excel:hover { background: var(--success-hover); transform: translateY(-1px); }
+
+    /* Sub-toolbar inside workspace card */
+    .workspace-toolbar {
+      padding: 13px 24px;
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
     }
 
-    .legend-item {
+    .status-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .status-tab {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 11.5px;
-      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      background: transparent;
       color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
 
-    .dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 3px;
+    .status-tab:hover { background: var(--bg-surface); color: var(--text-primary); }
+    .status-tab.active {
+      background: var(--bg-surface);
+      color: var(--accent);
+      border-color: var(--border-hairline);
+      box-shadow: var(--shadow-xs);
     }
-    .dot.green { background: var(--success); }
-    .dot.blue { background: var(--accent); }
-    .dot.amber { background: var(--warning); }
-    .dot.red { background: var(--danger); }
 
-    .table-responsive {
-      overflow-x: auto;
+    .tab-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
     }
+
+    .status-tab.active .tab-badge {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .search-box {
+      position: relative;
+      min-width: 240px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-faint);
+      font-size: 12.5px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 12.5px;
+      font-weight: 500;
+      outline: none;
+    }
+
+    .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+    /* TABLE */
+    .table-responsive { overflow-x: auto; }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 780px;
     }
 
     th {
-      padding: 14px 18px;
+      padding: 13px 18px;
       text-align: left;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: var(--text-muted);
       background: var(--bg-subtle);
       border-bottom: 1px solid var(--border-hairline);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
       white-space: nowrap;
     }
 
@@ -791,104 +881,89 @@
       padding: 15px 18px;
       border-bottom: 1px solid var(--border-hairline);
       font-size: 13.5px;
-      color: var(--text-primary);
       vertical-align: middle;
     }
 
-    tbody tr {
-      transition: background-color 0.15s ease;
-    }
+    tbody tr:hover td { background: var(--bg-subtle); }
+    tbody tr:last-child td { border-bottom: none; }
 
-    tbody tr:hover {
-      background: var(--bg-subtle);
-    }
-
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
+    .keg-title { font-weight: 700; color: var(--text-primary); line-height: 1.42; max-width: 460px; }
+    .keg-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; font-size: 11.5px; color: var(--text-muted); }
 
     .kode-pill {
-      display: inline-block;
-      padding: 4px 9px;
-      border-radius: 7px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
       background: var(--bg-subtle);
       border: 1px solid var(--border-hairline);
-      font-size: 12px;
-      font-weight: 700;
       color: var(--text-secondary);
-      white-space: nowrap;
     }
 
-    .keg-name {
-      font-weight: 600;
-      color: var(--text-primary);
-      max-width: 440px;
+    .note-box {
+      margin-top: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11.5px;
       line-height: 1.45;
+      max-width: 460px;
     }
 
-    .calc-badge {
-      font-size: 12.5px;
+    .note-box.staff {
+      background: var(--bg-subtle);
+      border-left: 3px solid var(--accent);
+      color: var(--text-secondary);
+    }
+
+    .note-box.reject {
+      background: var(--danger-soft);
+      border-left: 3px solid var(--danger);
+      color: var(--danger);
       font-weight: 600;
-      color: var(--text-muted);
-      white-space: nowrap;
     }
 
-    .poin-total {
+    .poin-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 44px;
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 13px;
+      min-width: 46px;
+      padding: 5px 11px;
+      border-radius: 9px;
+      font-size: 13.5px;
       font-weight: 800;
-      background: var(--accent-soft);
-      color: var(--accent);
     }
 
-    .poin-total.green {
-      background: var(--success-soft);
-      color: var(--success);
-    }
+    .poin-badge.green { background: var(--success-soft); color: var(--success); }
+    .poin-badge.blue { background: var(--accent-soft); color: var(--accent); }
+    .poin-badge.amber { background: var(--warning-soft); color: var(--warning); }
+    .poin-badge.red { background: var(--danger-soft); color: var(--danger); text-decoration: line-through; }
 
-    .poin-total.amber {
-      background: var(--warning-soft);
-      color: var(--warning);
-    }
-
-    .poin-total.red {
-      background: var(--danger-soft);
-      color: var(--danger);
-      text-decoration: line-through;
-    }
-
-    .btn-evidence {
+    .btn-proof {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
+      padding: 6px 11px;
       border-radius: 8px;
       border: 1px solid var(--border-hairline);
       background: var(--bg-subtle);
       color: var(--accent);
       font-size: 12px;
       font-weight: 700;
-      transition: all 0.18s ease;
+      cursor: pointer;
+      transition: all 0.15s ease;
       white-space: nowrap;
     }
 
-    .btn-evidence:hover {
-      background: var(--accent-soft);
-      border-color: var(--accent);
-    }
+    .btn-proof:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
     .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
+      padding: 5px 11px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       white-space: nowrap;
     }
@@ -898,10 +973,10 @@
     .status-pending { background: var(--warning-soft); color: var(--warning); }
     .status-rejected { background: var(--danger-soft); color: var(--danger); }
 
-    /* Empty & Loading States */
+    /* EMPTY & LOADING */
     .state-box {
       text-align: center;
-      padding: 56px 24px;
+      padding: 54px 24px;
       color: var(--text-muted);
     }
 
@@ -911,43 +986,19 @@
       border-radius: 16px;
       background: var(--bg-subtle);
       border: 1px solid var(--border-hairline);
-      color: var(--text-faint);
+      color: var(--accent);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      margin-bottom: 14px;
+      font-size: 22px;
+      margin-bottom: 12px;
     }
 
-    .state-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 6px;
-    }
-
-    .state-desc {
-      font-size: 13.5px;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
-
-    .spinner {
-      width: 30px;
-      height: 30px;
-      border: 3px solid var(--border-hairline);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.75s linear infinite;
-      margin: 0 auto 12px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    .state-title { font-size: 15.5px; font-weight: 800; color: var(--text-primary); margin-bottom: 5px; }
+    .state-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
 
     .table-foot {
-      padding: 14px 24px;
+      padding: 13px 24px;
       border-top: 1px solid var(--border-hairline);
       background: var(--bg-subtle);
       display: flex;
@@ -959,14 +1010,103 @@
       gap: 8px;
     }
 
-    /* ============ MOBILE BOTTOM NAVIGATION ============ */
+    /* MODAL PREVIEW BUKTI */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 820px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow-md);
+      animation: popIn 0.2s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .modal-title { font-size: 16px; font-weight: 800; }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .proof-frame {
+      width: 100%;
+      height: 460px;
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      background: var(--bg-subtle);
+    }
+
+    /* TOAST */
+    .toast-stack {
+      position: fixed;
+      top: 82px;
+      right: 24px;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 380px;
+    }
+
+    .toast {
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.25s ease;
+    }
+
+    .toast.success { border-left: 4px solid var(--success); }
+    .toast.error { border-left: 4px solid var(--danger); }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+    /* MOBILE BOTTOM DOCK */
     .mobile-dock {
       display: none;
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 1000;
+      z-index: 950;
       background: var(--bg-glass);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
@@ -986,81 +1126,39 @@
       color: var(--text-muted);
       padding: 6px 12px;
       border-radius: 10px;
-      transition: all 0.15s ease;
     }
 
-    .dock-item i {
-      font-size: 16px;
-    }
+    .dock-item i { font-size: 16px; }
+    .dock-item.active { color: var(--accent); background: var(--accent-soft); }
 
-    .dock-item.active {
-      color: var(--accent);
-      background: var(--accent-soft);
-    }
-
-    /* ============ RESPONSIVE BREAKPOINTS ============ */
-    @media (max-width: 1180px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    /* RESPONSIVE */
+    @media (max-width: 1040px) {
+      .overview-grid { grid-template-columns: 1fr; }
+      .pipeline-stack { grid-template-rows: none; grid-template-columns: repeat(3, 1fr); }
     }
 
     @media (max-width: 860px) {
-      .nav-links {
-        display: none;
-      }
-      .mobile-dock {
-        display: flex;
-      }
-      .container {
-        padding-bottom: 92px;
-      }
+      .nav-links { display: none; }
+      .mobile-dock { display: flex; }
+      .pipeline-stack { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 640px) {
-      .navbar {
-        padding: 0 16px;
-      }
-      .user-meta {
-        display: none;
-      }
-      .user-pill {
-        padding: 4px;
-      }
-      .container {
-        padding: 20px 14px 92px;
-      }
-      .hero-bento {
-        padding: 20px;
-      }
-      .hero-title {
-        font-size: 21px;
-      }
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-      .filter-input {
-        width: 100%;
-        min-width: 0;
-      }
-      .control-box {
-        width: 100%;
-      }
-      .filter-select {
-        width: 100%;
-      }
-      .toolbar-right {
-        width: 100%;
-      }
-      .btn-export {
-        flex: 1;
-        justify-content: center;
-      }
+    @media (max-width: 600px) {
+      .navbar { padding: 0 16px; }
+      .user-meta { display: none; }
+      .user-pill { padding: 4px; }
+      .container { padding: 16px 14px 92px; }
+      .hero-card { padding: 18px; }
+      .hero-title { font-size: 20px; }
+      .target-big-val { font-size: 32px; }
+      .search-box { width: 100%; min-width: 0; }
+      .year-picker { border-right: none; padding-right: 0; }
     }
   </style>
 </head>
 <body>
   <div class="kerb-top-bar" aria-hidden="true"></div>
+  <div class="toast-stack" id="toastStack"></div>
 
   <!-- TOP NAVBAR -->
   <header class="navbar">
@@ -1117,15 +1215,15 @@
 
   <!-- MAIN CONTENT -->
   <main class="container">
-    <!-- HERO BENTO -->
-    <section class="hero-bento">
-      <div class="hero-left">
+    <!-- 1. HERO HEADER -->
+    <section class="hero-card">
+      <div>
         <div class="hero-eyebrow">
           <span class="live-dot"></span>
           <span>Monitoring Kinerja Harian ASN</span>
         </div>
         <h1 class="hero-title" id="welcomeHeading">Dashboard Kegiatan</h1>
-        <div class="hero-subtitle">
+        <div class="hero-sub">
           <span id="pageSub">Pantau capaian poin dan status verifikasi aktivitas Anda</span>
           <span class="sync-tag" id="lastSyncTag">
             <i class="fa-regular fa-clock"></i> Sinkronisasi otomatis aktif
@@ -1140,134 +1238,170 @@
         </button>
         <a href="entri.html" class="btn-primary">
           <i class="fa-solid fa-plus"></i>
-          <span>Tambah Kegiatan Baru</span>
+          <span>Input Kegiatan</span>
         </a>
       </div>
     </section>
 
-    <!-- STATS BENTO GRID -->
-    <section class="stats-grid" aria-label="Ringkasan Capaian Poin">
-      <!-- Card 1: Total Poin Diinput -->
-      <article class="stat-card">
-        <div class="stat-top">
-          <span class="stat-label">Total Poin Diinput</span>
-          <div class="stat-icon blue"><i class="fa-solid fa-bolt"></i></div>
-        </div>
-        <div class="stat-value-row">
-          <span class="stat-value tabular" id="poinBulan">0</span>
-          <span class="stat-unit">poin</span>
-        </div>
-        <div class="stat-sub">
-          <span>Target: <strong class="tabular" id="targetBulan">0</strong> poin</span>
-          <span class="stat-pct tabular" id="pctBulan">0%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progressBulan" style="width: 0%"></div>
-        </div>
-      </article>
-
-      <!-- Card 2: Sudah Final Disetujui -->
-      <article class="stat-card">
-        <div class="stat-top">
-          <span class="stat-label">Sudah Validasi Final</span>
-          <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
-        </div>
-        <div class="stat-value-row">
-          <span class="stat-value tabular" id="poinValidated" style="color: var(--success);">0</span>
-          <span class="stat-unit">poin</span>
-        </div>
-        <div class="stat-sub">
-          <span>Disetujui Kepala Badan</span>
-          <span class="stat-pct tabular" id="pctValidated">0%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill green" id="progressValidated" style="width: 0%"></div>
-        </div>
-      </article>
-
-      <!-- Card 3: Menunggu / Proses Validasi -->
-      <article class="stat-card">
-        <div class="stat-top">
-          <span class="stat-label">Dalam Proses / Pending</span>
-          <div class="stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div>
-        </div>
-        <div class="stat-value-row">
-          <span class="stat-value tabular" id="poinPending" style="color: var(--warning);">0</span>
-          <span class="stat-unit">poin</span>
-        </div>
-        <div class="stat-sub">
-          <span>Menunggu verifikasi berjenjang</span>
-          <span class="stat-pct tabular" id="pctPending">0%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill amber" id="progressPending" style="width: 0%"></div>
-        </div>
-      </article>
-
-      <!-- Card 4: Ringkasan Aktivitas -->
-      <article class="stat-card">
-        <div class="stat-top">
-          <span class="stat-label">Volume Aktivitas</span>
-          <div class="stat-icon indigo"><i class="fa-solid fa-layer-group"></i></div>
-        </div>
-        <div class="stat-value-row">
-          <span class="stat-value tabular" id="totalKegiatan">0</span>
-          <span class="stat-unit">kegiatan</span>
-        </div>
-        <div class="stat-sub" style="margin-bottom: 6px;">
-          <span>Rekap periode terpilih</span>
-        </div>
-        <div class="mini-pills">
-          <span class="mini-pill tabular" id="countApproved">0 Disetujui</span>
-          <span class="mini-pill tabular" id="countPending">0 Proses</span>
-          <span class="mini-pill tabular" id="countRejected">0 Ditolak</span>
-        </div>
-      </article>
+    <!-- 2. PERIOD BAR (TAHUN + STRIP PIL BULAN) -->
+    <section class="period-bar" aria-label="Pilih Tahun dan Bulan">
+      <div class="year-picker">
+        <label for="filterTahun"><i class="fa-regular fa-calendar-days" style="color:var(--accent)"></i> Tahun:</label>
+        <select class="year-select" id="filterTahun" aria-label="Filter Tahun"></select>
+      </div>
+      <div class="month-pills" id="monthPills"></div>
     </section>
 
-    <!-- FILTER & EXPORT TOOLBAR -->
-    <section class="toolbar-card" aria-label="Filter dan Ekspor Laporan">
-      <div class="filter-group">
-        <div class="control-box">
-          <i class="fa-regular fa-calendar"></i>
-          <select class="filter-select" id="filterBulan" aria-label="Filter Bulan">
-            <option value="all">Semua Bulan</option>
-            <option value="0">Januari</option>
-            <option value="1">Februari</option>
-            <option value="2">Maret</option>
-            <option value="3">April</option>
-            <option value="4">Mei</option>
-            <option value="5">Juni</option>
-            <option value="6">Juli</option>
-            <option value="7">Agustus</option>
-            <option value="8">September</option>
-            <option value="9">Oktober</option>
-            <option value="10">November</option>
-            <option value="11">Desember</option>
-          </select>
+    <!-- 3. OVERVIEW BENTO: PROGRES TARGET + ALUR VERIFIKASI -->
+    <section class="overview-grid" aria-label="Ringkasan Target dan Status Verifikasi">
+      <!-- Kiri: Kartu Utama Progres Target -->
+      <article class="target-card">
+        <div class="target-top">
+          <div>
+            <div class="target-kicker">
+              <i class="fa-solid fa-bullseye" style="color:var(--accent)"></i>
+              <span id="targetPeriodTitle">Capaian Poin Periode Ini</span>
+            </div>
+            <div class="target-big-row">
+              <span class="target-big-val tabular" id="poinBulan">0</span>
+              <span class="target-big-denom tabular">dari target <strong id="targetBulan">0</strong> poin</span>
+            </div>
+          </div>
+
+          <span class="target-pct-pill tabular" id="pctBulan">0%</span>
         </div>
 
-        <div class="control-box">
-          <i class="fa-solid fa-calendar-days"></i>
-          <select class="filter-select" id="filterTahun" aria-label="Filter Tahun"></select>
+        <div>
+          <div class="stacked-track" title="Hijau: Final Disetujui | Kuning: Proses/Pending">
+            <div class="seg-approved" id="barApproved" style="width: 0%"></div>
+            <div class="seg-pending" id="barPending" style="width: 0%"></div>
+          </div>
+
+          <div class="target-legend" style="margin-top: 12px;">
+            <div class="legend-group">
+              <span class="legend-dot-item">
+                <span class="s-dot green"></span>
+                <span>Final Disetujui: <strong class="tabular" id="legendApprovedPts">0</strong> poin</span>
+              </span>
+              <span class="legend-dot-item">
+                <span class="s-dot amber"></span>
+                <span>Proses / Pending: <strong class="tabular" id="legendPendingPts">0</strong> poin</span>
+              </span>
+            </div>
+            <span class="target-note tabular" id="targetRemainingNote">Memuat target...</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Kanan: 3 Kartu Pipeline Status (Bisa diklik untuk filter tabel) -->
+      <div class="pipeline-stack">
+        <button type="button" class="pipe-card" data-status-filter="approved" onclick="togglePipelineFilter('approved')">
+          <div class="pipe-left">
+            <div class="pipe-icon green"><i class="fa-solid fa-circle-check"></i></div>
+            <div>
+              <div class="pipe-title">Final Disetujui</div>
+              <div class="pipe-sub">Sudah disahkan Kepala Badan</div>
+            </div>
+          </div>
+          <div class="pipe-right">
+            <div class="pipe-pts tabular" style="color:var(--success)" id="poinValidated">0</div>
+            <div class="pipe-cnt tabular" id="countApproved">0 kegiatan</div>
+          </div>
+        </button>
+
+        <button type="button" class="pipe-card" data-status-filter="inprogress" onclick="togglePipelineFilter('inprogress')">
+          <div class="pipe-left">
+            <div class="pipe-icon amber"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div>
+              <div class="pipe-title">Menunggu / Proses</div>
+              <div class="pipe-sub" id="inprogressBreakdown">Pending Eselon IV &amp; berjenjang</div>
+            </div>
+          </div>
+          <div class="pipe-right">
+            <div class="pipe-pts tabular" style="color:var(--warning)" id="poinPending">0</div>
+            <div class="pipe-cnt tabular" id="countPending">0 kegiatan</div>
+          </div>
+        </button>
+
+        <button type="button" class="pipe-card" data-status-filter="rejected" onclick="togglePipelineFilter('rejected')">
+          <div class="pipe-left">
+            <div class="pipe-icon red"><i class="fa-solid fa-circle-xmark"></i></div>
+            <div>
+              <div class="pipe-title">Ditolak / Revisi</div>
+              <div class="pipe-sub">Tidak dihitung ke capaian poin</div>
+            </div>
+          </div>
+          <div class="pipe-right">
+            <div class="pipe-pts tabular" style="color:var(--danger)" id="countRejectedBig">0</div>
+            <div class="pipe-cnt tabular" id="countRejected">0 kegiatan</div>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <!-- ALERT JIKA ADA KEGIATAN DITOLAK -->
+    <div class="reject-alert" id="rejectAlertBanner">
+      <div class="reject-alert-text">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span id="rejectAlertMsg">Ada kegiatan yang ditolak verifikator pada periode ini.</span>
+      </div>
+      <button type="button" class="btn-review-reject" onclick="setStatusFilter('rejected')">
+        Lihat Kegiatan Ditolak
+      </button>
+    </div>
+
+    <!-- 4. DAFTAR KEGIATAN & EKSPOR LAPORAN -->
+    <section class="workspace-card">
+      <div class="workspace-header">
+        <div>
+          <h2 class="workspace-title">
+            <i class="fa-solid fa-list-check" style="color: var(--accent);"></i>
+            <span>Rincian Kegiatan Harian</span>
+          </h2>
+          <p class="workspace-sub" id="tableSubtitle">Menampilkan riwayat kegiatan periode terpilih</p>
         </div>
 
-        <div class="control-box">
-          <i class="fa-solid fa-filter"></i>
-          <select class="filter-select" id="filterStatus" aria-label="Filter Status Verifikasi">
-            <option value="all">Semua Status</option>
-            <option value="approved">Final Disetujui</option>
-            <option value="process">Proses Berjenjang</option>
-            <option value="pending">Pending / Eselon IV</option>
-            <option value="rejected">Ditolak</option>
-          </select>
+        <div class="export-group">
+          <button type="button" class="btn-export btn-pdf" onclick="exportPDF()">
+            <i class="fa-solid fa-file-pdf"></i>
+            <span>Export PDF</span>
+          </button>
+          <button type="button" class="btn-export btn-excel" onclick="exportExcel()">
+            <i class="fa-solid fa-file-excel"></i>
+            <span>Export Excel</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Tabs & Search -->
+      <div class="workspace-toolbar">
+        <div class="status-tabs" id="statusTabs">
+          <button type="button" class="status-tab active" data-status="all" onclick="setStatusFilter('all')">
+            <span>Semua</span>
+            <span class="tab-badge tabular" id="tabCountAll">0</span>
+          </button>
+          <button type="button" class="status-tab" data-status="approved" onclick="setStatusFilter('approved')">
+            <span>✅ Final Disetujui</span>
+            <span class="tab-badge tabular" id="tabCountApproved">0</span>
+          </button>
+          <button type="button" class="status-tab" data-status="process" onclick="setStatusFilter('process')">
+            <span>🔄 Proses Berjenjang</span>
+            <span class="tab-badge tabular" id="tabCountProcess">0</span>
+          </button>
+          <button type="button" class="status-tab" data-status="pending" onclick="setStatusFilter('pending')">
+            <span>⏳ Pending</span>
+            <span class="tab-badge tabular" id="tabCountPending">0</span>
+          </button>
+          <button type="button" class="status-tab" data-status="rejected" onclick="setStatusFilter('rejected')">
+            <span>❌ Ditolak</span>
+            <span class="tab-badge tabular" id="tabCountRejected">0</span>
+          </button>
         </div>
 
-        <div class="control-box">
+        <div class="search-box">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input
             type="search"
-            class="filter-input"
             id="searchInput"
             placeholder="Cari kode atau nama kegiatan..."
             aria-label="Cari kegiatan"
@@ -1275,60 +1409,26 @@
         </div>
       </div>
 
-      <div class="toolbar-right">
-        <span class="period-badge" id="filterInfo">
-          <i class="fa-solid fa-list-check"></i> Memuat...
-        </span>
-        <button type="button" class="btn-export btn-pdf" onclick="exportPDF()">
-          <i class="fa-solid fa-file-pdf"></i>
-          <span>Export PDF</span>
-        </button>
-        <button type="button" class="btn-export btn-excel" onclick="exportExcel()">
-          <i class="fa-solid fa-file-excel"></i>
-          <span>Export Excel</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- TABLE SECTION -->
-    <section class="table-card">
-      <div class="table-head-bar">
-        <div>
-          <h2 class="table-title">
-            <i class="fa-solid fa-table-list" style="color: var(--accent);"></i>
-            <span>Daftar Kegiatan Pegawai</span>
-          </h2>
-          <p class="table-sub" id="tableSubtitle">Riwayat kegiatan harian yang telah diinputkan</p>
-        </div>
-
-        <div class="legend-pills">
-          <span class="legend-item"><span class="dot green"></span> Final Disetujui</span>
-          <span class="legend-item"><span class="dot blue"></span> Proses Berjenjang</span>
-          <span class="legend-item"><span class="dot amber"></span> Pending Eselon IV</span>
-          <span class="legend-item"><span class="dot red"></span> Ditolak</span>
-        </div>
-      </div>
-
+      <!-- Tabel Kegiatan -->
       <div class="table-responsive">
         <table id="tableKegiatan">
           <thead>
             <tr>
-              <th>Tanggal</th>
-              <th>Kode</th>
-              <th>Nama Kegiatan</th>
-              <th>Perhitungan</th>
-              <th>Total Poin</th>
-              <th>Bukti</th>
-              <th>Status Verifikasi</th>
+              <th style="width: 115px;">Tanggal</th>
+              <th>Uraian Kegiatan &amp; Catatan</th>
+              <th style="width: 110px;">Perhitungan</th>
+              <th style="width: 95px;">Poin</th>
+              <th style="width: 115px;">Bukti</th>
+              <th style="width: 185px;">Status Verifikasi</th>
             </tr>
           </thead>
           <tbody id="tableBody">
             <tr>
-              <td colspan="7">
+              <td colspan="6">
                 <div class="state-box">
-                  <div class="spinner"></div>
+                  <div class="state-icon"><i class="fa-solid fa-spinner spin"></i></div>
                   <div class="state-title">Memuat Data Kegiatan...</div>
-                  <div class="state-desc" style="margin-bottom: 0;">Mengambil riwayat aktivitas dari server Bapenda</div>
+                  <div class="state-desc" style="margin-bottom:0;">Mengambil riwayat aktivitas dari server BEKARYE Bapenda</div>
                 </div>
               </td>
             </tr>
@@ -1338,12 +1438,28 @@
 
       <div class="table-foot">
         <span id="tableFootCount">Menampilkan 0 kegiatan</span>
-        <span>Gunakan tombol <strong>Export PDF</strong> atau <strong>Export Excel</strong> untuk mengunduh laporan resmi</span>
+        <span>Gunakan tombol <strong>Export PDF</strong> atau <strong>Export Excel</strong> di atas untuk mengunduh laporan resmi</span>
       </div>
     </section>
   </main>
 
-  <!-- MOBILE DOCK NAVIGATION -->
+  <!-- MODAL PREVIEW BUKTI -->
+  <div class="modal-overlay" id="modalProof">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 class="modal-title" id="proofModalTitle">📎 Pratinjau Bukti Kegiatan</h3>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <a id="proofExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-proof">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Tab Baru
+          </a>
+          <button type="button" class="modal-close" onclick="closeProofModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <iframe id="proofIframe" class="proof-frame" src="about:blank" title="Pratinjau Bukti"></iframe>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM DOCK -->
   <nav class="mobile-dock" aria-label="Navigasi Seluler">
     <a href="dashboard.html" class="dock-item active">
       <i class="fa-solid fa-house"></i>
@@ -1374,13 +1490,22 @@
       'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
       'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
     ];
+    const BULAN_SINGKAT = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+    ];
 
     let allKegiatan = [];
     let filteredKegiatan = [];
+    let displayedSorted = [];
     let session = null;
 
+    // State Filter Aktif
+    let selectedMonth = String(new Date().getMonth()); // '0'..'11' atau 'all'
+    let selectedStatus = 'all'; // 'all' | 'approved' | 'process' | 'pending' | 'inprogress' | 'rejected'
+
     // ============================================================
-    // UTILITAS KEAMANAN & PARSING TANGGAL
+    // UTILITAS
     // ============================================================
     function escapeHtml(str) {
       return String(str ?? '').replace(/[&<>"']/g, m => ({
@@ -1390,22 +1515,23 @@
 
     function safeUrl(url) {
       const raw = String(url ?? '').trim();
-      if (!raw) return '';
-      if (/^https?:\/\//i.test(raw)) return raw;
-      return '';
+      return /^https?:\/\//i.test(raw) ? raw : '';
+    }
+
+    function getInitials(name) {
+      const parts = String(name || '?').trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
 
     function parseTanggal(val) {
       if (!val) return null;
       if (val instanceof Date && !isNaN(val.getTime())) return val;
-
       const str = String(val).trim();
-      // Tangani format YYYY-MM-DD secara lokal agar tidak tergeser zona waktu UTC
-      const ymdMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-      if (ymdMatch) {
-        return new Date(Number(ymdMatch[1]), Number(ymdMatch[2]) - 1, Number(ymdMatch[3]));
-      }
-
+      const ymd = str.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+      if (ymd) return new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));
+      const dmy = str.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
+      if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));
       const d = new Date(str);
       return isNaN(d.getTime()) ? null : d;
     }
@@ -1420,12 +1546,25 @@
       });
     }
 
+    function showToast(msg, type = 'success') {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'}" style="color:var(--${type === 'error' ? 'danger' : 'success'})"></i><span>${escapeHtml(msg)}</span>`;
+      stack.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateX(20px)';
+        el.style.transition = 'all 0.25s ease';
+        setTimeout(() => el.remove(), 260);
+      }, 3600);
+    }
+
     // ============================================================
     // TEMA GELAP / TERANG
     // ============================================================
     function initTheme() {
-      const t = localStorage.getItem(THEME_KEY);
-      if (t === 'dark') {
+      if (localStorage.getItem(THEME_KEY) === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
       }
       updateThemeIcon();
@@ -1446,9 +1585,7 @@
     function updateThemeIcon() {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       const icon = document.getElementById('themeIcon');
-      if (icon) {
-        icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-      }
+      if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
 
     // ============================================================
@@ -1466,7 +1603,8 @@
         }
 
         setupUI();
-        setupFilters();
+        setupYearFilter();
+        renderMonthPills();
         loadDataKegiatan(false);
       } catch (err) {
         console.error('Init error:', err);
@@ -1479,7 +1617,7 @@
       const nama = session.nama || 'Pegawai';
       const firstName = nama.split(' ')[0];
 
-      document.getElementById('userAvatar').textContent = nama.charAt(0).toUpperCase();
+      document.getElementById('userAvatar').textContent = getInitials(nama);
       document.getElementById('userName').textContent = nama;
       document.getElementById('userJabatan').textContent = session.jabatan || ('Eselon ' + (session.eselon || 'Staff'));
       document.getElementById('welcomeHeading').textContent = 'Halo, ' + firstName;
@@ -1495,11 +1633,8 @@
       }
     }
 
-    function setupFilters() {
-      const today = new Date();
-      const currentYear = today.getFullYear();
-      const currentMonth = today.getMonth();
-
+    function setupYearFilter() {
+      const currentYear = new Date().getFullYear();
       const selectTahun = document.getElementById('filterTahun');
       selectTahun.innerHTML = '';
       for (let y = currentYear; y >= currentYear - 4; y--) {
@@ -1508,9 +1643,7 @@
         opt.textContent = String(y);
         selectTahun.appendChild(opt);
       }
-
-      document.getElementById('filterBulan').value = String(currentMonth);
-      document.getElementById('filterTahun').value = String(currentYear);
+      selectTahun.value = String(currentYear);
     }
 
     // ============================================================
@@ -1533,7 +1666,6 @@
       if (st === 'ditolak' || st.includes('tolak')) {
         return 'rejected';
       }
-      // Status berjenjang lain (misal: Disetujui Eselon IV / Menunggu Eselon III / II)
       return 'process';
     }
 
@@ -1545,7 +1677,7 @@
       const refreshIcon = document.getElementById('refreshIcon');
 
       if (btnRefresh) btnRefresh.disabled = true;
-      if (refreshIcon) refreshIcon.classList.add('fa-spin');
+      if (refreshIcon) refreshIcon.classList.add('spin');
 
       try {
         const response = await fetch(API_URL, {
@@ -1567,9 +1699,14 @@
 
         const nowStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
         document.getElementById('lastSyncTag').innerHTML =
-          `<i class="fa-solid fa-check-circle" style="color: var(--success);"></i> Diperbarui pukul ${nowStr}`;
+          `<i class="fa-solid fa-circle-check" style="color: var(--success);"></i> Diperbarui pukul ${nowStr}`;
 
+        renderMonthPills();
         applyFilter();
+
+        if (isManual) {
+          showToast('Data kinerja berhasil diperbarui', 'success');
+        }
       } catch (err) {
         console.error('Fetch kegiatan error:', err);
         document.getElementById('lastSyncTag').innerHTML =
@@ -1579,121 +1716,220 @@
         }
       } finally {
         if (btnRefresh) btnRefresh.disabled = false;
-        if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+        if (refreshIcon) refreshIcon.classList.remove('spin');
       }
+    }
+
+    // ============================================================
+    // STRIP PIL BULAN INTERAKTIF
+    // ============================================================
+    function renderMonthPills() {
+      const tahunFilter = parseInt(document.getElementById('filterTahun').value, 10);
+      const ptsByMonth = Array(12).fill(0);
+      let yearTotalPts = 0;
+
+      allKegiatan.forEach(k => {
+        const tgl = parseTanggal(k.tanggal);
+        if (!tgl || tgl.getFullYear() !== tahunFilter) return;
+        if (getStatusCategory(k) !== 'rejected') {
+          const p = getPoin(k);
+          ptsByMonth[tgl.getMonth()] += p;
+          yearTotalPts += p;
+        }
+      });
+
+      const container = document.getElementById('monthPills');
+      let html = '';
+
+      for (let m = 0; m < 12; m++) {
+        const isActive = selectedMonth === String(m) ? 'active' : '';
+        const pts = Math.round(ptsByMonth[m] * 100) / 100;
+        const badge = pts > 0 ? `<span class="m-pts tabular">${pts}</span>` : '';
+        html += `
+          <button type="button" class="month-pill ${isActive}" onclick="selectMonth('${m}')">
+            <span>${BULAN_SINGKAT[m]}</span>
+            ${badge}
+          </button>
+        `;
+      }
+
+      const allPtsRounded = Math.round(yearTotalPts * 100) / 100;
+      html += `
+        <button type="button" class="month-pill ${selectedMonth === 'all' ? 'active' : ''}" onclick="selectMonth('all')">
+          <span>Semua Bulan</span>
+          ${allPtsRounded > 0 ? `<span class="m-pts tabular">${allPtsRounded}</span>` : ''}
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function selectMonth(monthVal) {
+      selectedMonth = String(monthVal);
+      renderMonthPills();
+      applyFilter();
     }
 
     // ============================================================
     // FILTER & RENDERING
     // ============================================================
+    function setStatusFilter(statusVal) {
+      selectedStatus = statusVal;
+      syncStatusFilterUI();
+      applyFilter();
+    }
+
+    function togglePipelineFilter(statusVal) {
+      selectedStatus = (selectedStatus === statusVal) ? 'all' : statusVal;
+      syncStatusFilterUI();
+      applyFilter();
+    }
+
+    function syncStatusFilterUI() {
+      document.querySelectorAll('#statusTabs .status-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.status === selectedStatus);
+      });
+      document.querySelectorAll('.pipe-card').forEach(card => {
+        card.classList.toggle('selected', card.dataset.statusFilter === selectedStatus);
+      });
+    }
+
     function applyFilter() {
-      const bulanFilter = document.getElementById('filterBulan').value;
       const tahunFilter = parseInt(document.getElementById('filterTahun').value, 10);
-      const statusFilter = document.getElementById('filterStatus').value;
       const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
 
-      // Dataset periode (untuk statistik KPI agar akurat terhadap bulan/tahun)
+      // 1. Dataset periode terpilih (Tahun + Bulan)
       const periodKegiatan = allKegiatan.filter(k => {
         const tgl = parseTanggal(k.tanggal);
-        if (!tgl) return false;
-        if (tgl.getFullYear() !== tahunFilter) return false;
-        if (bulanFilter === 'all') return true;
-        return tgl.getMonth() === parseInt(bulanFilter, 10);
+        if (!tgl || tgl.getFullYear() !== tahunFilter) return false;
+        if (selectedMonth === 'all') return true;
+        return tgl.getMonth() === parseInt(selectedMonth, 10);
       });
 
-      // Dataset tabel (periode + status + pencarian teks)
+      // Hitung jumlah per status pada periode ini untuk badge tab
+      let cAll = periodKegiatan.length;
+      let cApproved = 0;
+      let cProcess = 0;
+      let cPending = 0;
+      let cRejected = 0;
+
+      periodKegiatan.forEach(k => {
+        const cat = getStatusCategory(k);
+        if (cat === 'approved') cApproved++;
+        else if (cat === 'process') cProcess++;
+        else if (cat === 'pending') cPending++;
+        else if (cat === 'rejected') cRejected++;
+      });
+
+      document.getElementById('tabCountAll').textContent = cAll;
+      document.getElementById('tabCountApproved').textContent = cApproved;
+      document.getElementById('tabCountProcess').textContent = cProcess;
+      document.getElementById('tabCountPending').textContent = cPending;
+      document.getElementById('tabCountRejected').textContent = cRejected;
+
+      // 2. Dataset tabel (periode + status + pencarian)
       filteredKegiatan = periodKegiatan.filter(k => {
-        if (statusFilter !== 'all' && getStatusCategory(k) !== statusFilter) {
+        const cat = getStatusCategory(k);
+        if (selectedStatus === 'inprogress') {
+          if (cat !== 'pending' && cat !== 'process') return false;
+        } else if (selectedStatus !== 'all' && cat !== selectedStatus) {
           return false;
         }
+
         if (keyword) {
-          const hay = `${k.kode_keg || ''} ${k.nama_keg || ''} ${k.status_verif || ''}`.toLowerCase();
+          const hay = `${k.kode_keg || ''} ${k.nama_keg || ''} ${k.status_verif || ''} ${k.catatan || ''}`.toLowerCase();
           if (!hay.includes(keyword)) return false;
         }
         return true;
       });
 
-      updateFilterInfo(bulanFilter, tahunFilter);
-      calculateStats(periodKegiatan, bulanFilter);
+      updatePeriodLabels(tahunFilter);
+      calculateOverviewStats(periodKegiatan, cApproved, cProcess, cPending, cRejected);
       displayKegiatan(filteredKegiatan);
     }
 
-    function updateFilterInfo(bulanFilter, tahunFilter) {
-      const periodeLabel = bulanFilter === 'all'
+    function updatePeriodLabels(tahunFilter) {
+      const periodeLabel = selectedMonth === 'all'
         ? `Tahun ${tahunFilter}`
-        : `${BULAN_NAMA[Number(bulanFilter)]} ${tahunFilter}`;
+        : `${BULAN_NAMA[Number(selectedMonth)]} ${tahunFilter}`;
 
-      document.getElementById('filterInfo').innerHTML =
-        `<i class="fa-solid fa-list-check"></i> ${periodeLabel} (${filteredKegiatan.length} data)`;
-
-      document.getElementById('tableSubtitle').textContent =
-        `Menampilkan riwayat kegiatan periode ${periodeLabel}`;
-
-      document.getElementById('pageSub').textContent =
-        `Ringkasan capaian poin dan status verifikasi periode ${periodeLabel}`;
+      document.getElementById('targetPeriodTitle').textContent = `Capaian Poin — ${periodeLabel}`;
+      document.getElementById('tableSubtitle').textContent = `Menampilkan ${filteredKegiatan.length} kegiatan pada periode ${periodeLabel}`;
+      document.getElementById('pageSub').textContent = `Ringkasan capaian poin dan status verifikasi periode ${periodeLabel}`;
     }
 
-    function calculateStats(periodList, bulanFilter) {
+    function calculateOverviewStats(periodList, cApproved, cProcess, cPending, cRejected) {
       let totalPoin = 0;
       let totalValidated = 0;
       let totalPending = 0;
 
-      let countApproved = 0;
-      let countPending = 0;
-      let countRejected = 0;
-
       periodList.forEach(k => {
         const poin = getPoin(k);
         const cat = getStatusCategory(k);
-
-        if (cat !== 'rejected') {
-          totalPoin += poin;
-        }
-
-        if (cat === 'approved') {
-          totalValidated += poin;
-          countApproved++;
-        } else if (cat === 'rejected') {
-          countRejected++;
-        } else {
-          totalPending += poin;
-          countPending++;
-        }
+        if (cat !== 'rejected') totalPoin += poin;
+        if (cat === 'approved') totalValidated += poin;
+        else if (cat !== 'rejected') totalPending += poin;
       });
 
       const baseTargetBln = Number(session.target_bln) || 0;
-      const targetAktif = bulanFilter === 'all'
+      const targetAktif = selectedMonth === 'all'
         ? (Number(session.target_th) || baseTargetBln * 12)
         : baseTargetBln;
 
-      const persenTarget = targetAktif > 0 ? Math.min(Math.round((totalPoin / targetAktif) * 100), 100) : 0;
-      const persenValidated = totalPoin > 0 ? Math.round((totalValidated / totalPoin) * 100) : 0;
-      const persenPending = totalPoin > 0 ? Math.round((totalPending / totalPoin) * 100) : 0;
+      const persenTotal = targetAktif > 0 ? Math.min(Math.round((totalPoin / targetAktif) * 100), 100) : 0;
+      const pctBarApproved = targetAktif > 0 ? Math.min((totalValidated / targetAktif) * 100, 100) : 0;
+      const pctBarPending = targetAktif > 0 ? Math.min((totalPending / targetAktif) * 100, Math.max(0, 100 - pctBarApproved)) : 0;
 
       document.getElementById('poinBulan').textContent = totalPoin.toLocaleString('id-ID');
       document.getElementById('targetBulan').textContent = targetAktif.toLocaleString('id-ID');
-      document.getElementById('pctBulan').textContent = persenTarget + '%';
-      document.getElementById('progressBulan').style.width = persenTarget + '%';
 
-      document.getElementById('poinValidated').textContent = totalValidated.toLocaleString('id-ID');
-      document.getElementById('pctValidated').textContent = persenValidated + '%';
-      document.getElementById('progressValidated').style.width = persenValidated + '%';
+      const pctPill = document.getElementById('pctBulan');
+      pctPill.textContent = persenTotal + '%';
+      pctPill.classList.toggle('complete', targetAktif > 0 && totalPoin >= targetAktif);
 
-      document.getElementById('poinPending').textContent = totalPending.toLocaleString('id-ID');
-      document.getElementById('pctPending').textContent = persenPending + '%';
-      document.getElementById('progressPending').style.width = persenPending + '%';
+      document.getElementById('barApproved').style.width = pctBarApproved + '%';
+      document.getElementById('barPending').style.width = pctBarPending + '%';
 
-      document.getElementById('totalKegiatan').textContent = periodList.length.toLocaleString('id-ID');
-      document.getElementById('countApproved').textContent = `${countApproved} Disetujui`;
-      document.getElementById('countPending').textContent = `${countPending} Proses`;
-      document.getElementById('countRejected').textContent = `${countRejected} Ditolak`;
+      document.getElementById('legendApprovedPts').textContent = totalValidated.toLocaleString('id-ID');
+      document.getElementById('legendPendingPts').textContent = totalPending.toLocaleString('id-ID');
+
+      const remNote = document.getElementById('targetRemainingNote');
+      if (targetAktif <= 0) {
+        remNote.textContent = `${periodList.length} aktivitas tercatat`;
+      } else if (totalPoin >= targetAktif) {
+        remNote.innerHTML = `<span style="color:var(--success)"><i class="fa-solid fa-circle-check"></i> Target tercapai!</span>`;
+      } else {
+        const sisa = Math.round((targetAktif - totalPoin) * 100) / 100;
+        remNote.textContent = `Kurang ${sisa.toLocaleString('id-ID')} poin lagi dari target`;
+      }
+
+      // Pipeline cards kanan
+      document.getElementById('poinValidated').textContent = totalValidated.toLocaleString('id-ID') + ' poin';
+      document.getElementById('countApproved').textContent = `${cApproved} kegiatan`;
+
+      document.getElementById('poinPending').textContent = totalPending.toLocaleString('id-ID') + ' poin';
+      document.getElementById('countPending').textContent = `${cPending + cProcess} kegiatan`;
+      document.getElementById('inprogressBreakdown').textContent = `${cPending} pending • ${cProcess} proses berjenjang`;
+
+      document.getElementById('countRejectedBig').textContent = String(cRejected);
+      document.getElementById('countRejected').textContent = `${cRejected} kegiatan`;
+
+      // Alert banner jika ada kegiatan ditolak
+      const rejectBanner = document.getElementById('rejectAlertBanner');
+      if (cRejected > 0) {
+        document.getElementById('rejectAlertMsg').textContent =
+          `Terdapat ${cRejected} kegiatan yang ditolak verifikator pada periode ini. Periksa catatan penolakan untuk memperbaiki.`;
+        rejectBanner.classList.add('show');
+      } else {
+        rejectBanner.classList.remove('show');
+      }
     }
 
     function displayEmpty(customMsg) {
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = `
         <tr>
-          <td colspan="7">
+          <td colspan="6">
             <div class="state-box">
               <div class="state-icon"><i class="fa-regular fa-folder-open"></i></div>
               <div class="state-title">Belum Ada Data Kegiatan</div>
@@ -1717,13 +1953,13 @@
         return;
       }
 
-      const sorted = [...list].sort((a, b) => {
+      displayedSorted = [...list].sort((a, b) => {
         const da = parseTanggal(a.tanggal);
         const db = parseTanggal(b.tanggal);
         return (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
       });
 
-      const rowsHtml = sorted.map(k => {
+      const rowsHtml = displayedSorted.map((k, idx) => {
         const tglDisplay = formatTanggalID(k.tanggal);
         const poin = getPoin(k);
         const cat = getStatusCategory(k);
@@ -1731,41 +1967,47 @@
         let statusClass = 'status-pending';
         let statusIcon = 'fa-clock';
         let statusLabel = k.status_verif || 'Pending';
-        let poinClass = 'poin-total amber';
+        let poinClass = 'poin-badge amber';
 
         if (cat === 'approved') {
           statusClass = 'status-approved';
           statusIcon = 'fa-circle-check';
           statusLabel = k.status_verif || 'Final Disetujui';
-          poinClass = 'poin-total green';
+          poinClass = 'poin-badge green';
         } else if (cat === 'rejected') {
           statusClass = 'status-rejected';
           statusIcon = 'fa-circle-xmark';
           statusLabel = k.status_verif || 'Ditolak';
-          poinClass = 'poin-total red';
+          poinClass = 'poin-badge red';
         } else if (cat === 'process') {
           statusClass = 'status-process';
           statusIcon = 'fa-arrows-spin';
-          poinClass = 'poin-total';
+          poinClass = 'poin-badge blue';
         }
 
         const validUrl = safeUrl(k.link_bukti);
         const buktiHtml = validUrl
-          ? `<a href="${escapeHtml(validUrl)}" target="_blank" rel="noopener noreferrer" class="btn-evidence">
+          ? `<button type="button" class="btn-proof" onclick="openProofModal(${idx})">
                <i class="fa-solid fa-paperclip"></i> Lihat Bukti
-             </a>`
-          : `<span style="color: var(--text-faint); font-size: 12px;">Tidak ada</span>`;
+             </button>`
+          : `<span style="color: var(--text-faint); font-size: 12px;">Tanpa bukti</span>`;
 
         const poinSatuan = Number(k.poin_satuan) || 0;
         const jumlah = Number(k.jumlah) || 1;
-        const calcStr = jumlah > 1 ? `${poinSatuan} × ${jumlah}` : `${poinSatuan} × 1`;
+        const calcStr = `${poinSatuan} × ${jumlah}`;
 
         return `
           <tr>
             <td class="tabular" style="white-space: nowrap; font-weight: 600;">${escapeHtml(tglDisplay)}</td>
-            <td><span class="kode-pill tabular">${escapeHtml(k.kode_keg || '-')}</span></td>
-            <td><div class="keg-name">${escapeHtml(k.nama_keg || '-')}</div></td>
-            <td><span class="calc-badge tabular">${escapeHtml(calcStr)}</span></td>
+            <td>
+              <div class="keg-title">${escapeHtml(k.nama_keg || '-')}</div>
+              <div class="keg-meta">
+                <span class="kode-pill tabular">${escapeHtml(k.kode_keg || '-')}</span>
+              </div>
+              ${k.catatan ? `<div class="note-box staff"><strong>Catatan:</strong> ${escapeHtml(k.catatan)}</div>` : ''}
+              ${(cat === 'rejected' && k.catatan_verif) ? `<div class="note-box reject"><i class="fa-solid fa-comment-dots"></i> Alasan Ditolak: ${escapeHtml(k.catatan_verif)}</div>` : ''}
+            </td>
+            <td class="tabular" style="font-size: 12.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap;">${escapeHtml(calcStr)}</td>
             <td><span class="${poinClass} tabular">${poin}</span></td>
             <td>${buktiHtml}</td>
             <td>
@@ -1779,7 +2021,33 @@
       }).join('');
 
       tbody.innerHTML = rowsHtml;
-      document.getElementById('tableFootCount').textContent = `Menampilkan ${sorted.length} kegiatan`;
+      document.getElementById('tableFootCount').textContent = `Menampilkan ${displayedSorted.length} kegiatan`;
+    }
+
+    // ============================================================
+    // MODAL PREVIEW BUKTI
+    // ============================================================
+    function openProofModal(idx) {
+      const item = displayedSorted[idx];
+      if (!item || !item.link_bukti) return;
+      const rawUrl = safeUrl(item.link_bukti);
+      if (!rawUrl) return;
+
+      let embedUrl = rawUrl;
+      const driveMatch = rawUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || rawUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        embedUrl = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+      }
+
+      document.getElementById('proofModalTitle').textContent = `📎 Bukti: ${item.nama_keg || 'Kegiatan'}`;
+      document.getElementById('proofExternalLink').href = rawUrl;
+      document.getElementById('proofIframe').src = embedUrl;
+      document.getElementById('modalProof').classList.add('active');
+    }
+
+    function closeProofModal() {
+      document.getElementById('modalProof').classList.remove('active');
+      document.getElementById('proofIframe').src = 'about:blank';
     }
 
     // ============================================================
@@ -1787,15 +2055,14 @@
     // ============================================================
     function exportPDF() {
       if (filteredKegiatan.length === 0) {
-        alert('Tidak ada data kegiatan pada filter saat ini untuk diekspor.');
+        showToast('Tidak ada data kegiatan pada filter saat ini untuk diekspor.', 'error');
         return;
       }
 
-      const bulanFilter = document.getElementById('filterBulan').value;
       const tahunFilter = document.getElementById('filterTahun').value;
-      const periode = bulanFilter === 'all'
+      const periode = selectedMonth === 'all'
         ? 'Tahun ' + tahunFilter
-        : BULAN_NAMA[Number(bulanFilter)] + ' ' + tahunFilter;
+        : BULAN_NAMA[Number(selectedMonth)] + ' ' + tahunFilter;
 
       const sorted = [...filteredKegiatan].sort((a, b) => {
         const da = parseTanggal(a.tanggal);
@@ -1818,7 +2085,6 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF('landscape', 'mm', 'a4');
 
-      // Kop Surat Resmi
       doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
       doc.text('PEMERINTAH KABUPATEN LOMBOK TENGAH', 148.5, 13, { align: 'center' });
@@ -1831,7 +2097,6 @@
       doc.setLineWidth(0.6);
       doc.line(15, 28.5, 282, 28.5);
 
-      // Identitas Pegawai
       const infoY = 35;
       doc.setFontSize(9.5);
       doc.text('Nama Pegawai', 15, infoY);
@@ -1894,9 +2159,7 @@
           fontStyle: 'bold',
           fontSize: 8.5
         },
-        bodyStyles: {
-          fontSize: 8
-        },
+        bodyStyles: { fontSize: 8 },
         columnStyles: {
           0: { cellWidth: 10, halign: 'center' },
           1: { cellWidth: 24 },
@@ -1954,15 +2217,14 @@
     // ============================================================
     function exportExcel() {
       if (filteredKegiatan.length === 0) {
-        alert('Tidak ada data kegiatan pada filter saat ini untuk diekspor.');
+        showToast('Tidak ada data kegiatan pada filter saat ini untuk diekspor.', 'error');
         return;
       }
 
-      const bulanFilter = document.getElementById('filterBulan').value;
       const tahunFilter = document.getElementById('filterTahun').value;
-      const periode = bulanFilter === 'all'
+      const periode = selectedMonth === 'all'
         ? 'Tahun ' + tahunFilter
-        : BULAN_NAMA[Number(bulanFilter)] + ' ' + tahunFilter;
+        : BULAN_NAMA[Number(selectedMonth)] + ' ' + tahunFilter;
 
       const sorted = [...filteredKegiatan].sort((a, b) => {
         const da = parseTanggal(a.tanggal);
@@ -2037,17 +2299,20 @@
       }
     });
 
-    document.getElementById('filterBulan').addEventListener('change', applyFilter);
-    document.getElementById('filterTahun').addEventListener('change', applyFilter);
-    document.getElementById('filterStatus').addEventListener('change', applyFilter);
+    document.getElementById('filterTahun').addEventListener('change', () => {
+      renderMonthPills();
+      applyFilter();
+    });
     document.getElementById('searchInput').addEventListener('input', applyFilter);
     document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+    document.getElementById('modalProof').addEventListener('click', (e) => {
+      if (e.target.id === 'modalProof') closeProofModal();
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       initTheme();
       initApp();
 
-      // Sinkronisasi latar belakang setiap 60 detik saat tab aktif
       setInterval(() => {
         if (!document.hidden && session) {
           loadDataKegiatan(false);
