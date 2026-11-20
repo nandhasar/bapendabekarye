@@ -1355,6 +1355,175 @@
       gap: 8px;
     }
 
+
+    /* ============ MONTH FILTER BAR & GROUP HEADERS ============ */
+    .month-filter-bar {
+      padding: 13px 24px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .month-filter-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .month-pills {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 2px 0;
+      flex: 1;
+      scrollbar-width: thin;
+    }
+
+    .month-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.16s ease;
+    }
+
+    .month-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--bg-surface);
+    }
+
+    .month-pill.active {
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .month-pill .pill-count {
+      padding: 1px 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-hairline);
+    }
+
+    .month-pill.active .pill-count {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .month-summary-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    tr.month-group-row td {
+      background: var(--bg-subtle);
+      padding: 11px 18px;
+      border-top: 1px solid var(--border-hairline);
+      border-bottom: 1px solid var(--border-hairline);
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.15s ease;
+    }
+
+    tr.month-group-row:hover td {
+      background: var(--accent-soft);
+    }
+
+    .month-group-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .month-group-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .month-chevron {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      transition: transform 0.18s ease;
+    }
+
+    .month-group-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .month-group-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mg-chip {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-secondary);
+    }
+
+    .mg-chip.poin {
+      background: var(--accent-soft);
+      border-color: transparent;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .mg-chip.pending {
+      background: var(--warning-soft);
+      border-color: transparent;
+      color: var(--warning);
+    }
+
     /* ============ MODALS ============ */
     .modal-overlay {
       display: none;
@@ -1500,6 +1669,7 @@
       .form-card { padding: 20px 18px; }
       .input-row { grid-template-columns: 1fr; }
       .search-box { width: 100%; min-width: 0; }
+      .month-filter-bar { padding: 12px 16px; }
       .bukti-segmented { grid-template-columns: 1fr; }
     }
   </style>
@@ -1884,13 +2054,30 @@
             <i class="fa-solid fa-clock-rotate-left" style="color:var(--accent)"></i>
             <span>Daftar Kegiatan Anda</span>
           </h2>
-          <p class="workspace-sub">Kelola riwayat kegiatan yang telah diinputkan</p>
+          <p class="workspace-sub">Riwayat kegiatan dikelompokkan per bulan agar ringkas dan mudah ditelusuri</p>
         </div>
 
-        <button type="button" class="btn-secondary" id="btnRefreshTable" onclick="loadDataKegiatan(true)">
-          <i class="fa-solid fa-arrows-rotate" id="refreshTableIcon"></i>
-          <span>Segarkan Daftar</span>
-        </button>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="btn-secondary" id="btnToggleAllMonths" style="display:none;" onclick="toggleAllMonthGroups()">
+            <i class="fa-solid fa-layer-group"></i>
+            <span id="toggleAllMonthsText">Buka Semua Bulan</span>
+          </button>
+          <button type="button" class="btn-secondary" id="btnRefreshTable" onclick="loadDataKegiatan(true)">
+            <i class="fa-solid fa-arrows-rotate" id="refreshTableIcon"></i>
+            <span>Segarkan Daftar</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="month-filter-bar" id="monthFilterBar">
+        <div class="month-filter-label">
+          <i class="fa-regular fa-calendar-days" style="color:var(--accent)"></i>
+          <span>Periode Bulan:</span>
+        </div>
+        <div class="month-pills" id="historyMonthPills">
+          <span class="month-pill active">Memuat periode...</span>
+        </div>
+        <div class="month-summary-chip tabular" id="activeMonthPointsChip" style="display:none;"></div>
       </div>
 
       <div class="workspace-toolbar">
@@ -2025,9 +2212,16 @@
     let selectedFile = null;
     let photoData = null;
 
+    const BULAN_NAMA = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
     let allKegiatanList = [];
     let displayedList = [];
     let tableStatusFilter = 'all';
+    let selectedHistoryMonth = ''; // 'YYYY-MM' atau 'ALL'
+    let collapsedMonthGroups = new Set();
 
     let stream = null;
     let gpsData = null;
@@ -2074,6 +2268,22 @@
       if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));
       const d = new Date(str);
       return isNaN(d.getTime()) ? null : d;
+    }
+
+    function getMonthKey(val) {
+      const d = parseTanggal(val);
+      if (!d) return 'UNKNOWN';
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      return `${y}-${m}`;
+    }
+
+    function formatMonthLabel(monthKey) {
+      if (monthKey === 'ALL') return 'Semua Bulan';
+      if (monthKey === 'UNKNOWN') return 'Tanpa Tanggal';
+      const [y, m] = monthKey.split('-');
+      const idx = parseInt(m, 10) - 1;
+      return `${BULAN_NAMA[idx] || m} ${y}`;
     }
 
     function formatTanggalID(val) {
@@ -2865,6 +3075,7 @@
 
         const kegiatan = (j.data && j.data.kegiatan) || (j.user && j.user.kegiatan) || j.kegiatan || [];
         allKegiatanList = Array.isArray(kegiatan) ? kegiatan : [];
+        buildHistoryMonthPills();
         renderHistoryTable();
         if (isManual) showToast('Daftar kegiatan diperbarui', 'success');
       } catch (err) {
@@ -2896,6 +3107,96 @@
       return 'pending';
     }
 
+    function getItemTotalPoin(k) {
+      const poinSatuan = Number(k.poin_satuan) || 0;
+      const jumlah = Number(k.jumlah) || 1;
+      return Number(k.total_poin) || roundPts(poinSatuan * jumlah);
+    }
+
+    function getSortedMonthKeys() {
+      const monthMap = new Map();
+      allKegiatanList.forEach(k => {
+        const mk = getMonthKey(k.tanggal);
+        if (!monthMap.has(mk)) {
+          monthMap.set(mk, { key: mk, count: 0, points: 0 });
+        }
+        const entry = monthMap.get(mk);
+        entry.count++;
+        if (getStatusCategory(k) !== 'rejected') {
+          entry.points = roundPts(entry.points + getItemTotalPoin(k));
+        }
+      });
+      return Array.from(monthMap.values()).sort((a, b) => b.key.localeCompare(a.key));
+    }
+
+    function buildHistoryMonthPills() {
+      const months = getSortedMonthKeys();
+      const container = document.getElementById('historyMonthPills');
+      if (!container) return;
+
+      if (months.length === 0) {
+        selectedHistoryMonth = 'ALL';
+        container.innerHTML = `<span class="month-pill active">Belum ada data kegiatan</span>`;
+        return;
+      }
+
+      const validKeys = new Set(months.map(m => m.key));
+      if (!selectedHistoryMonth || (selectedHistoryMonth !== 'ALL' && !validKeys.has(selectedHistoryMonth))) {
+        selectedHistoryMonth = months[0].key;
+      }
+
+      let html = months.map(m => {
+        const isActive = selectedHistoryMonth === m.key ? 'active' : '';
+        return `
+          <button type="button" class="month-pill ${isActive}" onclick="selectHistoryMonth('${escapeHtml(m.key)}')">
+            <span>${escapeHtml(formatMonthLabel(m.key))}</span>
+            <span class="pill-count tabular">${m.count}</span>
+          </button>
+        `;
+      }).join('');
+
+      html += `
+        <button type="button" class="month-pill ${selectedHistoryMonth === 'ALL' ? 'active' : ''}" onclick="selectHistoryMonth('ALL')">
+          <span>Semua Bulan</span>
+          <span class="pill-count tabular">${allKegiatanList.length}</span>
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function selectHistoryMonth(monthKey) {
+      selectedHistoryMonth = monthKey;
+      if (monthKey === 'ALL') {
+        const months = getSortedMonthKeys();
+        collapsedMonthGroups.clear();
+        // Otomatis buka bulan terbaru saja agar tampilan tetap ringkas
+        months.slice(1).forEach(m => collapsedMonthGroups.add(m.key));
+      }
+      buildHistoryMonthPills();
+      renderHistoryTable();
+    }
+
+    function toggleMonthGroup(monthKey) {
+      if (collapsedMonthGroups.has(monthKey)) {
+        collapsedMonthGroups.delete(monthKey);
+      } else {
+        collapsedMonthGroups.add(monthKey);
+      }
+      renderHistoryTable();
+    }
+
+    function toggleAllMonthGroups() {
+      const months = getSortedMonthKeys();
+      const anyCollapsed = months.some(m => collapsedMonthGroups.has(m.key));
+      if (anyCollapsed) {
+        collapsedMonthGroups.clear();
+      } else {
+        months.forEach(m => collapsedMonthGroups.add(m.key));
+      }
+      renderHistoryTable();
+    }
+
     function setTableStatusFilter(st) {
       tableStatusFilter = st;
       document.querySelectorAll('#statusTabs .status-tab').forEach(btn => {
@@ -2904,16 +3205,98 @@
       renderHistoryTable();
     }
 
+    function buildActivityRowHtml(k, idx) {
+      const tglDisplay = formatTanggalID(k.tanggal);
+      const cat = getStatusCategory(k);
+      const rawStatus = String(k.status_verif || '').trim();
+
+      let statusClass = 'status-pending';
+      let statusIcon = 'fa-clock';
+      let statusText = rawStatus || 'Pending';
+      let canDelete = true;
+
+      if (cat === 'approved') {
+        statusClass = 'status-approved';
+        statusIcon = 'fa-circle-check';
+        statusText = rawStatus || 'Final Disetujui';
+        canDelete = false;
+      } else if (cat === 'rejected') {
+        statusClass = 'status-rejected';
+        statusIcon = 'fa-circle-xmark';
+        statusText = rawStatus || 'Ditolak';
+        canDelete = false;
+      } else if (rawStatus && rawStatus.toLowerCase() !== 'pending') {
+        statusClass = 'status-process';
+        statusIcon = 'fa-arrows-spin';
+      }
+
+      const poinSatuan = Number(k.poin_satuan) || 0;
+      const jumlah = Number(k.jumlah) || 1;
+      const totalPoin = getItemTotalPoin(k);
+      const calcStr = `${poinSatuan} × ${jumlah}`;
+
+      const hasNote = String(k.catatan || '').trim().length > 0 || String(k.catatan_verif || '').trim().length > 0;
+      const catatanHtml = hasNote
+        ? `<button type="button" class="btn-mini purple" onclick="openCatatanModal(${idx})">
+             <i class="fa-regular fa-note-sticky"></i> Catatan
+           </button>`
+        : `<span style="color:var(--text-faint);font-size:12px;">-</span>`;
+
+      const validUrl = safeUrl(k.link_bukti);
+      const buktiHtml = validUrl
+        ? `<button type="button" class="btn-mini blue" onclick="openProofModal(${idx})">
+             <i class="fa-solid fa-paperclip"></i> Lihat
+           </button>`
+        : `<span style="color:var(--text-faint);font-size:12px;">-</span>`;
+
+      let aksiHtml = '';
+      if (canDelete && k.row_index) {
+        aksiHtml = `<button type="button" class="btn-mini red btn-delete" onclick="deleteKegiatan(${idx})">
+                      <i class="fa-solid fa-trash-can"></i> Hapus
+                    </button>`;
+      } else {
+        aksiHtml = `<span class="lock-tag"><i class="fa-solid fa-lock"></i> Terkunci</span>`;
+      }
+
+      return `
+        <tr>
+          <td class="tabular" style="white-space:nowrap;font-weight:600;">${escapeHtml(tglDisplay)}</td>
+          <td>
+            <div class="keg-title">${escapeHtml(k.nama_keg || '-')}</div>
+            <span class="kode-pill tabular">${escapeHtml(k.kode_keg || '-')}</span>
+          </td>
+          <td class="tabular" style="font-size:12.5px;font-weight:600;color:var(--text-muted);white-space:nowrap;">${escapeHtml(calcStr)}</td>
+          <td><span class="poin-badge tabular">${totalPoin}</span></td>
+          <td>${catatanHtml}</td>
+          <td>${buktiHtml}</td>
+          <td>
+            <span class="status-badge ${statusClass}">
+              <i class="fa-solid ${statusIcon}"></i>
+              <span>${escapeHtml(statusText)}</span>
+            </span>
+          </td>
+          <td>${aksiHtml}</td>
+        </tr>
+      `;
+    }
+
     function renderHistoryTable() {
       const tbody = document.getElementById('tableBody');
       const kw = (document.getElementById('tableSearchInput').value || '').trim().toLowerCase();
+      const btnToggleAll = document.getElementById('btnToggleAllMonths');
+      const monthChip = document.getElementById('activeMonthPointsChip');
 
-      const cAll = allKegiatanList.length;
+      // Filter berdasarkan periode bulan terpilih terlebih dahulu
+      const monthScopedList = (selectedHistoryMonth && selectedHistoryMonth !== 'ALL')
+        ? allKegiatanList.filter(k => getMonthKey(k.tanggal) === selectedHistoryMonth)
+        : allKegiatanList;
+
+      const cAll = monthScopedList.length;
       let cPending = 0;
       let cApproved = 0;
       let cRejected = 0;
 
-      allKegiatanList.forEach(k => {
+      monthScopedList.forEach(k => {
         const cat = getStatusCategory(k);
         if (cat === 'approved') cApproved++;
         else if (cat === 'rejected') cRejected++;
@@ -2925,7 +3308,7 @@
       document.getElementById('cntApproved').textContent = cApproved;
       document.getElementById('cntRejected').textContent = cRejected;
 
-      const filtered = allKegiatanList.filter(k => {
+      const filtered = monthScopedList.filter(k => {
         if (tableStatusFilter !== 'all' && getStatusCategory(k) !== tableStatusFilter) return false;
         if (kw) {
           const hay = `${k.kode_keg || ''} ${k.nama_keg || ''} ${k.catatan || ''} ${k.status_verif || ''}`.toLowerCase();
@@ -2934,104 +3317,125 @@
         return true;
       });
 
+      if (btnToggleAll) {
+        btnToggleAll.style.display = (selectedHistoryMonth === 'ALL' && filtered.length > 0 && !kw) ? 'inline-flex' : 'none';
+      }
+
       if (filtered.length === 0) {
+        displayedList = [];
+        if (monthChip) monthChip.style.display = 'none';
+        const switchAllBtn = (selectedHistoryMonth && selectedHistoryMonth !== 'ALL' && allKegiatanList.length > 0)
+          ? `<button type="button" class="btn-secondary" style="margin-top:12px;" onclick="selectHistoryMonth('ALL')">
+               <i class="fa-solid fa-layer-group"></i> Lihat di Semua Bulan
+             </button>`
+          : '';
         tbody.innerHTML = `
           <tr>
             <td colspan="8">
               <div class="state-box">
                 <div class="state-icon"><i class="fa-regular fa-folder-open"></i></div>
                 <div class="state-title">Belum Ada Kegiatan</div>
-                <div class="state-desc">Tidak ada kegiatan yang sesuai dengan filter saat ini.</div>
+                <div class="state-desc">Tidak ada kegiatan pada periode <strong>${escapeHtml(formatMonthLabel(selectedHistoryMonth || 'ALL'))}</strong> yang sesuai dengan filter saat ini.</div>
+                ${switchAllBtn}
               </div>
             </td>
           </tr>
         `;
-        document.getElementById('tableFootCount').textContent = 'Menampilkan 0 kegiatan';
+        document.getElementById('tableFootCount').textContent = `Menampilkan 0 kegiatan (${formatMonthLabel(selectedHistoryMonth || 'ALL')})`;
         return;
       }
 
-      displayedList = [...filtered].sort((a, b) => {
+      const sorted = [...filtered].sort((a, b) => {
         const da = parseTanggal(a.tanggal);
         const db = parseTanggal(b.tanggal);
         return (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
       });
 
-      tbody.innerHTML = displayedList.map((k, idx) => {
-        const tglDisplay = formatTanggalID(k.tanggal);
-        const cat = getStatusCategory(k);
-        const rawStatus = String(k.status_verif || '').trim();
+      displayedList = [];
+      let totalPeriodPoints = 0;
+      sorted.forEach(k => {
+        if (getStatusCategory(k) !== 'rejected') {
+          totalPeriodPoints = roundPts(totalPeriodPoints + getItemTotalPoin(k));
+        }
+      });
 
-        let statusClass = 'status-pending';
-        let statusIcon = 'fa-clock';
-        let statusText = rawStatus || 'Pending';
-        let canDelete = true;
+      if (monthChip) {
+        monthChip.style.display = 'inline-flex';
+        monthChip.innerHTML = `<i class="fa-solid fa-star"></i> Total: ${totalPeriodPoints.toLocaleString('id-ID')} poin`;
+      }
 
-        if (cat === 'approved') {
-          statusClass = 'status-approved';
-          statusIcon = 'fa-circle-check';
-          statusText = rawStatus || 'Final Disetujui';
-          canDelete = false;
-        } else if (cat === 'rejected') {
-          statusClass = 'status-rejected';
-          statusIcon = 'fa-circle-xmark';
-          statusText = rawStatus || 'Ditolak';
-          canDelete = false;
-        } else if (rawStatus && rawStatus.toLowerCase() !== 'pending') {
-          statusClass = 'status-process';
-          statusIcon = 'fa-arrows-spin';
+      // Jika mode "Semua Bulan", kelompokkan dengan header akordeon per bulan
+      if (selectedHistoryMonth === 'ALL') {
+        const groups = new Map();
+        sorted.forEach(k => {
+          const mk = getMonthKey(k.tanggal);
+          if (!groups.has(mk)) {
+            groups.set(mk, { key: mk, items: [], points: 0, pending: 0 });
+          }
+          const g = groups.get(mk);
+          g.items.push(k);
+          const cat = getStatusCategory(k);
+          if (cat !== 'rejected') {
+            g.points = roundPts(g.points + getItemTotalPoin(k));
+          }
+          if (cat === 'pending') g.pending++;
+        });
+
+        const groupList = Array.from(groups.values());
+        const anyCollapsed = groupList.some(g => collapsedMonthGroups.has(g.key));
+        const toggleTextEl = document.getElementById('toggleAllMonthsText');
+        if (toggleTextEl) {
+          toggleTextEl.textContent = anyCollapsed ? 'Buka Semua Bulan' : 'Tutup Semua Bulan';
         }
 
-        const poinSatuan = Number(k.poin_satuan) || 0;
-        const jumlah = Number(k.jumlah) || 1;
-        const totalPoin = Number(k.total_poin) || roundPts(poinSatuan * jumlah);
-        const calcStr = `${poinSatuan} × ${jumlah}`;
+        let rowsHtml = '';
+        groupList.forEach(g => {
+          const isCollapsed = !kw && collapsedMonthGroups.has(g.key);
+          const chevronIcon = isCollapsed ? 'fa-chevron-right' : 'fa-chevron-down';
+          const pendingBadge = g.pending > 0
+            ? `<span class="mg-chip pending">${g.pending} pending</span>`
+            : '';
 
-        const hasNote = String(k.catatan || '').trim().length > 0 || String(k.catatan_verif || '').trim().length > 0;
-        const catatanHtml = hasNote
-          ? `<button type="button" class="btn-mini purple" onclick="openCatatanModal(${idx})">
-               <i class="fa-regular fa-note-sticky"></i> Catatan
-             </button>`
-          : `<span style="color:var(--text-faint);font-size:12px;">-</span>`;
+          rowsHtml += `
+            <tr class="month-group-row" onclick="toggleMonthGroup('${escapeHtml(g.key)}')">
+              <td colspan="8">
+                <div class="month-group-inner">
+                  <div class="month-group-left">
+                    <span class="month-chevron"><i class="fa-solid ${chevronIcon}"></i></span>
+                    <span class="month-group-title">${escapeHtml(formatMonthLabel(g.key))}</span>
+                  </div>
+                  <div class="month-group-badges">
+                    ${pendingBadge}
+                    <span class="mg-chip tabular">${g.items.length} kegiatan</span>
+                    <span class="mg-chip poin tabular">${g.points.toLocaleString('id-ID')} poin</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          `;
 
-        const validUrl = safeUrl(k.link_bukti);
-        const buktiHtml = validUrl
-          ? `<button type="button" class="btn-mini blue" onclick="openProofModal(${idx})">
-               <i class="fa-solid fa-paperclip"></i> Lihat
-             </button>`
-          : `<span style="color:var(--text-faint);font-size:12px;">-</span>`;
+          if (!isCollapsed) {
+            g.items.forEach(k => {
+              const idx = displayedList.length;
+              displayedList.push(k);
+              rowsHtml += buildActivityRowHtml(k, idx);
+            });
+          }
+        });
 
-        let aksiHtml = '';
-        if (canDelete && k.row_index) {
-          aksiHtml = `<button type="button" class="btn-mini red btn-delete" onclick="deleteKegiatan(${idx})">
-                        <i class="fa-solid fa-trash-can"></i> Hapus
-                      </button>`;
-        } else {
-          aksiHtml = `<span class="lock-tag"><i class="fa-solid fa-lock"></i> Terkunci</span>`;
-        }
+        tbody.innerHTML = rowsHtml;
+        document.getElementById('tableFootCount').textContent = `Menampilkan ${sorted.length} kegiatan dalam ${groupList.length} bulan • Total ${totalPeriodPoints.toLocaleString('id-ID')} poin`;
+        return;
+      }
 
-        return `
-          <tr>
-            <td class="tabular" style="white-space:nowrap;font-weight:600;">${escapeHtml(tglDisplay)}</td>
-            <td>
-              <div class="keg-title">${escapeHtml(k.nama_keg || '-')}</div>
-              <span class="kode-pill tabular">${escapeHtml(k.kode_keg || '-')}</span>
-            </td>
-            <td class="tabular" style="font-size:12.5px;font-weight:600;color:var(--text-muted);white-space:nowrap;">${escapeHtml(calcStr)}</td>
-            <td><span class="poin-badge tabular">${totalPoin}</span></td>
-            <td>${catatanHtml}</td>
-            <td>${buktiHtml}</td>
-            <td>
-              <span class="status-badge ${statusClass}">
-                <i class="fa-solid ${statusIcon}"></i>
-                <span>${escapeHtml(statusText)}</span>
-              </span>
-            </td>
-            <td>${aksiHtml}</td>
-          </tr>
-        `;
+      // Mode bulan tunggal terpilih: ringkas, langsung tampil tanpa panjang ke bawah
+      tbody.innerHTML = sorted.map(k => {
+        const idx = displayedList.length;
+        displayedList.push(k);
+        return buildActivityRowHtml(k, idx);
       }).join('');
 
-      document.getElementById('tableFootCount').textContent = `Menampilkan ${displayedList.length} kegiatan`;
+      document.getElementById('tableFootCount').textContent = `Menampilkan ${sorted.length} kegiatan • Total ${totalPeriodPoints.toLocaleString('id-ID')} poin (${formatMonthLabel(selectedHistoryMonth)})`;
     }
 
     // ============================================================
@@ -3173,6 +3577,9 @@
 
         if (res && res.ok) {
           showToast(`Kegiatan tersimpan! (+${totalCalc} poin)`, 'success');
+          if (selectedHistoryMonth !== 'ALL') {
+            selectedHistoryMonth = getMonthKey(tanggal);
+          }
           resetFormAll(false);
           setTimeout(() => loadDataKegiatan(false), 600);
         } else {
@@ -3225,6 +3632,7 @@
         if (res && res.ok) {
           showToast('Kegiatan berhasil dihapus', 'success');
           allKegiatanList = allKegiatanList.filter(k => parseInt(k.row_index, 10) !== rowIndex);
+          buildHistoryMonthPills();
           renderHistoryTable();
           setTimeout(() => loadDataKegiatan(false), 1800);
         } else {
