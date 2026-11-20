@@ -1,1290 +1,1433 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Bekarye Bapenda</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2pdf@0.10.1/dist/html2pdf.bundle.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-
-        .header-subtitle {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .control-group label {
-            color: #666;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        select, input {
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            min-width: 160px;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
-        }
-
-        button {
-            padding: 10px 20px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        button:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        button.secondary {
-            background: #6c757d;
-        }
-
-        button.secondary:hover {
-            background: #5a6268;
-        }
-
-        /* Triwulan Info Card */
-        .triwulan-info {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .triwulan-info.active {
-            display: block;
-        }
-
-        .triwulan-info h3 {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .triwulan-info .stats-row {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        .triwulan-info .stat-item {
-            background: rgba(255,255,255,0.2);
-            padding: 15px 25px;
-            border-radius: 8px;
-        }
-
-        .triwulan-info .stat-item .value {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .triwulan-info .stat-item .label {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left: 5px solid #667eea;
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-card.warning {
-            border-left-color: #ffc107;
-        }
-
-        .stat-card.danger {
-            border-left-color: #dc3545;
-        }
-
-        .stat-card.success {
-            border-left-color: #28a745;
-        }
-
-        .stat-card.purple {
-            border-left-color: #9b59b6;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .stat-subtitle {
-            color: #999;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 0;
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-radius: 10px 10px 0 0;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            background: white;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            color: #666;
-            font-weight: 500;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-
-        .tab.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .tab:hover:not(.active) {
-            background: #e9ecef;
-        }
-
-        /* Content Sections */
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        /* Table */
-        .table-container {
-            background: white;
-            border-radius: 0 0 10px 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 900px;
-        }
-
-        th {
-            background: #f8f9fa;
-            padding: 15px;
-            text-align: left;
-            color: #333;
-            font-weight: 600;
-            border-bottom: 2px solid #ddd;
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #eee;
-            border-radius: 4px;
-            overflow: hidden;
-            min-width: 100px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.3s;
-        }
-
-        .progress-fill.warning {
-            background: linear-gradient(90deg, #ffc107, #ff9800);
-        }
-
-        .progress-fill.danger {
-            background: linear-gradient(90deg, #dc3545, #c82333);
-        }
-
-        .progress-fill.success {
-            background: linear-gradient(90deg, #28a745, #20c997);
-        }
-
-        .percentage {
-            display: inline-block;
-            margin-top: 5px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* Charts */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .chart-container {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-            height: 400px;
-        }
-
-        .chart-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Status Badge */
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .badge.complete {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .badge.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .badge.incomplete {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        /* Loading & Empty */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .loading i {
-            font-size: 30px;
-            margin-bottom: 10px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-
-        .empty-state i {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .controls {
-                flex-direction: column;
-            }
-
-            .control-group {
-                width: 100%;
-            }
-
-            .control-group select,
-            .control-group input {
-                width: 100%;
-            }
-
-            table {
-                font-size: 12px;
-            }
-
-            th, td {
-                padding: 10px;
-            }
-
-            .triwulan-info .stats-row {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-
-        .filter-badge {
-            background: #667eea;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: inline-block;
-            margin-left: 10px;
-        }
-
-        .export-btn {
-            background: #28a745;
-        }
-
-        .export-btn:hover {
-            background: #218838;
-        }
-
-        /* Quick Stats Bar */
-        .quick-stats {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .quick-stat {
-            background: #f8f9fa;
-            padding: 15px 25px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .quick-stat i {
-            font-size: 24px;
-            color: #667eea;
-        }
-
-        .quick-stat .info .value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .quick-stat .info .label {
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* Triwulan Selector Highlight */
-        .triwulan-selector {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .triwulan-btn {
-            padding: 15px;
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .triwulan-btn:hover {
-            border-color: #667eea;
-            background: #f8f9fa;
-        }
-
-        .triwulan-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #667eea;
-            color: white;
-        }
-
-        .triwulan-btn .triwulan-name {
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .triwulan-btn .triwulan-months {
-            font-size: 11px;
-            opacity: 0.8;
-        }
-
-        .triwulan-btn .triwulan-poin {
-            margin-top: 8px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEKARYE — Admin Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --bg2: #ffffff;
+      --bg3: #f8fafc;
+      --text: #0f172a;
+      --text2: #334155;
+      --text3: #64748b;
+      --text4: #94a3b8;
+      --border: #e2e8f0;
+      --border2: #f1f5f9;
+      --blue: #2563eb;
+      --blue2: #3b82f6;
+      --blue-bg: #dbeafe;
+      --blue-bg2: #eff6ff;
+      --green: #059669;
+      --green-bg: #d1fae5;
+      --red: #dc2626;
+      --red-bg: #ffe4e6;
+      --red2: #be123c;
+      --yellow: #d97706;
+      --yellow-bg: #fef3c7;
+      --purple: #7c3aed;
+      --purple-bg: #ede9fe;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .06);
+      --shadow2: 0 8px 30px rgba(0, 0, 0, .08);
+      --shadow3: 0 20px 60px rgba(0, 0, 0, .15);
+      --radius: 20px;
+      --radius2: 14px;
+      --radius3: 10px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --bg3: #334155;
+      --text: #f1f5f9;
+      --text2: #cbd5e1;
+      --text3: #94a3b8;
+      --text4: #64748b;
+      --border: #334155;
+      --border2: #334155;
+      --blue: #3b82f6;
+      --blue2: #60a5fa;
+      --blue-bg: #1e3a5f;
+      --blue-bg2: #172554;
+      --green: #34d399;
+      --green-bg: #064e3b;
+      --red: #f87171;
+      --red-bg: #450a0a;
+      --red2: #fca5a5;
+      --yellow: #fbbf24;
+      --yellow-bg: #451a03;
+      --purple: #a78bfa;
+      --purple-bg: #2e1065;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .2);
+      --shadow2: 0 8px 30px rgba(0, 0, 0, .3);
+      --shadow3: 0 20px 60px rgba(0, 0, 0, .4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background .3s, color .3s;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; font-size: inherit; }
+    input, select, textarea { font-family: inherit; font-size: inherit; }
+
+    .page { max-width: 1400px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      margin-bottom: 20px; padding: 16px 20px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+    .topbar-logo {
+      width: 50px; height: 50px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; overflow: hidden;
+    }
+    .topbar-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .topbar-info { flex: 1; min-width: 0; }
+    .topbar-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .topbar-info h1 { font-size: 21px; font-weight: 800; line-height: 1.2; }
+    .admin-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 999px;
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+      color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .04em;
+    }
+    .topbar-info p { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+    .topbar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
+    .btn-nav {
+      border: 1px solid var(--border); background: var(--bg2);
+      padding: 9px 14px; border-radius: var(--radius2);
+      font-size: 13px; font-weight: 600; color: var(--text2);
+      transition: all .2s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+    }
+    .btn-nav:hover { background: var(--bg3); transform: translateY(-1px); }
+    .btn-nav.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .btn-nav.primary:hover { background: var(--blue2); }
+    .btn-nav.purple { background: linear-gradient(135deg, #7c3aed, #2563eb); color: #fff; border: none; }
+    .btn-nav.purple:hover { opacity: .92; transform: translateY(-1px); }
+    .btn-nav.danger { background: #fff1f2; color: var(--red2); border-color: #fecdd3; }
+    .btn-nav.danger:hover { background: #ffe4e6; }
+    [data-theme="dark"] .btn-nav.danger { background: var(--red-bg); color: var(--red2); border-color: #7f1d1d; }
+    .btn-icon {
+      width: 38px; height: 38px; border: 1px solid var(--border); background: var(--bg2);
+      border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 17px; transition: all .2s;
+    }
+    .btn-icon:hover { background: var(--bg3); transform: translateY(-1px); }
+
+    /* EXPORT DROPDOWN */
+    .dropdown-wrap { position: relative; }
+    .dropdown-menu {
+      position: absolute; top: calc(100% + 8px); right: 0; width: 260px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow3);
+      z-index: 9998; overflow: hidden; display: none; animation: dropIn .2s ease;
+    }
+    .dropdown-menu.open { display: block; }
+    @keyframes dropIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    .dropdown-head {
+      padding: 12px 16px; background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: #fff; font-size: 13px; font-weight: 700;
+    }
+    .dropdown-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .dropdown-item {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+      background: var(--bg3); color: var(--text2); text-align: left;
+      font-weight: 600; font-size: 13px; border-radius: var(--radius2);
+      display: flex; align-items: center; gap: 8px; transition: all .2s;
+    }
+    .dropdown-item:hover { background: var(--blue-bg2); border-color: var(--blue); color: var(--blue); }
+
+    /* HAMBURGER MOBILE */
+    .hamburger {
+      display: none; width: 40px; height: 40px; border: 1px solid var(--border);
+      background: var(--bg2); border-radius: 12px; flex-direction: column;
+      align-items: center; justify-content: center; gap: 5px;
+    }
+    .hamburger span { width: 19px; height: 2px; background: var(--text2); border-radius: 2px; transition: all .25s; }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .mobile-drawer {
+      display: none; background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px; margin-bottom: 16px;
+      box-shadow: var(--shadow2); flex-direction: column; gap: 8px;
+    }
+    .mobile-drawer.open { display: flex; }
+    .mobile-drawer a, .mobile-drawer button {
+      width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--bg3); color: var(--text2); font-weight: 600; font-size: 13px;
+      text-align: left; display: flex; align-items: center; gap: 8px;
+    }
+
+    /* BANNER INFO */
+    .admin-banner {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      padding: 18px 22px; margin-bottom: 20px; border-radius: var(--radius);
+      background: linear-gradient(135deg, #1e3a8a, #5b21b6); color: #fff;
+      box-shadow: var(--shadow2);
+    }
+    .admin-banner h2 { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+    .admin-banner p { font-size: 13px; opacity: .85; }
+    .banner-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-banner {
+      padding: 10px 16px; border-radius: var(--radius2); font-size: 13px; font-weight: 700;
+      border: none; display: inline-flex; align-items: center; gap: 6px; transition: all .2s;
+    }
+    .btn-banner-white { background: #ffffff; color: #1e3a8a; }
+    .btn-banner-white:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, .2); }
+    .btn-banner-glass { background: rgba(255, 255, 255, .16); color: #fff; border: 1px solid rgba(255, 255, 255, .25); }
+    .btn-banner-glass:hover { background: rgba(255, 255, 255, .25); }
+
+    /* KPI STATS */
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px; margin-bottom: 20px;
+    }
+    .stat {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px; box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s;
+    }
+    .stat:hover { transform: translateY(-3px); box-shadow: var(--shadow2); }
+    .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .stat-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .stat-num { font-size: 28px; font-weight: 800; line-height: 1.1; }
+    .stat-label { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 4px; }
+    .stat-sub { font-size: 11px; color: var(--text4); margin-top: 2px; }
+    .stat-bar { height: 4px; border-radius: 4px; margin-top: 10px; background: var(--border); overflow: hidden; }
+    .stat-bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
+
+    /* TABS */
+    .tabs-bar {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;
+      background: var(--bg2); padding: 8px; border-radius: var(--radius);
+      border: 1px solid var(--border); box-shadow: var(--shadow);
+    }
+    .tab-btn {
+      padding: 10px 18px; border-radius: var(--radius2); border: none;
+      background: transparent; color: var(--text3); font-size: 13px; font-weight: 700;
+      display: inline-flex; align-items: center; gap: 8px; transition: all .2s;
+    }
+    .tab-btn:hover { background: var(--bg3); color: var(--text); }
+    .tab-btn.active { background: var(--blue); color: #fff; box-shadow: 0 4px 12px rgba(37, 99, 235, .25); }
+    .tab-badge {
+      padding: 2px 8px; border-radius: 999px; font-size: 11px;
+      background: rgba(255, 255, 255, .2); color: inherit;
+    }
+    .tab-btn:not(.active) .tab-badge { background: var(--bg3); color: var(--text3); }
+
+    /* CHARTS */
+    .charts { display: grid; gap: 14px; grid-template-columns: 1fr; margin-bottom: 20px; }
+    @media(min-width: 768px) { .charts { grid-template-columns: 1fr 1fr; } }
+    .chart-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow);
+    }
+    .chart-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .chart-wrap { position: relative; height: 220px; }
+
+    /* CARD & TOOLBAR */
+    .card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .card-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .card-head h2 { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
+    .toolbar {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      margin-bottom: 16px; padding: 12px 14px; background: var(--bg3);
+      border-radius: var(--radius2); border: 1px solid var(--border);
+    }
+    .search-input {
+      flex: 1; min-width: 200px; padding: 9px 14px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--bg2); color: var(--text);
+      font-size: 13px; outline: none;
+    }
+    .search-input:focus { border-color: var(--blue); }
+    .filter-select {
+      padding: 9px 12px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--bg2); color: var(--text); font-size: 13px; font-weight: 600; outline: none;
+    }
+    .filter-select:focus { border-color: var(--blue); }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; margin: 0 -20px; padding: 0 20px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th {
+      padding: 11px 12px; text-align: left; font-size: 11px;
+      text-transform: uppercase; letter-spacing: .08em; color: var(--text3);
+      border-bottom: 2px solid var(--border); font-weight: 700;
+    }
+    td { padding: 13px 12px; border-bottom: 1px solid var(--border2); font-size: 13px; color: var(--text2); vertical-align: middle; }
+    tr:hover td { background: var(--bg3); }
+
+    .user-cell { display: flex; align-items: center; gap: 12px; }
+    .u-avatar {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; flex-shrink: 0;
+    }
+    .u-avatar.admin-av { background: linear-gradient(135deg, #7c3aed, #ec4899); }
+    .u-name { font-weight: 700; color: var(--text); font-size: 14px; }
+    .u-sub { font-size: 12px; color: var(--text3); }
+
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+    .role-admin { background: var(--purple-bg); color: var(--purple); }
+    .role-user { background: var(--blue-bg); color: var(--blue); }
+    .status-active { background: var(--green-bg); color: var(--green); }
+    .status-inactive { background: var(--red-bg); color: var(--red); }
+
+    .b-todo { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+    .b-doing { background: var(--blue-bg); color: var(--blue); }
+    .b-done { background: var(--green-bg); color: var(--green); }
+    .b-blocked { background: var(--red-bg); color: var(--red); }
+
+    .p-high { color: var(--red); font-weight: 700; }
+    .p-medium { color: var(--yellow); font-weight: 600; }
+    .p-low { color: var(--green); font-weight: 600; }
+
+    .row-actions { display: flex; gap: 6px; flex-wrap: nowrap; }
+    .btn-act {
+      padding: 6px 10px; border-radius: 9px; font-size: 12px; font-weight: 600;
+      border: 1px solid var(--border); background: var(--bg2); color: var(--text2);
+      transition: all .15s; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .btn-act:hover { background: var(--blue-bg2); border-color: var(--blue); color: var(--blue); }
+    .btn-act.warn:hover { background: var(--yellow-bg); border-color: var(--yellow); color: var(--yellow); }
+    .btn-act.del:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .6);
+      display: none; align-items: center; justify-content: center;
+      z-index: 10000; padding: 16px; backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      width: min(580px, 100%); background: var(--bg2); color: var(--text);
+      border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow3);
+      position: relative; max-height: 90vh; overflow-y: auto; animation: popIn .22s ease;
+    }
+    @keyframes popIn { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-close {
+      position: absolute; top: 12px; right: 16px; border: none; background: transparent;
+      font-size: 28px; color: var(--text3); line-height: 1;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-box h3 { font-size: 19px; font-weight: 800; margin-bottom: 14px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .col-span-2 { grid-column: span 2; }
+    .fg label { display: block; font-size: 12px; font-weight: 700; color: var(--text3); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em; }
+    .fg input, .fg select {
+      width: 100%; padding: 11px 14px; border-radius: var(--radius2);
+      border: 1px solid var(--border); background: var(--bg3); color: var(--text);
+      font-size: 14px; outline: none;
+    }
+    .fg input:focus, .fg select:focus { border-color: var(--blue); background: var(--bg2); }
+    .fg-hint { font-size: 11px; color: var(--text4); margin-top: 4px; }
+
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .modal-item { padding: 12px 14px; border-radius: var(--radius2); background: var(--bg3); border: 1px solid var(--border2); }
+    .modal-item strong { display: block; font-size: 11px; color: var(--text3); margin-bottom: 3px; text-transform: uppercase; }
+    .modal-item span { font-size: 14px; font-weight: 700; color: var(--text); word-break: break-word; }
+
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+    .btn-m { padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 13px; border: 1px solid var(--border); transition: all .2s; }
+    .btn-m-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .btn-m-primary:hover { background: var(--blue2); }
+    .btn-m-primary:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-m-secondary { background: var(--bg3); color: var(--text2); }
+    .btn-m-secondary:hover { background: var(--border); }
+
+    /* TOAST & STATES */
+    .toast {
+      position: fixed; bottom: 20px; right: 20px; z-index: 10002;
+      padding: 12px 18px; border-radius: 14px; font-size: 13px; font-weight: 700;
+      background: #0f172a; color: #fff; box-shadow: var(--shadow3);
+      display: none; align-items: center; gap: 8px; max-width: 360px;
+    }
+    .toast.show { display: flex; animation: popIn .2s ease; }
+    .toast.ok { background: #059669; }
+    .toast.err { background: #dc2626; }
+
+    .empty { text-align: center; padding: 32px; color: var(--text4); font-size: 14px; }
+    .loading { text-align: center; padding: 48px 20px; color: var(--text3); font-size: 14px; }
+
+    @media(max-width: 768px) {
+      .topbar-actions { display: none; }
+      .hamburger { display: flex; }
+      .form-grid, .modal-grid { grid-template-columns: 1fr; }
+      .col-span-2 { grid-column: span 1; }
+      .admin-banner { padding: 16px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1><i class="fas fa-chart-line"></i> Admin Dashboard</h1>
-            <p class="header-subtitle">Monitor progress keseluruhan pegawai Bekarye Bapenda</p>
+<div class="page">
 
-            <!-- Triwulan Selector -->
-            <div class="triwulan-selector" id="triwulanSelector">
-                <div class="triwulan-btn" data-triwulan="1" onclick="selectTriwulan(1)">
-                    <div class="triwulan-name">Triwulan I</div>
-                    <div class="triwulan-months">Januari - Maret</div>
-                    <div class="triwulan-poin" id="poin1">-</div>
-                </div>
-                <div class="triwulan-btn" data-triwulan="2" onclick="selectTriwulan(2)">
-                    <div class="triwulan-name">Triwulan II</div>
-                    <div class="triwulan-months">April - Juni</div>
-                    <div class="triwulan-poin" id="poin2">-</div>
-                </div>
-                <div class="triwulan-btn" data-triwulan="3" onclick="selectTriwulan(3)">
-                    <div class="triwulan-name">Triwulan III</div>
-                    <div class="triwulan-months">Juli - September</div>
-                    <div class="triwulan-poin" id="poin3">-</div>
-                </div>
-                <div class="triwulan-btn" data-triwulan="4" onclick="selectTriwulan(4)">
-                    <div class="triwulan-name">Triwulan IV</div>
-                    <div class="triwulan-months">Oktober - Desember</div>
-                    <div class="triwulan-poin" id="poin4">-</div>
-                </div>
-            </div>
-
-            <!-- Controls -->
-            <div class="controls">
-                <div class="control-group">
-                    <label for="filterTriwulan">Filter Triwulan:</label>
-                    <select id="filterTriwulan" onchange="filterData()">
-                        <option value="">Semua Triwulan</option>
-                        <option value="1">Triwulan I (Jan-Mar)</option>
-                        <option value="2">Triwulan II (Apr-Jun)</option>
-                        <option value="3">Triwulan III (Jul-Sep)</option>
-                        <option value="4">Triwulan IV (Okt-Des)</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="filterUnit">Filter Unit:</label>
-                    <select id="filterUnit" onchange="filterData()">
-                        <option value="">Semua Unit</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="sortBy">Urutkan:</label>
-                    <select id="sortBy" onchange="filterData()">
-                        <option value="nama">Nama (A-Z)</option>
-                        <option value="poin_desc">Poin Triwulan (Tertinggi)</option>
-                        <option value="poin_asc">Poin Triwulan (Terendah)</option>
-                        <option value="progress_desc">Progress (Tertinggi)</option>
-                        <option value="progress_asc">Progress (Terendah)</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label>&nbsp;</label>
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="loadData()"><i class="fas fa-sync"></i> Refresh</button>
-                        <button class="export-btn" onclick="exportPDF()"><i class="fas fa-download"></i> Export PDF</button>
-                    </div>
-                </div>
-            </div>
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">
+        <img src="assets/logo/logo-light.png" alt="BEKARYE" id="logoImage"
+             onerror="this.style.display='none';this.parentElement.innerHTML='🛡️';" />
+      </div>
+      <div class="topbar-info">
+        <div class="topbar-title-row">
+          <h1>BEKARYE</h1>
+          <span class="admin-pill">🛡️ ADMIN PANEL</span>
         </div>
-
-        <!-- Stats -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="loading">
-                <i class="fas fa-spinner"></i>
-                <p>Loading data...</p>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab('table')"><i class="fas fa-table"></i> Tabel</button>
-                <button class="tab" onclick="switchTab('charts')"><i class="fas fa-chart-bar"></i> Grafik</button>
-                <button class="tab" onclick="switchTab('details')"><i class="fas fa-list"></i> Detail Kegiatan</button>
-            </div>
-
-            <!-- Table Tab -->
-            <div id="table" class="content-section active">
-                <div class="table-container">
-                    <div class="table-wrapper">
-                        <table id="summaryTable">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Unit</th>
-                                    <th>Tier</th>
-                                    <th>Target Triwulan</th>
-                                    <th>Poin Triwulan</th>
-                                    <th>Progress</th>
-                                    <th>Poin Tahun</th>
-                                    <th>Kegiatan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="summaryBody">
-                                <tr>
-                                    <td colspan="9" class="loading">
-                                        <i class="fas fa-spinner"></i> Loading...
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Charts Tab -->
-            <div id="charts" class="content-section" style="padding: 30px;">
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <div class="chart-title"><i class="fas fa-chart-bar"></i> Top 10 Pegawai (Poin Triwulan)</div>
-                        <canvas id="topPoinChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <div class="chart-title"><i class="fas fa-chart-pie"></i> Distribusi Progress</div>
-                        <canvas id="progressDistChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <div class="chart-title"><i class="fas fa-chart-line"></i> Poin Triwulan vs Target</div>
-                        <canvas id="targetChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <div class="chart-title"><i class="fas fa-chart-area"></i> Distribusi Per Triwulan</div>
-                        <canvas id="triwulanChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Details Tab -->
-            <div id="details" class="content-section">
-                <div style="padding: 20px;">
-                    <div style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
-                        <input type="text" id="searchKegiatan" placeholder="🔍 Cari kegiatan..." style="flex: 1; min-width: 250px; padding: 12px; font-size: 14px;" onkeyup="updateDetails()">
-                        <select id="filterTriwulanDetail" onchange="updateDetails()" style="padding: 12px; min-width: 200px;">
-                            <option value="">Semua Triwulan</option>
-                            <option value="1">Triwulan I</option>
-                            <option value="2">Triwulan II</option>
-                            <option value="3">Triwulan III</option>
-                            <option value="4">Triwulan IV</option>
-                        </select>
-                    </div>
-                    <div class="table-container">
-                        <div class="table-wrapper">
-                            <table id="detailsTable">
-                                <thead>
-                                    <tr>
-                                        <th>Nama Pegawai</th>
-                                        <th>Unit</th>
-                                        <th>Tanggal</th>
-                                        <th>Triwulan</th>
-                                        <th>Kegiatan</th>
-                                        <th>Poin</th>
-                                        <th>Status</th>
-                                        <th>Bukti</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="detailsBody">
-                                    <tr>
-                                        <td colspan="8" class="loading">
-                                            <i class="fas fa-spinner"></i> Loading...
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <p id="topbarUser">Memuat sesi admin...</p>
+      </div>
     </div>
 
-    <script>
-        // ============================================
-        // KONFIGURASI
-        // ============================================
-        var API_URL = 'https://script.google.com/macros/s/AKfycbzl99Ev78a6Tw8d0HZiESOOidmLUm-kKwRYkd5WkYIsItG856mqn7neAOeEnodPSVxjeA/exec';
-        
-        // ============================================
-        // STATE
-        // ============================================
-        var allData = {
-            summary: [],
-            kegiatan: []
-        };
-        var charts = {};
-        var selectedTriwulan = null;
+    <!-- DESKTOP NAV -->
+    <nav class="topbar-actions">
+      <a href="dashboard.html" class="btn-nav">📊 Dashboard</a>
+      <a href="entri.html" class="btn-nav primary">➕ Entri</a>
+      <a href="notulen.html" class="btn-nav purple">📝 Notulen</a>
+      <a href="assistant.html" class="btn-nav">🤖 Assistant</a>
 
-        // Triwulan mapping
-        var triwulanMonths = {
-            1: [1, 2, 3],      // Jan, Feb, Mar
-            2: [4, 5, 6],      // Apr, May, Jun
-            3: [7, 8, 9],      // Jul, Aug, Sep
-            4: [10, 11, 12]    // Oct, Nov, Dec
-        };
+      <div class="dropdown-wrap">
+        <button class="btn-nav" id="exportDropdownBtn">📥 Export ▾</button>
+        <div class="dropdown-menu" id="exportDropdownMenu">
+          <div class="dropdown-head">📥 Export Laporan Admin</div>
+          <div class="dropdown-body">
+            <button class="dropdown-item" id="btnExportUsersPDF">📄 Export Daftar Users (PDF)</button>
+            <button class="dropdown-item" id="btnExportUsersExcel">📊 Export Users & Tasks (Excel)</button>
+          </div>
+        </div>
+      </div>
 
-        var triwulanNames = {
-            1: 'Triwulan I',
-            2: 'Triwulan II',
-            3: 'Triwulan III',
-            4: 'Triwulan IV'
-        };
+      <button class="btn-icon" id="themeToggle" title="Ganti Tema">🌙</button>
+      <button class="btn-nav danger" id="logoutBtn">🚪 Logout</button>
+    </nav>
 
-        // ============================================
-        // FUNGSI UTAMA
-        // ============================================
+    <!-- MOBILE HAMBURGER -->
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
 
-        // Load data dari API
-        async function loadData() {
-            try {
-                console.log('🔄 Loading admin data...');
-                showLoading();
-                
-                // Load summary
-                const summaryRes = await fetch(API_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'getSummaryPegawai' })
-                });
-                const summaryData = await summaryRes.json();
-                
-                // Load kegiatan
-                const kegiatanRes = await fetch(API_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'getAllKegiatan' })
-                });
-                const kegiatanData = await kegiatanRes.json();
+  <!-- MOBILE DRAWER -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <a href="dashboard.html">📊 Dashboard User</a>
+    <a href="entri.html">➕ Entri Task</a>
+    <a href="notulen.html">📝 Notulen Rapat</a>
+    <a href="assistant.html">🤖 AI Assistant</a>
+    <button id="mobThemeBtn">🌙 Ganti Tema Terang / Gelap</button>
+    <button id="mobExportPDF">📄 Export Users (PDF)</button>
+    <button id="mobExportExcel">📊 Export Users & Tasks (Excel)</button>
+    <button id="mobLogoutBtn" style="color:var(--red);background:var(--red-bg);border-color:transparent;">🚪 Logout</button>
+  </div>
 
-                if (summaryData.ok && kegiatanData.ok) {
-                    allData.summary = summaryData.data.summary || [];
-                    allData.kegiatan = kegiatanData.data.kegiatan || [];
-                    
-                    console.log('👥 Total pegawai:', allData.summary.length);
-                    console.log('📊 Total kegiatan:', allData.kegiatan.length);
-                    
-                    // Proses data triwulan
-                    processTriwulanData();
-                    
-                    populateFilters();
-                    updateStats();
-                    updateTable();
-                    updateCharts();
-                    updateDetails();
-                    
-                    console.log('✅ Data loaded successfully');
-                } else {
-                    throw new Error(summaryData.message || 'Gagal memuat data');
-                }
-            } catch (err) {
-                console.error('❌ Error:', err);
-                showError(err.message);
-            }
+  <!-- BANNER -->
+  <section class="admin-banner">
+    <div>
+      <h2>Pusat Kontrol Administrator</h2>
+      <p>Kelola akun pengguna, hak akses role, status aktivasi, serta pantau statistik kinerja organisasi.</p>
+    </div>
+    <div class="banner-actions">
+      <button class="btn-banner btn-banner-white" id="btnOpenAddUser">➕ Tambah User Baru</button>
+      <button class="btn-banner btn-banner-glass" id="btnRefreshAll">🔄 Refresh Data</button>
+    </div>
+  </section>
+
+  <!-- KPI CARDS -->
+  <section class="stats" id="kpiGrid">
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon" style="background:var(--blue-bg);color:var(--blue);">👥</div></div>
+      <div class="stat-num" id="kpiTotalUsers">-</div>
+      <div class="stat-label">Total Pengguna</div>
+      <div class="stat-sub">Terdaftar di sistem</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:100%;background:var(--blue);"></div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon" style="background:var(--green-bg);color:var(--green);">✅</div></div>
+      <div class="stat-num" id="kpiActiveUsers">-</div>
+      <div class="stat-label">User Aktif</div>
+      <div class="stat-sub" id="kpiActivePct">0% dari total</div>
+      <div class="stat-bar"><div class="stat-bar-fill" id="barActiveUsers" style="width:0%;background:var(--green);"></div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon" style="background:var(--purple-bg);color:var(--purple);">🛡️</div></div>
+      <div class="stat-num" id="kpiAdminCount">-</div>
+      <div class="stat-label">Administrator</div>
+      <div class="stat-sub" id="kpiRegularCount">0 user reguler</div>
+      <div class="stat-bar"><div class="stat-bar-fill" id="barAdminCount" style="width:0%;background:var(--purple);"></div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon" style="background:var(--yellow-bg);color:var(--yellow);">📋</div></div>
+      <div class="stat-num" id="kpiTotalTasks">-</div>
+      <div class="stat-label">Total Task</div>
+      <div class="stat-sub" id="kpiDoneTasks">0 selesai</div>
+      <div class="stat-bar"><div class="stat-bar-fill" id="barDoneTasks" style="width:0%;background:var(--yellow);"></div></div>
+    </div>
+  </section>
+
+  <!-- CHARTS -->
+  <section class="charts">
+    <div class="chart-card">
+      <h3>📊 Komposisi Pengguna (Role & Status)</h3>
+      <div class="chart-wrap"><canvas id="chartUsers"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>📈 Distribusi Status Task</h3>
+      <div class="chart-wrap"><canvas id="chartTasks"></canvas></div>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" data-tab="users">👥 Manajemen Users <span class="tab-badge" id="badgeUsersCount">0</span></button>
+    <button class="tab-btn" data-tab="tasks">📋 Monitoring Task <span class="tab-badge" id="badgeTasksCount">0</span></button>
+  </div>
+
+  <!-- TAB 1: USERS MANAGEMENT -->
+  <section class="card" id="tab-users">
+    <div class="card-head">
+      <h2>👥 Daftar Pengguna Sistem</h2>
+      <button class="btn-nav primary" id="btnAddUserCard">➕ Tambah User</button>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" class="search-input" id="userSearch" placeholder="🔍 Cari nama, username, atau nama sheet..." />
+      <select class="filter-select" id="userRoleFilter">
+        <option value="all">Semua Role</option>
+        <option value="admin">Admin</option>
+        <option value="user">User</option>
+      </select>
+      <select class="filter-select" id="userStatusFilter">
+        <option value="all">Semua Status</option>
+        <option value="TRUE">Aktif</option>
+        <option value="FALSE">Nonaktif</option>
+      </select>
+    </div>
+
+    <div id="usersContainer">
+      <div class="loading">⏳ Memuat daftar pengguna dari server...</div>
+    </div>
+  </section>
+
+  <!-- TAB 2: TASKS MONITORING -->
+  <section class="card" id="tab-tasks" style="display:none;">
+    <div class="card-head">
+      <h2>📋 Monitoring Data Task</h2>
+      <span style="font-size:12px;color:var(--text3);" id="taskScopeNote">Menampilkan data task</span>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" class="search-input" id="taskSearch" placeholder="🔍 Cari judul task, pemilik, atau catatan..." />
+      <select class="filter-select" id="taskStatusFilter">
+        <option value="all">Semua Status</option>
+        <option value="To Do">To Do</option>
+        <option value="Doing">Doing</option>
+        <option value="Done">Done</option>
+        <option value="Blocked">Blocked</option>
+      </select>
+      <select class="filter-select" id="taskPriorityFilter">
+        <option value="all">Semua Prioritas</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </div>
+
+    <div id="tasksContainer">
+      <div class="loading">⏳ Memuat data task...</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- MODAL: ADD / EDIT USER -->
+<div class="modal-overlay" id="userFormModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeUserFormModal">&times;</button>
+    <h3 id="userFormTitle">➕ Tambah User Baru</h3>
+    <form id="userForm">
+      <input type="hidden" id="ufMode" value="add" />
+      <input type="hidden" id="ufOrigUsername" value="" />
+      <div class="form-grid">
+        <div class="fg col-span-2">
+          <label for="ufName">Nama Lengkap *</label>
+          <input type="text" id="ufName" placeholder="Contoh: Budi Santoso" required />
+        </div>
+        <div class="fg">
+          <label for="ufUsername">Username *</label>
+          <input type="text" id="ufUsername" placeholder="Contoh: budi" required />
+        </div>
+        <div class="fg">
+          <label for="ufPassword" id="ufPassLabel">Password *</label>
+          <input type="text" id="ufPassword" placeholder="Masukkan password" />
+          <div class="fg-hint" id="ufPassHint">Wajib diisi untuk user baru.</div>
+        </div>
+        <div class="fg">
+          <label for="ufRole">Role Akses</label>
+          <select id="ufRole">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label for="ufActive">Status Akun</label>
+          <select id="ufActive">
+            <option value="TRUE">✅ Aktif</option>
+            <option value="FALSE">❌ Nonaktif</option>
+          </select>
+        </div>
+        <div class="fg col-span-2">
+          <label for="ufSheet">Nama Sheet Data</label>
+          <input type="text" id="ufSheet" placeholder="Otomatis mengikuti username jika dikosongkan" />
+          <div class="fg-hint">Nama tab worksheet di Google Spreadsheet untuk menyimpan task user ini.</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-m btn-m-secondary" id="cancelUserFormBtn">Batal</button>
+        <button type="submit" class="btn-m btn-m-primary" id="saveUserFormBtn">💾 Simpan User</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: USER DETAIL -->
+<div class="modal-overlay" id="userDetailModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeUserDetailModal">&times;</button>
+    <div id="userDetailBody"></div>
+  </div>
+</div>
+
+<!-- MODAL: TASK DETAIL -->
+<div class="modal-overlay" id="taskDetailModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeTaskDetailModal">&times;</button>
+    <div id="taskDetailBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ============================================================
+  // 1. CONFIG & SESSION GUARD
+  // ============================================================
+  var API_URL = 'https://script.google.com/macros/s/AKfycbyS2etJ3c11TcTD3dPmJTcV6J0cqELfKxhUYToMpk_GUMKRjwDpg-nmLJ-xNx7DdyYH/exec';
+  var SESSION_KEY = 'bekarye-session';
+  var LEGACY_SESSION_KEY = 'simontok-session';
+  var THEME_KEY = 'bekarye-theme';
+  var LEGACY_THEME_KEY = 'simontok-theme';
+
+  var SESSION = null;
+  var USERS = [];
+  var TASKS = [];
+  var chartUsers = null;
+  var chartTasks = null;
+
+  function migrateStorage() {
+    try {
+      if (!localStorage.getItem(SESSION_KEY) && localStorage.getItem(LEGACY_SESSION_KEY)) {
+        localStorage.setItem(SESSION_KEY, localStorage.getItem(LEGACY_SESSION_KEY));
+      }
+      if (!localStorage.getItem(THEME_KEY) && localStorage.getItem(LEGACY_THEME_KEY)) {
+        localStorage.setItem(THEME_KEY, localStorage.getItem(LEGACY_THEME_KEY));
+      }
+    } catch (e) {}
+  }
+
+  function loadSession() {
+    try {
+      var raw = localStorage.getItem(SESSION_KEY) || localStorage.getItem(LEGACY_SESSION_KEY);
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      return (parsed && parsed.token) ? parsed : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  migrateStorage();
+  SESSION = loadSession();
+
+  if (!SESSION) {
+    alert('Silakan login terlebih dahulu.');
+    window.location.replace('index.html');
+    return;
+  }
+
+  if (String(SESSION.role || '').toLowerCase() !== 'admin') {
+    alert('Akses ditolak. Halaman ini khusus Administrator.');
+    window.location.replace('dashboard.html');
+    return;
+  }
+
+  // ============================================================
+  // 2. HELPERS
+  // ============================================================
+  function $(id) { return document.getElementById(id); }
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function isActiveUser(u) {
+    return String(u && u.active).toUpperCase() === 'TRUE';
+  }
+
+  function authURL(action, extraParams) {
+    var url = API_URL
+      + '?action=' + encodeURIComponent(action)
+      + '&user=' + encodeURIComponent(SESSION.username)
+      + '&token=' + encodeURIComponent(SESSION.token);
+    if (extraParams) {
+      Object.keys(extraParams).forEach(function (k) {
+        if (extraParams[k] !== undefined && extraParams[k] !== null) {
+          url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(extraParams[k]);
         }
+      });
+    }
+    return url;
+  }
 
-        // Proses data triwulan
-        function processTriwulanData() {
-            // Hitung poin per triwulan untuk setiap pegawai
-            allData.summary.forEach(pegawai => {
-                pegawai.poin_triwulan = { 1: 0, 2: 0, 3: 0, 4: 0 };
-                pegawai.target_triwulan = { 1: 0, 2: 0, 3: 0, 4: 0 };
-            });
+  function sendPost(action, payload) {
+    var body = Object.assign({}, payload || {}, {
+      action: action,
+      user: SESSION.username,
+      token: SESSION.token
+    });
+    return fetch(authURL(action), {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+      redirect: 'follow'
+    })
+      .then(function (r) { return r.text(); })
+      .then(function (text) {
+        var json;
+        try { json = JSON.parse(text); } catch (e) { throw new Error('Respons server bukan JSON valid.'); }
+        if (!json.ok) throw new Error(json.message || 'Permintaan gagal diproses server.');
+        return json;
+      });
+  }
 
-            // Filter kegiatan berdasarkan tanggal dan hitung poin per triwulan
-            allData.kegiatan.forEach(keg => {
-                if (!keg.tanggal) return;
-                
-                const date = new Date(keg.tanggal);
-                const month = date.getMonth() + 1;
-                const year = date.getFullYear();
-                const currentYear = new Date().getFullYear();
-                
-                if (year !== currentYear) return;
-                
-                // Tentukan triwulan
-                let triwulan = null;
-                for (let t = 1; t <= 4; t++) {
-                    if (triwulanMonths[t].includes(month)) {
-                        triwulan = t;
-                        break;
-                    }
-                }
-                
-                if (triwulan) {
-                    // Cari pegawai dan tambah poin
-                    const pegawai = allData.summary.find(p => 
-                        p.nama.toLowerCase() === keg.nama.toLowerCase()
-                    );
-                    if (pegawai) {
-                        pegawai.poin_triwulan[triwulan] += parseFloat(keg.total_poin) || 0;
-                    }
-                }
-            });
+  var toastTimer = null;
+  function showToast(msg, type) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + (type || '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); }, 3500);
+  }
 
-            // Update triwulan summary stats
-            updateTriwulanStats();
+  function badgeCls(status) {
+    return { 'To Do': 'b-todo', 'Doing': 'b-doing', 'Done': 'b-done', 'Blocked': 'b-blocked' }[status] || 'b-todo';
+  }
+
+  function priCls(priority) {
+    return { 'High': 'p-high', 'Medium': 'p-medium', 'Low': 'p-low' }[priority] || '';
+  }
+
+  function renderNoteWithLinks(note) {
+    if (!note) return '';
+    return esc(note).replace(/(https?:\/\/[^\s&]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline;">$1</a>');
+  }
+
+  // ============================================================
+  // 3. THEME & NAVIGATION
+  // ============================================================
+  function applyTheme(isDark) {
+    var logo = $('logoImage');
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      $('themeToggle').textContent = '☀️';
+      if (logo) logo.src = 'assets/logo/logo-dark.png';
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      $('themeToggle').textContent = '🌙';
+      if (logo) logo.src = 'assets/logo/logo-light.png';
+    }
+  }
+
+  function toggleTheme() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    isDark = !isDark;
+    localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+    applyTheme(isDark);
+    renderCharts();
+  }
+
+  applyTheme((localStorage.getItem(THEME_KEY) || localStorage.getItem(LEGACY_THEME_KEY)) === 'dark');
+  $('themeToggle').addEventListener('click', toggleTheme);
+  $('mobThemeBtn').addEventListener('click', toggleTheme);
+
+  $('topbarUser').textContent = '👤 ' + (SESSION.name || SESSION.username) + ' (@' + SESSION.username + ')';
+
+  function doLogout() {
+    if (!confirm('Yakin ingin logout dari Admin Panel?')) return;
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(LEGACY_SESSION_KEY);
+    window.location.href = 'index.html';
+  }
+  $('logoutBtn').addEventListener('click', doLogout);
+  $('mobLogoutBtn').addEventListener('click', doLogout);
+
+  // Mobile drawer
+  $('hamburgerBtn').addEventListener('click', function () {
+    this.classList.toggle('active');
+    $('mobileDrawer').classList.toggle('open');
+  });
+
+  // Export dropdown
+  $('exportDropdownBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    $('exportDropdownMenu').classList.toggle('open');
+  });
+  document.addEventListener('click', function () {
+    $('exportDropdownMenu').classList.remove('open');
+  });
+  $('exportDropdownMenu').addEventListener('click', function (e) { e.stopPropagation(); });
+
+  // Tabs switching
+  document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var target = btn.getAttribute('data-tab');
+      $('tab-users').style.display = target === 'users' ? '' : 'none';
+      $('tab-tasks').style.display = target === 'tasks' ? '' : 'none';
+    });
+  });
+
+  // ============================================================
+  // 4. DATA FETCHING (USERS & TASKS)
+  // ============================================================
+  function loadUsers() {
+    $('usersContainer').innerHTML = '<div class="loading">⏳ Memuat daftar pengguna dari server...</div>';
+    return fetch(authURL('users'), { redirect: 'follow' })
+      .then(function (r) { return r.text(); })
+      .then(function (text) {
+        var j;
+        try { j = JSON.parse(text); } catch (e) { throw new Error('Gagal membaca data users.'); }
+        if (!j.ok) throw new Error(j.message || 'Gagal memuat daftar users.');
+        USERS = Array.isArray(j.users) ? j.users : [];
+        $('badgeUsersCount').textContent = USERS.length;
+        renderKPI();
+        renderUsersTable();
+        renderCharts();
+      })
+      .catch(function (err) {
+        $('usersContainer').innerHTML = '<div class="empty" style="color:var(--red);">❌ ' + esc(err.message) + '</div>';
+      });
+  }
+
+  function loadTasks() {
+    $('tasksContainer').innerHTML = '<div class="loading">⏳ Memuat data task...</div>';
+    // Coba endpoint admin-list terlebih dahulu, fallback ke list standar jika belum tersedia di Apps Script
+    return fetch(authURL('admin-list'), { redirect: 'follow' })
+      .then(function (r) { return r.text(); })
+      .then(function (text) {
+        var j;
+        try { j = JSON.parse(text); } catch (e) { return null; }
+        if (j && j.ok && Array.isArray(j.data)) {
+          $('taskScopeNote').textContent = 'Menampilkan seluruh task lintas pengguna (' + j.data.length + ' task)';
+          return j.data;
         }
+        return null;
+      })
+      .catch(function () { return null; })
+      .then(function (adminTasks) {
+        if (adminTasks) return adminTasks;
+        return fetch(authURL('list'), { redirect: 'follow' })
+          .then(function (r) { return r.text(); })
+          .then(function (text) {
+            var j = JSON.parse(text);
+            if (!j.ok) throw new Error(j.message || 'Gagal memuat data task.');
+            $('taskScopeNote').textContent = 'Menampilkan task pada sheet aktif (' + (SESSION.sheet_name || SESSION.username) + ')';
+            return Array.isArray(j.data) ? j.data : [];
+          });
+      })
+      .then(function (list) {
+        TASKS = list;
+        $('badgeTasksCount').textContent = TASKS.length;
+        renderKPI();
+        renderTasksTable();
+        renderCharts();
+      })
+      .catch(function (err) {
+        $('tasksContainer').innerHTML = '<div class="empty" style="color:var(--red);">❌ ' + esc(err.message) + '</div>';
+      });
+  }
 
-        // Update statistik triwulan
-        function updateTriwulanStats() {
-            const currentYear = new Date().getFullYear();
-            
-            for (let t = 1; t <= 4; t++) {
-                const totalPoin = allData.summary.reduce((sum, p) => sum + (p.poin_triwulan[t] || 0), 0);
-                document.getElementById('poin' + t).textContent = totalPoin.toLocaleString('id-ID') + ' poin';
-            }
+  function loadAll() {
+    Promise.all([loadUsers(), loadTasks()]);
+  }
+
+  $('btnRefreshAll').addEventListener('click', function () {
+    showToast('🔄 Memperbarui data...');
+    loadAll();
+  });
+
+  // ============================================================
+  // 5. KPI & CHARTS
+  // ============================================================
+  function renderKPI() {
+    var totalU = USERS.length;
+    var activeU = USERS.filter(isActiveUser).length;
+    var adminU = USERS.filter(function (u) { return String(u.role).toLowerCase() === 'admin'; }).length;
+    var regU = totalU - adminU;
+    var pctActive = totalU ? Math.round((activeU / totalU) * 100) : 0;
+    var pctAdmin = totalU ? Math.round((adminU / totalU) * 100) : 0;
+
+    $('kpiTotalUsers').textContent = totalU;
+    $('kpiActiveUsers').textContent = activeU;
+    $('kpiActivePct').textContent = pctActive + '% aktif (' + (totalU - activeU) + ' nonaktif)';
+    $('barActiveUsers').style.width = pctActive + '%';
+
+    $('kpiAdminCount').textContent = adminU;
+    $('kpiRegularCount').textContent = regU + ' user reguler';
+    $('barAdminCount').style.width = pctAdmin + '%';
+
+    var totalT = TASKS.length;
+    var doneT = TASKS.filter(function (t) { return t.status === 'Done'; }).length;
+    var pctDone = totalT ? Math.round((doneT / totalT) * 100) : 0;
+
+    $('kpiTotalTasks').textContent = totalT;
+    $('kpiDoneTasks').textContent = doneT + ' selesai (' + pctDone + '%)';
+    $('barDoneTasks').style.width = pctDone + '%';
+  }
+
+  function renderCharts() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var tc = isDark ? '#94a3b8' : '#475569';
+    var gridColor = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.05)';
+
+    if (chartUsers) chartUsers.destroy();
+    if (chartTasks) chartTasks.destroy();
+
+    var adminActive = 0, userActive = 0, inactiveAll = 0;
+    USERS.forEach(function (u) {
+      if (!isActiveUser(u)) inactiveAll++;
+      else if (String(u.role).toLowerCase() === 'admin') adminActive++;
+      else userActive++;
+    });
+
+    var c1 = $('chartUsers');
+    if (c1) {
+      chartUsers = new Chart(c1, {
+        type: 'doughnut',
+        data: {
+          labels: ['Admin Aktif', 'User Aktif', 'Nonaktif'],
+          datasets: [{
+            data: [adminActive, userActive, inactiveAll],
+            backgroundColor: ['#7c3aed', '#2563eb', '#ef4444'],
+            borderWidth: 0,
+            spacing: 4,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '64%',
+          plugins: {
+            legend: { position: 'bottom', labels: { color: tc, padding: 14, usePointStyle: true } }
+          }
         }
+      });
+    }
 
-        // Select triwulan dari visual selector
-        function selectTriwulan(triwulan) {
-            // Toggle selection
-            if (selectedTriwulan === triwulan) {
-                selectedTriwulan = null;
-                document.getElementById('filterTriwulan').value = '';
-            } else {
-                selectedTriwulan = triwulan;
-                document.getElementById('filterTriwulan').value = triwulan;
-            }
-            
-            // Update visual buttons
-            document.querySelectorAll('.triwulan-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            if (selectedTriwulan) {
-                document.querySelector(`.triwulan-btn[data-triwulan="${selectedTriwulan}"]`).classList.add('active');
-            }
-            
-            filterData();
+    var todo = 0, doing = 0, done = 0, blocked = 0;
+    TASKS.forEach(function (t) {
+      if (t.status === 'To Do') todo++;
+      else if (t.status === 'Doing') doing++;
+      else if (t.status === 'Done') done++;
+      else if (t.status === 'Blocked') blocked++;
+    });
+
+    var c2 = $('chartTasks');
+    if (c2) {
+      chartTasks = new Chart(c2, {
+        type: 'bar',
+        data: {
+          labels: ['To Do', 'Doing', 'Done', 'Blocked'],
+          datasets: [{
+            label: 'Jumlah Task',
+            data: [todo, doing, done, blocked],
+            backgroundColor: ['#94a3b8', '#3b82f6', '#10b981', '#ef4444'],
+            borderRadius: 10,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { color: tc, stepSize: 1 }, grid: { color: gridColor } },
+            x: { ticks: { color: tc }, grid: { display: false } }
+          }
         }
+      });
+    }
+  }
 
-        // Filter data
-        function filterData() {
-            updateStats();
-            updateTable();
-            updateCharts();
+  // ============================================================
+  // 6. USERS TABLE & ACTIONS
+  // ============================================================
+  function getFilteredUsers() {
+    var q = ($('userSearch').value || '').toLowerCase().trim();
+    var roleF = $('userRoleFilter').value;
+    var statF = $('userStatusFilter').value;
+
+    return USERS.filter(function (u) {
+      if (roleF !== 'all' && String(u.role).toLowerCase() !== roleF) return false;
+      if (statF !== 'all' && String(u.active).toUpperCase() !== statF) return false;
+      if (q) {
+        var hay = (u.name + ' ' + u.username + ' ' + (u.sheet_name || '')).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderUsersTable() {
+    var list = getFilteredUsers();
+    var box = $('usersContainer');
+
+    if (!list.length) {
+      box.innerHTML = '<div class="empty">Tidak ada pengguna yang sesuai dengan filter.</div>';
+      return;
+    }
+
+    var html = '<div class="table-wrap"><table><thead><tr>' +
+      '<th>Pengguna</th><th>Username</th><th>Sheet Data</th><th>Role</th><th>Status</th><th>Aksi</th>' +
+      '</tr></thead><tbody>';
+
+    list.forEach(function (u) {
+      var isAdm = String(u.role).toLowerCase() === 'admin';
+      var active = isActiveUser(u);
+      var initial = (u.name || u.username || '?').charAt(0).toUpperCase();
+
+      html += '<tr>' +
+        '<td><div class="user-cell">' +
+          '<div class="u-avatar' + (isAdm ? ' admin-av' : '') + '">' + esc(initial) + '</div>' +
+          '<div><div class="u-name">' + esc(u.name || u.username) + '</div>' +
+          '<div class="u-sub">' + (u.username === SESSION.username ? 'Akun Anda saat ini' : 'Anggota Organisasi') + '</div></div>' +
+        '</div></td>' +
+        '<td><strong>@' + esc(u.username) + '</strong></td>' +
+        '<td><code style="background:var(--bg3);padding:3px 8px;border-radius:6px;font-size:12px;">' + esc(u.sheet_name || u.username) + '</code></td>' +
+        '<td><span class="badge ' + (isAdm ? 'role-admin' : 'role-user') + '">' + (isAdm ? '🛡️ Admin' : '👤 User') + '</span></td>' +
+        '<td><span class="badge ' + (active ? 'status-active' : 'status-inactive') + '">' + (active ? '✅ Aktif' : '❌ Nonaktif') + '</span></td>' +
+        '<td><div class="row-actions">' +
+          '<button class="btn-act" data-view-user="' + esc(u.username) + '" title="Detail User">👁️ Detail</button>' +
+          '<button class="btn-act warn" data-edit-user="' + esc(u.username) + '" title="Edit User">✏️ Edit</button>' +
+          '<button class="btn-act" data-toggle-user="' + esc(u.username) + '" title="Ubah Status Aktif">' + (active ? '⏸️ Nonaktifkan' : '▶️ Aktifkan') + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    box.innerHTML = html;
+
+    box.querySelectorAll('[data-view-user]').forEach(function (b) {
+      b.addEventListener('click', function () { openUserDetail(b.getAttribute('data-view-user')); });
+    });
+    box.querySelectorAll('[data-edit-user]').forEach(function (b) {
+      b.addEventListener('click', function () { openEditUserModal(b.getAttribute('data-edit-user')); });
+    });
+    box.querySelectorAll('[data-toggle-user]').forEach(function (b) {
+      b.addEventListener('click', function () { toggleUserActive(b.getAttribute('data-toggle-user')); });
+    });
+  }
+
+  $('userSearch').addEventListener('input', renderUsersTable);
+  $('userRoleFilter').addEventListener('change', renderUsersTable);
+  $('userStatusFilter').addEventListener('change', renderUsersTable);
+
+  // ============================================================
+  // 7. USER CRUD MODALS & API HANDLERS
+  // ============================================================
+  function findUser(username) {
+    for (var i = 0; i < USERS.length; i++) {
+      if (String(USERS[i].username) === String(username)) return USERS[i];
+    }
+    return null;
+  }
+
+  function openAddUserModal() {
+    $('ufMode').value = 'add';
+    $('ufOrigUsername').value = '';
+    $('userFormTitle').textContent = '➕ Tambah User Baru';
+    $('ufName').value = '';
+    $('ufUsername').value = '';
+    $('ufUsername').readOnly = false;
+    $('ufPassword').value = '';
+    $('ufPassLabel').textContent = 'Password *';
+    $('ufPassHint').textContent = 'Wajib diisi untuk akun baru.';
+    $('ufRole').value = 'user';
+    $('ufActive').value = 'TRUE';
+    $('ufSheet').value = '';
+    $('userFormModal').classList.add('active');
+    setTimeout(function () { $('ufName').focus(); }, 100);
+  }
+
+  function openEditUserModal(username) {
+    var u = findUser(username);
+    if (!u) return;
+    $('ufMode').value = 'edit';
+    $('ufOrigUsername').value = u.username;
+    $('userFormTitle').textContent = '✏️ Edit User: ' + (u.name || u.username);
+    $('ufName').value = u.name || '';
+    $('ufUsername').value = u.username || '';
+    $('ufUsername').readOnly = true;
+    $('ufPassword').value = '';
+    $('ufPassLabel').textContent = 'Password Baru (Opsional)';
+    $('ufPassHint').textContent = 'Kosongkan jika tidak ingin mengubah password.';
+    $('ufRole').value = String(u.role || 'user').toLowerCase();
+    $('ufActive').value = isActiveUser(u) ? 'TRUE' : 'FALSE';
+    $('ufSheet').value = u.sheet_name || u.username || '';
+    $('userFormModal').classList.add('active');
+  }
+
+  function closeUserFormModal() {
+    $('userFormModal').classList.remove('active');
+  }
+
+  $('btnOpenAddUser').addEventListener('click', openAddUserModal);
+  $('btnAddUserCard').addEventListener('click', openAddUserModal);
+  $('closeUserFormModal').addEventListener('click', closeUserFormModal);
+  $('cancelUserFormBtn').addEventListener('click', closeUserFormModal);
+  $('userFormModal').addEventListener('click', function (e) { if (e.target === this) closeUserFormModal(); });
+
+  $('userForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var mode = $('ufMode').value;
+    var name = $('ufName').value.trim();
+    var username = $('ufUsername').value.trim();
+    var password = $('ufPassword').value;
+    var role = $('ufRole').value;
+    var active = $('ufActive').value;
+    var sheet_name = $('ufSheet').value.trim() || username;
+
+    if (!name || !username) {
+      showToast('⚠️ Nama dan username wajib diisi.', 'err');
+      return;
+    }
+    if (mode === 'add' && !password) {
+      showToast('⚠️ Password wajib diisi untuk user baru.', 'err');
+      return;
+    }
+
+    var btn = $('saveUserFormBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Menyimpan...';
+
+    var action = mode === 'add' ? 'add-user' : 'update-user';
+    var payload = {
+      targetUser: username,
+      userData: {
+        username: username,
+        name: name,
+        role: role,
+        active: active,
+        sheet_name: sheet_name
+      }
+    };
+    if (password) payload.userData.password = password;
+
+    sendPost(action, payload)
+      .then(function () {
+        showToast(mode === 'add' ? '✅ User berhasil ditambahkan!' : '✅ Data user berhasil diperbarui!', 'ok');
+        closeUserFormModal();
+        return loadUsers();
+      })
+      .catch(function (err) {
+        showToast('❌ ' + err.message, 'err');
+      })
+      .then(function () {
+        btn.disabled = false;
+        btn.textContent = '💾 Simpan User';
+      });
+  });
+
+  function toggleUserActive(username) {
+    var u = findUser(username);
+    if (!u) return;
+    if (u.username === SESSION.username) {
+      showToast('⚠️ Anda tidak dapat menonaktifkan akun Anda sendiri.', 'err');
+      return;
+    }
+    var nextActive = isActiveUser(u) ? 'FALSE' : 'TRUE';
+    var label = nextActive === 'TRUE' ? 'mengaktifkan' : 'menonaktifkan';
+    if (!confirm('Yakin ingin ' + label + ' akun @' + u.username + '?')) return;
+
+    sendPost('update-user', {
+      targetUser: u.username,
+      userData: {
+        username: u.username,
+        name: u.name,
+        role: u.role,
+        active: nextActive,
+        sheet_name: u.sheet_name || u.username
+      }
+    })
+      .then(function () {
+        showToast('✅ Status akun @' + u.username + ' diperbarui.', 'ok');
+        return loadUsers();
+      })
+      .catch(function (err) {
+        showToast('❌ ' + err.message, 'err');
+      });
+  }
+
+  function openUserDetail(username) {
+    var u = findUser(username);
+    if (!u) return;
+    var active = isActiveUser(u);
+    var isAdm = String(u.role).toLowerCase() === 'admin';
+
+    $('userDetailBody').innerHTML =
+      '<h3>👤 Detail Pengguna</h3>' +
+      '<div class="user-cell" style="margin-bottom:14px;">' +
+        '<div class="u-avatar' + (isAdm ? ' admin-av' : '') + '" style="width:52px;height:52px;font-size:22px;">' + esc((u.name || u.username || '?').charAt(0).toUpperCase()) + '</div>' +
+        '<div><div style="font-size:18px;font-weight:800;">' + esc(u.name || u.username) + '</div>' +
+        '<div style="font-size:13px;color:var(--text3);">@' + esc(u.username) + '</div></div>' +
+      '</div>' +
+      '<div class="modal-grid">' +
+        '<div class="modal-item"><strong>Role</strong><span>' + (isAdm ? '🛡️ Admin' : '👤 User') + '</span></div>' +
+        '<div class="modal-item"><strong>Status Akun</strong><span>' + (active ? '✅ Aktif' : '❌ Nonaktif') + '</span></div>' +
+        '<div class="modal-item"><strong>Sheet Data</strong><span>' + esc(u.sheet_name || u.username) + '</span></div>' +
+        '<div class="modal-item"><strong>API Key AI</strong><span>' + (u.apiKey ? '🔑 Terpasang' : '— Tidak ada') + '</span></div>' +
+      '</div>' +
+      '<div id="userTaskPreview" style="margin-top:16px;"><div class="loading" style="padding:16px;">⏳ Memeriksa ringkasan task user...</div></div>' +
+      '<div class="modal-footer">' +
+        '<button class="btn-m btn-m-primary" id="btnDetailEditUser">✏️ Edit User</button>' +
+        '<button class="btn-m btn-m-secondary" id="btnDetailCloseUser">Tutup</button>' +
+      '</div>';
+
+    $('userDetailModal').classList.add('active');
+    $('btnDetailEditUser').addEventListener('click', function () {
+      $('userDetailModal').classList.remove('active');
+      openEditUserModal(u.username);
+    });
+    $('btnDetailCloseUser').addEventListener('click', function () {
+      $('userDetailModal').classList.remove('active');
+    });
+
+    // Coba ambil ringkasan task milik user ini jika endpoint didukung
+    fetch(authURL('list', { targetUser: u.username, sheet: u.sheet_name || u.username }), { redirect: 'follow' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var box = $('userTaskPreview');
+        if (!box) return;
+        if (j && j.ok && Array.isArray(j.data)) {
+          var done = j.data.filter(function (t) { return t.status === 'Done'; }).length;
+          box.innerHTML = '<div class="modal-item"><strong>Ringkasan Task (' + esc(u.sheet_name || u.username) + ')</strong>' +
+            '<span>Total: ' + j.data.length + ' task · Selesai: ' + done + ' task</span></div>';
+        } else {
+          box.innerHTML = '';
         }
+      })
+      .catch(function () {
+        var box = $('userTaskPreview');
+        if (box) box.innerHTML = '';
+      });
+  }
 
-        // Show loading
-        function showLoading() {
-            document.getElementById('summaryBody').innerHTML = 
-                '<tr><td colspan="9" class="loading"><i class="fas fa-spinner"></i> Loading...</td></tr>';
-            document.getElementById('detailsBody').innerHTML = 
-                '<tr><td colspan="8" class="loading"><i class="fas fa-spinner"></i> Loading...</td></tr>';
-            document.getElementById('statsGrid').innerHTML = 
-                '<div class="loading"><i class="fas fa-spinner"></i> Loading...</div>';
-        }
+  $('closeUserDetailModal').addEventListener('click', function () { $('userDetailModal').classList.remove('active'); });
+  $('userDetailModal').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('active'); });
 
-        // Show error
-        function showError(message) {
-            document.getElementById('summaryBody').innerHTML = 
-                `<tr><td colspan="9" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Error: ${message}</td></tr>`;
-        }
+  // ============================================================
+  // 8. TASKS TABLE & DETAIL
+  // ============================================================
+  function getFilteredTasks() {
+    var q = ($('taskSearch').value || '').toLowerCase().trim();
+    var st = $('taskStatusFilter').value;
+    var pr = $('taskPriorityFilter').value;
 
-        // ============================================
-        // FILTER & POPULATE
-        // ============================================
+    return TASKS.filter(function (t) {
+      if (st !== 'all' && t.status !== st) return false;
+      if (pr !== 'all' && t.priority !== pr) return false;
+      if (q) {
+        var hay = ((t.title || '') + ' ' + (t.note || '') + ' ' + (t.owner || t.username || '')).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+  }
 
-        // Populate filter dropdown
-        function populateFilters() {
-            const units = [...new Set(allData.summary.map(x => x.unit))].filter(u => u);
-            const select = document.getElementById('filterUnit');
-            
-            // Clear existing options except "Semua Unit"
-            select.innerHTML = '<option value="">Semua Unit</option>';
-            
-            units.forEach(unit => {
-                const option = document.createElement('option');
-                option.value = unit;
-                option.textContent = unit;
-                select.appendChild(option);
-            });
-        }
+  function renderTasksTable() {
+    var list = getFilteredTasks();
+    var box = $('tasksContainer');
 
-        // Get filtered data
-        function getFilteredData() {
-            let filtered = allData.summary;
-            
-            const triwulan = document.getElementById('filterTriwulan').value;
-            const unit = document.getElementById('filterUnit').value;
-            
-            // Filter berdasarkan triwulan
-            if (triwulan) {
-                filtered = filtered.map(p => ({
-                    ...p,
-                    poin_bln: p.poin_triwulan[triwulan] || 0,
-                    // Target triwulan = target bulanan x 3
-                    target_bln: Math.round((p.target_bln || 0) * 0.25), // Quarter target
-                    poin_bln_persen: p.target_bln > 0 ? 
-                        Math.round((p.poin_triwulan[triwulan] || 0) / ((p.target_bln || 0) * 0.25) * 100) : 0
-                }));
-            }
+    if (!list.length) {
+      box.innerHTML = '<div class="empty">Tidak ada data task yang sesuai dengan filter.</div>';
+      return;
+    }
 
-            // Filter berdasarkan unit
-            if (unit) {
-                filtered = filtered.filter(x => x.unit === unit);
-            }
+    var html = '<div class="table-wrap"><table><thead><tr>' +
+      '<th>Judul Task</th><th>Status</th><th>Prioritas</th><th>Due Date</th><th>Updated</th><th>Aksi</th>' +
+      '</tr></thead><tbody>';
 
-            // Sort
-            const sortBy = document.getElementById('sortBy').value;
-            switch(sortBy) {
-                case 'poin_desc':
-                    filtered.sort((a, b) => b.poin_bln - a.poin_bln);
-                    break;
-                case 'poin_asc':
-                    filtered.sort((a, b) => a.poin_bln - b.poin_bln);
-                    break;
-                case 'progress_desc':
-                    filtered.sort((a, b) => b.poin_bln_persen - a.poin_bln_persen);
-                    break;
-                case 'progress_asc':
-                    filtered.sort((a, b) => a.poin_bln_persen - b.poin_bln_persen);
-                    break;
-                default:
-                    filtered.sort((a, b) => a.nama.localeCompare(b.nama));
-            }
+    list.forEach(function (t) {
+      html += '<tr>' +
+        '<td style="font-weight:700;max-width:280px;">' + esc(t.title || '-') +
+        (t.owner ? '<div style="font-size:11px;color:var(--text3);font-weight:500;">👤 ' + esc(t.owner) + '</div>' : '') + '</td>' +
+        '<td><span class="badge ' + badgeCls(t.status) + '">' + esc(t.status || '-') + '</span></td>' +
+        '<td class="' + priCls(t.priority) + '">' + esc(t.priority || '-') + '</td>' +
+        '<td>' + esc(t.due_date || '-') + '</td>' +
+        '<td>' + esc(t.updated_at || '-') + '</td>' +
+        '<td><div class="row-actions">' +
+          '<button class="btn-act" data-view-task="' + esc(t.id) + '">👁️ Detail</button>' +
+          '<a href="entri.html?editId=' + encodeURIComponent(t.id) + '" class="btn-act warn">✏️ Edit</a>' +
+        '</div></td>' +
+      '</tr>';
+    });
 
-            return filtered;
-        }
+    html += '</tbody></table></div>';
+    box.innerHTML = html;
 
-        // ============================================
-        // UPDATE DISPLAY
-        // ============================================
+    box.querySelectorAll('[data-view-task]').forEach(function (b) {
+      b.addEventListener('click', function () { openTaskDetail(b.getAttribute('data-view-task')); });
+    });
+  }
 
-        // Update stats cards
-        function updateStats() {
-            const filtered = getFilteredData();
-            const triwulan = document.getElementById('filterTriwulan').value;
-            const triwulanLabel = triwulan ? `Triwulan ${triwulan}` : 'Bulan Ini';
-            
-            const totalPoinBln = filtered.reduce((sum, x) => sum + x.poin_bln, 0);
-            const totalTarget = filtered.reduce((sum, x) => sum + x.target_bln, 0);
-            const avgProgress = filtered.length > 0 && totalTarget > 0 ? 
-                Math.min((totalPoinBln / totalTarget * 100), 100).toFixed(1) : 0;
-            const completeCount = filtered.filter(x => x.poin_bln_persen >= 100).length;
+  $('taskSearch').addEventListener('input', renderTasksTable);
+  $('taskStatusFilter').addEventListener('change', renderTasksTable);
+  $('taskPriorityFilter').addEventListener('change', renderTasksTable);
 
-            // Statistik per triwulan
-            const triwulanStats = {};
-            for (let t = 1; t <= 4; t++) {
-                triwulanStats[t] = allData.summary.reduce((sum, p) => sum + (p.poin_triwulan[t] || 0), 0);
-            }
+  function openTaskDetail(id) {
+    var t = null;
+    for (var i = 0; i < TASKS.length; i++) {
+      if (String(TASKS[i].id) === String(id)) { t = TASKS[i]; break; }
+    }
+    if (!t) return;
 
-            const html = `
-                <div class="stat-card">
-                    <div class="stat-label"><i class="fas fa-users"></i> Total Pegawai</div>
-                    <div class="stat-value">${filtered.length}</div>
-                    <div class="stat-subtitle">yang terlihat di filter</div>
-                </div>
-                <div class="stat-card success">
-                    <div class="stat-label"><i class="fas fa-check-circle"></i> Target Tercapai</div>
-                    <div class="stat-value">${completeCount}</div>
-                    <div class="stat-subtitle">${filtered.length > 0 ? (completeCount / filtered.length * 100).toFixed(1) : 0}% dari total</div>
-                </div>
-                <div class="stat-card ${avgProgress >= 100 ? 'success' : avgProgress >= 50 ? 'warning' : 'danger'}">
-                    <div class="stat-label"><i class="fas fa-star"></i> Poin ${triwulanLabel}</div>
-                    <div class="stat-value">${totalPoinBln.toLocaleString('id-ID')}</div>
-                    <div class="stat-subtitle">Target: ${totalTarget.toLocaleString('id-ID')}</div>
-                </div>
-                <div class="stat-card purple">
-                    <div class="stat-label"><i class="fas fa-percentage"></i> Progress Rata-rata</div>
-                    <div class="stat-value">${avgProgress}%</div>
-                    <div class="stat-subtitle">${avgProgress >= 100 ? '✅ Target Terpenuhi' : '⏳ Dalam Proses'}</div>
-                </div>
-                <div class="stat-card warning">
-                    <div class="stat-label"><i class="fas fa-calendar-alt"></i> Akumulasi Tahun ${new Date().getFullYear()}</div>
-                    <div class="stat-value">${Object.values(triwulanStats).reduce((a, b) => a + b, 0).toLocaleString('id-ID')}</div>
-                    <div class="stat-subtitle">Total semua triwulan</div>
-                </div>
-            `;
+    $('taskDetailBody').innerHTML =
+      '<h3>📋 Detail Task</h3>' +
+      '<p style="font-size:17px;font-weight:800;margin-bottom:12px;">' + esc(t.title) + '</p>' +
+      '<div class="modal-grid">' +
+        '<div class="modal-item"><strong>Status</strong><span class="badge ' + badgeCls(t.status) + '">' + esc(t.status) + '</span></div>' +
+        '<div class="modal-item"><strong>Prioritas</strong><span class="' + priCls(t.priority) + '">' + esc(t.priority || '-') + '</span></div>' +
+        '<div class="modal-item"><strong>Due Date</strong><span>' + esc(t.due_date || '-') + '</span></div>' +
+        '<div class="modal-item"><strong>Updated</strong><span>' + esc(t.updated_at || '-') + '</span></div>' +
+      '</div>' +
+      (t.note
+        ? '<div style="margin-top:12px;padding:14px;border-radius:var(--radius2);background:var(--bg3);border:1px solid var(--border);font-size:13px;white-space:pre-wrap;word-break:break-word;"><strong>📝 Catatan:</strong><br>' + renderNoteWithLinks(t.note) + '</div>'
+        : '<p style="color:var(--text4);font-size:13px;margin-top:12px;">Tidak ada catatan.</p>') +
+      '<div class="modal-footer">' +
+        '<a href="entri.html?editId=' + encodeURIComponent(t.id) + '" class="btn-m btn-m-primary">✏️ Edit di Entri</a>' +
+        '<button class="btn-m btn-m-secondary" id="btnCloseTaskDetail">Tutup</button>' +
+      '</div>';
 
-            document.getElementById('statsGrid').innerHTML = html;
-        }
+    $('taskDetailModal').classList.add('active');
+    $('btnCloseTaskDetail').addEventListener('click', function () { $('taskDetailModal').classList.remove('active'); });
+  }
 
-        // Update table
-        function updateTable() {
-            const filtered = getFilteredData();
-            const triwulan = document.getElementById('filterTriwulan').value;
-            const triwulanLabel = triwulan ? `Triwulan ${triwulan}` : 'Bulan';
-            const targetLabel = triwulan ? 'Target Triwulan' : 'Target Bulan';
-            
-            // Update header
-            const headerCells = document.querySelectorAll('#summaryTable th');
-            if (headerCells[4]) headerCells[4].textContent = targetLabel;
-            if (headerCells[5]) headerCells[5].textContent = `Poin ${triwulanLabel}`;
+  $('closeTaskDetailModal').addEventListener('click', function () { $('taskDetailModal').classList.remove('active'); });
+  $('taskDetailModal').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('active'); });
 
-            let html = '';
+  // ============================================================
+  // 9. EXPORT PDF & EXCEL
+  // ============================================================
+  function exportUsersPDF() {
+    if (!USERS.length) { showToast('⚠️ Tidak ada data users untuk diexport.', 'err'); return; }
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF('p', 'mm', 'a4');
+    doc.setFontSize(18); doc.setFont(undefined, 'bold'); doc.text('BEKARYE — Laporan Pengguna', 14, 18);
+    doc.setFontSize(10); doc.setFont(undefined, 'normal');
+    doc.text('Sistem Monitoring Organisasi Kerja · Dicetak oleh: ' + (SESSION.name || SESSION.username), 14, 24);
+    doc.text('Tanggal: ' + new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }), 14, 29);
 
-            filtered.forEach((item, index) => {
-                const progressClass = item.poin_bln_persen >= 100 ? 'success' : 
-                                      item.poin_bln_persen >= 50 ? 'warning' : '';
-                const badge = item.poin_bln_persen >= 100 ? 'complete' : 
-                              item.poin_bln_persen >= 50 ? 'pending' : 'incomplete';
+    doc.autoTable({
+      startY: 35,
+      head: [['No', 'Nama', 'Username', 'Sheet Data', 'Role', 'Status']],
+      body: USERS.map(function (u, i) {
+        return [
+          i + 1,
+          u.name || '-',
+          '@' + (u.username || '-'),
+          u.sheet_name || u.username || '-',
+          String(u.role || 'user').toUpperCase(),
+          isActiveUser(u) ? 'Aktif' : 'Nonaktif'
+        ];
+      }),
+      styles: { fontSize: 9, cellPadding: 3 },
+      headStyles: { fillColor: [37, 99, 235], textColor: 255, fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [248, 250, 252] }
+    });
 
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td><strong>${item.nama}</strong></td>
-                        <td>${item.unit || '-'}</td>
-                        <td>${item.tier || '-'}</td>
-                        <td>${item.target_bln.toLocaleString('id-ID')}</td>
-                        <td><strong style="color: #667eea;">${item.poin_bln.toLocaleString('id-ID')}</strong></td>
-                        <td style="min-width: 150px;">
-                            <div class="progress-bar">
-                                <div class="progress-fill ${progressClass}" style="width: ${Math.min(item.poin_bln_persen, 100)}%"></div>
-                            </div>
-                            <span class="percentage">${item.poin_bln_persen}%</span>
-                        </td>
-                        <td>${item.poin_th ? item.poin_th.toLocaleString('id-ID') : '-'}</td>
-                        <td><span class="badge ${badge}">${item.kegiatan_count || 0} kegiatan</span></td>
-                    </tr>
-                `;
-            });
+    doc.save('BEKARYE_Admin_Users_' + new Date().toISOString().slice(0, 10) + '.pdf');
+    $('exportDropdownMenu').classList.remove('open');
+    showToast('✅ PDF Daftar Users berhasil diunduh.', 'ok');
+  }
 
-            document.getElementById('summaryBody').innerHTML = html || 
-                '<tr><td colspan="9" class="empty-state"><i class="fas fa-inbox"></i> Tidak ada data</td></tr>';
-        }
+  function exportAdminExcel() {
+    var wb = XLSX.utils.book_new();
+    var userRows = [['No', 'Nama', 'Username', 'Sheet Name', 'Role', 'Status']];
+    USERS.forEach(function (u, i) {
+      userRows.push([i + 1, u.name || '', u.username || '', u.sheet_name || '', u.role || 'user', isActiveUser(u) ? 'Aktif' : 'Nonaktif']);
+    });
+    var wsUsers = XLSX.utils.aoa_to_sheet(userRows);
+    wsUsers['!cols'] = [{ wch: 5 }, { wch: 28 }, { wch: 18 }, { wch: 20 }, { wch: 12 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, wsUsers, 'Users');
 
-        // Update charts
-        function updateCharts() {
-            const filtered = getFilteredData();
-            const triwulan = document.getElementById('filterTriwulan').value;
+    var taskRows = [['No', 'ID', 'Judul Task', 'Status', 'Prioritas', 'Due Date', 'Updated', 'Catatan']];
+    TASKS.forEach(function (t, i) {
+      taskRows.push([i + 1, t.id || '', t.title || '', t.status || '', t.priority || '', t.due_date || '', t.updated_at || '', t.note || '']);
+    });
+    var wsTasks = XLSX.utils.aoa_to_sheet(taskRows);
+    wsTasks['!cols'] = [{ wch: 5 }, { wch: 16 }, { wch: 36 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 14 }, { wch: 40 }];
+    XLSX.utils.book_append_sheet(wb, wsTasks, 'Tasks');
 
-            // Chart 1: Top 10 Poin
-            const top10 = filtered.sort((a, b) => b.poin_bln - a.poin_bln).slice(0, 10);
-            updateChart('topPoin', 'bar', {
-                labels: top10.map(x => x.nama),
-                datasets: [{
-                    label: `Poin ${triwulan ? 'Triwulan ' + triwulan : 'Bulan'}`,
-                    data: top10.map(x => x.poin_bln),
-                    backgroundColor: top10.map((_, i) => {
-                        const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', 
-                                       '#43e97b', '#fa709a', '#fee140', '#30cfd0', '#a8edea'];
-                        return colors[i % colors.length];
-                    }),
-                    borderRadius: 5
-                }]
-            }, {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, ticks: { stepSize: 50 } } }
-            });
+    XLSX.writeFile(wb, 'BEKARYE_Admin_Report_' + new Date().toISOString().slice(0, 10) + '.xlsx');
+    $('exportDropdownMenu').classList.remove('open');
+    showToast('✅ Excel laporan admin berhasil diunduh.', 'ok');
+  }
 
-            // Chart 2: Progress Distribution
-            const complete = filtered.filter(x => x.poin_bln_persen >= 100).length;
-            const pending = filtered.filter(x => x.poin_bln_persen >= 50 && x.poin_bln_persen < 100).length;
-            const incomplete = filtered.filter(x => x.poin_bln_persen < 50).length;
+  $('btnExportUsersPDF').addEventListener('click', exportUsersPDF);
+  $('mobExportPDF').addEventListener('click', exportUsersPDF);
+  $('btnExportUsersExcel').addEventListener('click', exportAdminExcel);
+  $('mobExportExcel').addEventListener('click', exportAdminExcel);
 
-            updateChart('progressDist', 'doughnut', {
-                labels: ['Tercapai (≥100%)', 'Dalam Proses (50-99%)', 'Belum Mencapai (<50%)'],
-                datasets: [{
-                    data: [complete, pending, incomplete],
-                    backgroundColor: ['#28a745', '#ffc107', '#dc3545']
-                }]
-            }, {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } }
-            });
-
-            // Chart 3: Poin vs Target
-            const top5 = filtered.sort((a, b) => b.poin_bln - a.poin_bln).slice(0, 5);
-            updateChart('target', 'line', {
-                labels: top5.map(x => x.nama),
-                datasets: [
-                    {
-                        label: `Poin ${triwulan ? 'Triwulan ' + triwulan : 'Bulan'}`,
-                        data: top5.map(x => x.poin_bln),
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Target',
-                        data: top5.map(x => x.target_bln),
-                        borderColor: '#dc3545',
-                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }
-                ]
-            }, {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: { y: { beginAtZero: true } }
-            });
-
-            // Chart 4: Distribusi Per Triwulan
-            const triwulanData = [1, 2, 3, 4].map(t => 
-                allData.summary.reduce((sum, p) => sum + (p.poin_triwulan[t] || 0), 0)
-            );
-
-            updateChart('triwulan', 'bar', {
-                labels: ['Triwulan I\n(Jan-Mar)', 'Triwulan II\n(Apr-Jun)', 
-                         'Triwulan III\n(Jul-Sep)', 'Triwulan IV\n(Okt-Des)'],
-                datasets: [{
-                    label: 'Total Poin per Triwulan',
-                    data: triwulanData,
-                    backgroundColor: ['#667eea', '#28a745', '#ffc107', '#dc3545'],
-                    borderRadius: 5
-                }]
-            }, {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
-            });
-        }
-
-        // Helper untuk update chart
-        function updateChart(chartId, type, data, options) {
-            const ctx = document.getElementById(chartId + 'Chart');
-            if (!ctx) return;
-            
-            if (charts[chartId]) {
-                charts[chartId].destroy();
-            }
-            
-            charts[chartId] = new Chart(ctx.getContext('2d'), {
-                type: type,
-                data: data,
-                options: options
-            });
-        }
-
-        // Update details
-        function updateDetails() {
-            const search = document.getElementById('searchKegiatan').value.toLowerCase();
-            const triwulanFilter = document.getElementById('filterTriwulanDetail').value;
-            
-            let filtered = allData.kegiatan;
-            
-            // Filter by triwulan
-            if (triwulanFilter) {
-                filtered = filtered.filter(x => {
-                    if (!x.tanggal) return false;
-                    const month = new Date(x.tanggal).getMonth() + 1;
-                    return triwulanMonths[triwulanFilter].includes(month);
-                });
-            }
-            
-            // Search filter
-            if (search) {
-                filtered = filtered.filter(x => 
-                    (x.nama && x.nama.toLowerCase().includes(search)) ||
-                    (x.nama_keg && x.nama_keg.toLowerCase().includes(search)) ||
-                    (x.unit && x.unit.toLowerCase().includes(search))
-                );
-            }
-
-            let html = '';
-            filtered.slice(0, 100).forEach(item => {
-                const date = new Date(item.tanggal);
-                const month = date.getMonth() + 1;
-                let triwulanNum = 1;
-                for (let t = 1; t <= 4; t++) {
-                    if (triwulanMonths[t].includes(month)) {
-                        triwulanNum = t;
-                        break;
-                    }
-                }
-                
-                const statusBadge = item.status === 'Selesai' ? 'complete' : 'pending';
-                html += `
-                    <tr>
-                        <td><strong>${item.nama || '-'}</strong></td>
-                        <td>${item.unit || '-'}</td>
-                        <td>${item.tanggal ? date.toLocaleDateString('id-ID') : '-'}</td>
-                        <td><span class="badge">Triwulan ${triwulanNum}</span></td>
-                        <td>${item.nama_keg || '-'}</td>
-                        <td><strong>${item.total_poin || 0}</strong></td>
-                        <td><span class="badge ${statusBadge}">${item.status || 'Pending'}</span></td>
-                        <td>${item.link_bukti ? `<a href="${item.link_bukti}" target="_blank" style="color: #667eea;">📎 Lihat</a>` : '-'}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('detailsBody').innerHTML = html || 
-                '<tr><td colspan="8" class="empty-state"><i class="fas fa-inbox"></i> Tidak ada data kegiatan</td></tr>';
-        }
-
-        // ============================================
-        // NAVIGASI & EXPORT
-        // ============================================
-
-        // Switch tab
-        function switchTab(tab) {
-            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            document.getElementById(tab).classList.add('active');
-            
-            // Find and activate the clicked tab button
-            document.querySelectorAll('.tab').forEach(t => {
-                if (t.textContent.toLowerCase().includes(tab) || 
-                    (tab === 'table' && t.textContent.includes('Tabel')) ||
-                    (tab === 'charts' && t.textContent.includes('Grafik')) ||
-                    (tab === 'details' && t.textContent.includes('Detail'))) {
-                    t.classList.add('active');
-                }
-            });
-            
-            // Update charts when switching to charts tab
-            if (tab === 'charts') {
-                setTimeout(() => updateCharts(), 100);
-            }
-        }
-
-        // Export PDF
-        function exportPDF() {
-            const element = document.getElementById('summaryTable');
-            const triwulan = document.getElementById('filterTriwulan').value;
-            const unit = document.getElementById('filterUnit').value;
-            
-            let filename = 'dashboard-';
-            if (triwulan) filename += 'triwulan' + triwulan + '-';
-            if (unit) filename += unit.replace(/\s+/g, '-') + '-';
-            filename += new Date().toISOString().slice(0, 10) + '.pdf';
-            
-            const opt = {
-                margin: 10,
-                filename: filename,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
-            };
-            
-            html2pdf().set(opt).from(element).save();
-        }
-
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-        });
-    </script>
+  // ============================================================
+  // 10. INIT
+  // ============================================================
+  loadAll();
+})();
+</script>
 </body>
 </html>
